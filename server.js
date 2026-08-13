@@ -55,6 +55,25 @@ app.post('/login', (req, res) => {
     });
 });
 
+// ROTA PARA CADASTRAR UM NOVO PROFESSOR (Executada pelo Gestor)
+app.post('/cadastrar-professor', (req, res) => {
+    const { nome, email, senha } = req.body;
+    const tipo = 'professor'; // Garante que o cadastro feito aqui sempre será professor
+
+    db.run(`INSERT INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, ?)`, 
+        [nome, email, senha, tipo], 
+        (err) => {
+            if (err) {
+                // Se o e-mail já existir, o SQLite vai dar erro porque configuramos como UNIQUE
+                return res.send('<h2>Erro: Este e-mail já está cadastrado! <a href="/gestor.html">Voltar</a></h2>');
+            }
+            // Se der certo, mostra mensagem e um link para voltar ao painel
+            res.send('<h2>Professor cadastrado com sucesso! <a href="/gestor.html">Voltar ao Painel</a></h2>');
+        }
+    );
+});
+
+
 // ROTA AUXILIAR PARA CRIAR USUÁRIOS DE TESTE (Rode no navegador para testar)
 // Acesse: http://localhost:3000/criar-usuarios-teste
 app.get('/criar-usuarios-teste', (req, res) => {

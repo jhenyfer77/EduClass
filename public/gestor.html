@@ -43,5 +43,29 @@
         </div>
     </div>
 
+            <!-- Formulário para Cadastrar Novo Professor -->
+            <div class="mt-10 bg-white p-8 rounded-lg shadow-sm max-w-lg">
+                <h3 class="text-xl font-bold text-gray-800 mb-6">➕ Cadastrar Novo Professor</h3>
+                
+                <form action="/cadastrar-professor" method="POST" class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-semibold mb-1">Nome Completo</label>
+                        <input type="text" name="nome" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" placeholder="Ex: Professor Roberto" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-semibold mb-1">E-mail Institucional</label>
+                        <input type="email" name="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" placeholder="roberto@escola.com" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-semibold mb-1">Senha de Acesso</label>
+                        <input type="password" name="senha" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" placeholder="Defina uma senha" required>
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 rounded hover:bg-green-700 transition">
+                        Salvar Novo Professor
+                    </button>
+                </form>
+            </div>
+    
+
 </body>
 </html>
