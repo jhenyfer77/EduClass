@@ -34,6 +34,43 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// ROTA DE LOGIN ATUALIZADA
+app.post('/login', (req, res) => {
+    const { email, senha } = req.body;
+
+    db.get(`SELECT * FROM usuarios WHERE email = ? AND senha = ?`, [email, senha], (err, usuario) => {
+        if (err) {
+            return res.status(500).send('Erro no servidor.');
+        }
+        if (!usuario) {
+            return res.send('<h2>E-mail ou senha incorretos! <a href="/">Tentar novamente</a></h2>');
+        }
+
+        // REDIRECIONAMENTO REAL PARA OS ARQUIVOS HTML
+        if (usuario.tipo === 'gestor') {
+            res.sendFile(path.join(__dirname, 'public', 'gestor.html'));
+        } else {
+            res.sendFile(path.join(__dirname, 'public', 'professor.html'));
+        }
+    });
+});
+
+// ROTA AUXILIAR PARA CRIAR USUÁRIOS DE TESTE (Rode no navegador para testar)
+// Acesse: http://localhost:3000/criar-usuarios-teste
+app.get('/criar-usuarios-teste', (req, res) => {
+    db.serialize(() => {
+        // Cria um Gestor de teste
+        db.run(`INSERT OR IGNORE INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, ?)`, 
+            ['Diretor Carlos', 'diretor@escola.com', '123456', 'gestor']);
+        
+        // Cria un Professor de teste
+        db.run(`INSERT OR IGNORE INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, ?)`, 
+            ['Professora Ana', 'ana@escola.com', '123456', 'professor']);
+    });
+    res.send('<h1>Usuários de teste criados com sucesso!</h1><p>Gestor: diretor@escola.com (senha: 123456)</p><p>Professor: ana@escola.com (senha: 123456)</p><a href="/">Ir para o Login</a>');
+});
+
+
 app.listen(PORT, () => {
     console.log(`EduClass rodando em http://localhost:${PORT}`);
 });
