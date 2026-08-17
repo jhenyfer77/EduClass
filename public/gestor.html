@@ -8,6 +8,49 @@
 <body>
 
     <h1>EduClass Gestor</h1>
+
+<!-- Formulário de Cadastro de Professores -->
+<div style="border: 1px solid #007bff; background-color: #f0f9ff; padding: 15px; margin-bottom: 25px;">
+    <h2>➕ Cadastrar Novo Professor</h2>
+    <form action="/cadastrar-professor" method="POST">
+        <label for="nome_prof">Nome Completo:</label><br>
+        <input type="text" id="nome_prof" name="nome" placeholder="Ex: Professor Carlos" required><br><br>
+
+        <label for="email_prof">E-mail de Acesso:</label><br>
+        <input type="email" id="email_prof" name="email" placeholder="Ex: carlos@escola.com" required><br><br>
+
+        <label for="senha_prof">Senha Inicial:</label><br>
+        <input type="password" id="senha_prof" name="senha" placeholder="Mínimo 6 caracteres" required><br><br>
+
+        <button type="submit" style="background-color: #007bff; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px;">Cadastrar Professor</button>
+    </form>
+</div>
+
+
+    <!-- Blocos de Contadores -->
+    <div style="display: flex; gap: 20px; margin-bottom: 25px;">
+        <!-- Bloco de Professores com estilo de clique -->
+        <div onclick="toggleListaProfessores()" style="border: 1px solid #ccc; padding: 15px; flex: 1; background: #e0f2fe; cursor: pointer;" title="Clique para ver a lista">
+            <h3>👨‍🏫 Professores (Clique para ver)</h3>
+            <p id="qtdProfessores" style="font-size: 24px; font-weight: bold; margin: 5px 0 0 0;">0</p>
+        </div>
+        <div style="border: 1px solid #ccc; padding: 15px; flex: 1; background: #fef9c3;">
+            <h3>📢 Recados Ativos</h3>
+            <p id="qtdRecados" style="font-size: 24px; font-weight: bold; margin: 5px 0 0 0;">0</p>
+        </div>
+        <div style="border: 1px solid #ccc; padding: 15px; flex: 1; background: #dcfce7;">
+            <h3>📅 Eventos Agendados</h3>
+            <p id="qtdEventos" style="font-size: 24px; font-weight: bold; margin: 5px 0 0 0;">0</p>
+        </div>
+    </div>
+
+    <!-- Área Oculta que vai mostrar a lista de professores -->
+    <div id="areaProfessores" style="display: none; border: 1px solid #007bff; background: #f0fdfa; padding: 15px; margin-bottom: 30px;">
+        <h3>👨‍🏫 Professores Cadastrados</h3>
+        <ul id="listaProfessores" style="margin: 10px 0 0 0; padding-left: 20px;">
+            <li>Carregando professores...</li>
+        </ul>
+    </div>
     
     <!-- Formulário de Recados -->
     <div>
@@ -59,6 +102,60 @@
     </div>
 
     <script>
+        // Abre ou fecha a lista de professores
+        function toggleListaProfessores() {
+            const area = document.getElementById('areaProfessores');
+            
+            if (area.style.display === 'none') {
+                area.style.display = 'block';
+                carregarListaProfessores(); // Atualiza os nomes ao abrir
+            } else {
+                area.style.display = 'none';
+            }
+        }
+    
+        // Busca a lista atualizada de professores no servidor
+        function carregarListaProfessores() {
+            fetch('/listar-professores')
+                .then(res => res.json())
+                .then(professores => {
+                    const lista = document.getElementById('listaProfessores');
+                    if (!professores || professores.length === 0) {
+                        lista.innerHTML = '<li>Nenhum professor cadastrado ainda.</li>';
+                        return;
+                    }
+                    lista.innerHTML = professores.map(p => `
+                        <li style="margin-bottom: 8px; display: flex; align-items: center; gap: 15px;">
+                            <span><strong>${p.nome}</strong> - (${p.email})</span>
+                            <button onclick="apagarProfessor(${p.id})" style="background-color: #dc3545; color: white; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 12px;">Excluir</button>
+                        </li>
+                    `).join('');
+                });
+        }
+    
+        // Envia o comando para o banco de dados deletar o professor
+        function apagarProfessor(id) {
+            if (confirm('Tem certeza que deseja remover este professor do sistema?')) {
+                fetch(`/apagar-professor/${id}`, { method: 'DELETE' })
+                    .then(res => res.json())
+                    .then(() => {
+                        carregarListaProfessores(); // FAZ SUMIR DA LISTA NA HORA
+                        atualizarContadores();     // Diminui o número do bloco azul do topo
+                    });
+            }
+        }
+    
+        // Atualiza os números nos blocos coloridos do topo
+        function atualizarContadores() {
+            fetch('/contadores-gestor')
+                .then(res => res.json())
+                .then(dados => {
+                    document.getElementById('qtdProfessores').innerText = dados.professores || 0;
+                    document.getElementById('qtdRecados').innerText = dados.recados || 0;
+                    document.getElementById('qtdEventos').innerText = dados.eventos || 0;
+                });
+        }
+    
         function carregarRecados() {
             fetch('/listar-recados')
                 .then(res => res.json())
@@ -76,12 +173,9 @@
                             <button onclick="apagarItem('/apagar-recado/${r.id}', 'recado')">Apagar Recado</button>
                         </div>
                     `).join('');
-                })
-                .catch(() => {
-                    document.getElementById('mural').innerHTML = '<p>Erro ao carregar recados.</p>';
                 });
         }
-
+    
         function carregarEventos() {
             fetch('/listar-eventos')
                 .then(res => res.json())
@@ -99,12 +193,10 @@
                             <button onclick="apagarItem('/apagar-evento/${e.id}', 'evento')">Apagar Evento</button>
                         </div>
                     `).join('');
-                })
-                .catch(() => {
-                    document.getElementById('calendario').innerHTML = '<p>Erro ao carregar eventos.</p>';
                 });
         }
-
+    
+        // Apaga recados ou eventos
         function apagarItem(url, tipo) {
             if (confirm('Tem certeza que deseja remover este item permanentemente?')) {
                 fetch(url, { method: 'DELETE' })
@@ -112,35 +204,38 @@
                     .then(() => {
                         if (tipo === 'recado') carregarRecados();
                         if (tipo === 'evento') carregarEventos();
+                        atualizarContadores();
                     });
             }
         }
-
+    
         document.getElementById('formRecado').addEventListener('submit', function(e) {
             e.preventDefault();
             const dados = new URLSearchParams(new FormData(this));
-            
             fetch('/criar-recado', { method: 'POST', body: dados })
                 .then(() => {
                     this.reset();
                     carregarRecados();
+                    atualizarContadores();
                 });
         });
-
+    
         document.getElementById('formEvento').addEventListener('submit', function(e) {
             e.preventDefault();
             const dados = new URLSearchParams(new FormData(this));
-            
             fetch('/criar-evento', { method: 'POST', body: dados })
                 .then(() => {
                     this.reset();
                     carregarEventos();
+                    atualizarContadores();
                 });
         });
-
-        // Executa ao carregar a página
+    
+        // Roda automaticamente assim que abre a tela
         carregarRecados();
         carregarEventos();
+        atualizarContadores();
     </script>
+    
 </body>
 </html>

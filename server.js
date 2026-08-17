@@ -180,6 +180,52 @@ app.get('/criar-usuarios-teste', (req, res) => {
     );
 });
 
+// Rota para o Gestor ver o total de professores, recados e eventos
+app.get('/contadores-gestor', (req, res) => {
+    // Conta os professores (usuarios onde tipo = 'professor')
+    db.get(`SELECT COUNT(*) AS total FROM usuarios WHERE tipo = 'professor'`, [], (err, rowProf) => {
+        if (err) return res.status(500).json({ erro: err.message });
+        
+        // Conta os recados
+        db.get(`SELECT COUNT(*) AS total FROM recados`, [], (err, rowRec) => {
+            if (err) return res.status(500).json({ erro: err.message });
+            
+            // Conta os eventos
+            db.get(`SELECT COUNT(*) AS total FROM eventos`, [], (err, rowEv) => {
+                if (err) return res.status(500).json({ erro: err.message });
+                
+                // Retorna os 3 números de uma vez só para o HTML
+                res.json({
+                    professores: rowProf.total,
+                    recados: rowRec.total,
+                    eventos: rowEv.total
+                });
+            });
+        });
+    });
+});
+
+// Rota para o Gestor listar os professores cadastrados
+app.get('/listar-professores', (req, res) => {
+    db.all(`SELECT id, nome, email FROM usuarios WHERE tipo = 'professor' ORDER BY nome ASC`, [], (err, rows) => {
+        if (err) return res.status(500).json({ erro: err.message });
+        res.json(rows);
+    });
+});
+
+// NOVA: Rota para o Gestor excluir um professor cadastrado pelo ID
+app.delete('/apagar-professor/:id', (req, res) => {
+    const { id } = req.params;
+    
+    // Deleta o usuário baseado no ID recebido
+    db.run(`DELETE FROM usuarios WHERE id = ? AND tipo = 'professor'`, [id], (err) => {
+        if (err) return res.status(500).json({ erro: err.message });
+        res.json({ mensagem: 'Professor excluído com sucesso!' });
+    });
+});
+
+
+
 // Inicializa o servidor
 app.listen(PORT, () => {
     console.log(`EduClass rodando em http://localhost:${PORT}`);
