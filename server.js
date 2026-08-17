@@ -4,7 +4,7 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
-// Configurações essenciais para receber dados de formulários (Login/Cadastro)
+// Configurações essenciais para receber dados de formulários e JSON
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -73,9 +73,9 @@ app.post('/login', (req, res) => {
         }
 
         if (usuario.tipo === 'gestor') {
-            res.sendFile(path.join(__dirname, 'public', 'gestor.html'));
+            res.redirect('/gestor.html');
         } else {
-            res.sendFile(path.join(__dirname, 'public', 'professor.html'));
+            res.redirect('/professor.html');
         }
     });
 });
@@ -96,8 +96,8 @@ app.post('/criar-recado', (req, res) => {
     const { titulo, conteudo, autor } = req.body;
     db.run(`INSERT INTO recados (titulo, conteudo, autor) VALUES (?, ?, ?)`, 
         [titulo, conteudo, autor], (err) => {
-            if (err) return res.status(500).send('Erro ao salvar recado.');
-            res.redirect('/gestor.html');
+            if (err) return res.status(500).json({ erro: 'Erro ao salvar recado.' });
+            res.json({ mensagem: 'Recado salvo com sucesso!' });
         }
     );
 });
@@ -107,21 +107,44 @@ app.post('/criar-evento', (req, res) => {
     const { titulo, data_evento, descricao } = req.body;
     db.run(`INSERT INTO eventos (titulo, data_evento, descricao) VALUES (?, ?, ?)`, 
         [titulo, data_evento, descricao], (err) => {
-            if (err) return res.status(500).send('Erro ao salvar evento.');
-            res.redirect('/gestor.html');
+            if (err) return res.status(500).json({ erro: 'Erro ao salvar evento.' });
+            res.json({ mensagem: 'Evento salvo com sucesso!' });
         }
     );
 });
 
-// 4. Rota para o Professor salvar um Planejamento de Aula
-app.post('/criar-planejamento', (req, res) => {
-    const { materia, conteudo, data_planejada } = req.body;
-    db.run(`INSERT INTO planejamentos (materia, conteudo, data_planejada) VALUES (?, ?, ?)`, 
-        [materia, conteudo, data_planejada], (err) => {
-            if (err) return res.status(500).send('Erro ao salvar planejamento.');
-            res.redirect('/professor.html');
-        }
-    );
+// Rota para buscar todos os recados salvos
+app.get('/listar-recados', (req, res) => {
+    db.all(`SELECT * FROM recados ORDER BY data_criacao DESC`, [], (err, rows) => {
+        if (err) return res.status(500).json({ erro: err.message });
+        res.json(rows);
+    });
+});
+
+// Rota para buscar todos os eventos salvos
+app.get('/listar-eventos', (req, res) => {
+    db.all(`SELECT * FROM eventos ORDER BY data_evento ASC`, [], (err, rows) => {
+        if (err) return res.status(500).json({ erro: err.message });
+        res.json(rows);
+    });
+});
+
+// Rota para apagar um recado específico
+app.delete('/apagar-recado/:id', (req, res) => {
+    const { id } = req.params;
+    db.run(`DELETE FROM recados WHERE id = ?`, [id], (err) => {
+        if (err) return res.status(500).json({ erro: err.message });
+        res.json({ mensagem: 'Recado apagado com sucesso!' });
+    });
+});
+
+// Rota para apagar um evento específico
+app.delete('/apagar-evento/:id', (req, res) => {
+    const { id } = req.params;
+    db.run(`DELETE FROM eventos WHERE id = ?`, [id], (err) => {
+        if (err) return res.status(500).json({ erro: err.message });
+        res.json({ mensagem: 'Evento apagado com sucesso!' });
+    });
 });
 
 // Rota auxiliar para criar usuários de teste padrão

@@ -3,69 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduClass - Painel do Gestor</title>
-    <script src="https://tailwindcss.com"></script>
+    <title>Painel do Gestor - EduClass</title>
 </head>
-<body class="bg-gray-100 font-sans flex">
+<body>
 
-    <!-- Menu Lateral (Sidebar) -->
-    <div class="w-64 bg-blue-800 h-screen text-white p-6 shadow-xl">
-        <h1 class="text-2xl font-bold mb-8 text-center border-b border-blue-600 pb-4">EduClass</h1>
-        <nav class="space-y-3">
-            <a href="#" class="block py-2.5 px-4 rounded bg-blue-900 font-semibold">🏠 Início</a>
-            <a href="#" class="block py-2.5 px-4 rounded hover:bg-blue-700 transition">👨‍🏫 Professores</a>
-            <a href="#" class="block py-2.5 px-4 rounded hover:bg-blue-700 transition">🏫 Turmas e Aulas</a>
-            <a href="/" class="block py-2.5 px-4 rounded hover:bg-red-600 transition mt-10">🚪 Sair</a>
-        </nav>
-    </div>
-
-    <!-- Conteúdo Principal -->
-    <div class="flex-1 p-10">
-        <header class="flex justify-between items-center mb-8 border-b pb-4">
-            <h2 class="text-3xl font-bold text-gray-800">Painel Geral da Gestão</h2>
-            <span class="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full">Ambiente: Direção</span>
-        </header>
-
-        <!-- Cards de Resumo -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-600">
-                <p class="text-gray-500 font-medium uppercase text-xs">Total de Professores</p>
-                <p class="text-2xl font-bold text-gray-800">12 Cadastrados</p>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
-                <p class="text-gray-500 font-medium uppercase text-xs">Turmas Ativas</p>
-                <p class="text-2xl font-bold text-gray-800">8 Turmas</p>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-purple-500">
-                <p class="text-gray-500 font-medium uppercase text-xs">Alunos Matriculados</p>
-                <p class="text-2xl font-bold text-gray-800">240 Alunos</p>
-            </div>
-        </div>
-    </div>
-
-            <!-- Formulário para Cadastrar Novo Professor -->
-            <div class="mt-10 bg-white p-8 rounded-lg shadow-sm max-w-lg">
-                <h3 class="text-xl font-bold text-gray-800 mb-6">➕ Cadastrar Novo Professor</h3>
-                
-                <form action="/cadastrar-professor" method="POST" class="space-y-4">
-                    <div>
-                        <label class="block text-gray-700 text-sm font-semibold mb-1">Nome Completo</label>
-                        <input type="text" name="nome" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" placeholder="Ex: Professor Roberto" required>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 text-sm font-semibold mb-1">E-mail Institucional</label>
-                        <input type="email" name="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" placeholder="roberto@escola.com" required>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 text-sm font-semibold mb-1">Senha de Acesso</label>
-                        <input type="password" name="senha" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" placeholder="Defina uma senha" required>
-                    </div>
-                    <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 rounded hover:bg-green-700 transition">
-                        Salvar Novo Professor
-                    </button>
-                </form>
-            </div>
+    <h1>EduClass Gestor</h1>
     
+    <!-- Formulário de Recados -->
+    <div>
+        <h2>📢 Novo Recado</h2>
+        <form id="formRecado">
+            <label for="titulo">Título do Recado:</label><br>
+            <input type="text" id="titulo" name="titulo" required><br><br>
 
+            <label for="conteudo">Conteúdo do Aviso:</label><br>
+            <textarea id="conteudo" name="conteudo" required></textarea><br><br>
+
+            <label for="autor">Autor do Recado:</label><br>
+            <input type="text" id="autor" name="autor" required><br><br>
+            
+            <button type="submit">Postar no Mural</button>
+        </form>
+    </div>
+
+    <br><hr><br>
+
+    <!-- Formulário do Calendário -->
+    <div>
+        <h2>📅 Adicionar Evento</h2>
+        <form id="formEvento">
+            <label for="titulo_evento">Nome do Evento:</label><br>
+            <input type="text" id="titulo_evento" name="titulo" required><br><br>
+            
+            <label for="data_evento">Data de Realização:</label><br>
+            <input type="date" id="data_evento" name="data_evento" required><br><br>
+
+            <label for="descricao">Descrição Adicional:</label><br>
+            <input type="text" id="descricao" name="descricao"><br><br>
+            
+            <button type="submit">Salvar Evento</button>
+        </form>
+    </div>
+
+    <br><hr><br>
+
+    <!-- Área de Exibição -->
+    <div>
+        <h2>📢 Mural de Avisos Ativos</h2>
+        <div id="mural">Carregando recados...</div>
+
+        <br>
+
+        <h2>📅 Agenda Escolar</h2>
+        <div id="calendario">Carregando eventos...</div>
+    </div>
+
+    <script>
+        function carregarRecados() {
+            fetch('/listar-recados')
+                .then(res => res.json())
+                .then(recados => {
+                    const muralDiv = document.getElementById('mural');
+                    if (!recados || recados.length === 0) {
+                        muralDiv.innerHTML = '<p>Nenhum recado postado até o momento.</p>';
+                        return;
+                    }
+                    muralDiv.innerHTML = recados.map(r => `
+                        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                            <h3>${r.titulo}</h3>
+                            <p>${r.conteudo}</p>
+                            <small>Por: <strong>${r.autor}</strong></small><br><br>
+                            <button onclick="apagarItem('/apagar-recado/${r.id}', 'recado')">Apagar Recado</button>
+                        </div>
+                    `).join('');
+                })
+                .catch(() => {
+                    document.getElementById('mural').innerHTML = '<p>Erro ao carregar recados.</p>';
+                });
+        }
+
+        function carregarEventos() {
+            fetch('/listar-eventos')
+                .then(res => res.json())
+                .then(eventos => {
+                    const calendarioDiv = document.getElementById('calendario');
+                    if (!eventos || eventos.length === 0) {
+                        calendarioDiv.innerHTML = '<p>Nenhum evento agendado na agenda.</p>';
+                        return;
+                    }
+                    calendarioDiv.innerHTML = eventos.map(e => `
+                        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                            <h3>${e.titulo}</h3>
+                            <p>📅 Data: ${e.data_evento}</p>
+                            ${e.descricao ? `<p>ℹ️ ${e.descricao}</p>` : ''}
+                            <button onclick="apagarItem('/apagar-evento/${e.id}', 'evento')">Apagar Evento</button>
+                        </div>
+                    `).join('');
+                })
+                .catch(() => {
+                    document.getElementById('calendario').innerHTML = '<p>Erro ao carregar eventos.</p>';
+                });
+        }
+
+        function apagarItem(url, tipo) {
+            if (confirm('Tem certeza que deseja remover este item permanentemente?')) {
+                fetch(url, { method: 'DELETE' })
+                    .then(res => res.json())
+                    .then(() => {
+                        if (tipo === 'recado') carregarRecados();
+                        if (tipo === 'evento') carregarEventos();
+                    });
+            }
+        }
+
+        document.getElementById('formRecado').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const dados = new URLSearchParams(new FormData(this));
+            
+            fetch('/criar-recado', { method: 'POST', body: dados })
+                .then(() => {
+                    this.reset();
+                    carregarRecados();
+                });
+        });
+
+        document.getElementById('formEvento').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const dados = new URLSearchParams(new FormData(this));
+            
+            fetch('/criar-evento', { method: 'POST', body: dados })
+                .then(() => {
+                    this.reset();
+                    carregarEventos();
+                });
+        });
+
+        // Executa ao carregar a página
+        carregarRecados();
+        carregarEventos();
+    </script>
 </body>
 </html>
