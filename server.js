@@ -224,6 +224,15 @@ app.delete('/apagar-professor/:id', (req, res) => {
     });
 });
 
+// Rota auxiliar para forçar a criação dos alunos de teste sem apagar o banco
+app.get('/criar-alunos-teste', (req, res) => {
+    db.run(`CREATE TABLE IF NOT EXISTS alunos (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL)`, () => {
+        db.run("INSERT INTO alunos (nome) VALUES ('Lucas Silva'), ('Maria Oliveira'), ('Pedro Santos'), ('Julia Costa')", (err) => {
+            if (err) return res.send('<h2>Erro ou alunos já inseridos! <a href="/professor.html">Voltar</a></h2>');
+            res.send('<h2>Alunos de teste criados com sucesso! <a href="/professor.html">Ir para a Chamada</a></h2>');
+        });
+    });
+});
 
 
 // Inicializa o servidor

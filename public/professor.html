@@ -9,7 +9,7 @@
 
     <h1>EduClass Professor</h1>
 
-    <!-- 📢 SEÇÃO 1: MURAL E AGENDA DA COORDENAÇÃO (APENAS LEITURA) -->
+    <!-- SEÇÃO 1: MURAL E AGENDA DA COORDENAÇÃO (APENAS LEITURA) -->
     <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 30px;">
         <h2>📢 Comunicados da Direção / Coordenação</h2>
         <div id="muralDirecao">Carregando recados da direção...</div>
@@ -22,7 +22,7 @@
 
     <hr>
 
-    <!-- 📝 SEÇÃO 2: FORMULÁRIO DE PLANEJAMENTO -->
+    <!-- SEÇÃO 2: FORMULÁRIO DE PLANEJAMENTO -->
     <div>
         <h2>📝 Novo Planejamento de Aula</h2>
         <form id="formPlanejamento">
@@ -41,7 +41,7 @@
 
     <br><hr><br>
 
-    <!-- 📋 SEÇÃO 3: LISTA DOS PLANEJAMENTOS DO PROFESSOR -->
+    <!-- SEÇÃO 3: LISTA DOS PLANEJAMENTOS DO PROFESSOR -->
     <div>
         <h2>📋 Meus Planejamentos Salvos</h2>
         <div id="listaPlanejamentos">Carregando planejamentos...</div>
@@ -133,7 +133,7 @@
                 });
         });
 
-        // Executa todas as listagens quando o professor abre a página
+        // Executa apenas as listagens corretas
         carregarRecadosDaDirecao();
         carregarEventosDaDirecao();
         carregarPlanejamentos();
