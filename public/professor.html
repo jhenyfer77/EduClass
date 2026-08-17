@@ -8,8 +8,21 @@
 <body>
 
     <h1>EduClass Professor</h1>
-    
-    <!-- Formulário de Planejamento de Aula -->
+
+    <!-- 📢 SEÇÃO 1: MURAL E AGENDA DA COORDENAÇÃO (APENAS LEITURA) -->
+    <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 30px;">
+        <h2>📢 Comunicados da Direção / Coordenação</h2>
+        <div id="muralDirecao">Carregando recados da direção...</div>
+
+        <br>
+
+        <h2>📅 Agenda e Eventos Escolares</h2>
+        <div id="calendarioDirecao">Carregando eventos escolares...</div>
+    </div>
+
+    <hr>
+
+    <!-- 📝 SEÇÃO 2: FORMULÁRIO DE PLANEJAMENTO -->
     <div>
         <h2>📝 Novo Planejamento de Aula</h2>
         <form id="formPlanejamento">
@@ -28,13 +41,54 @@
 
     <br><hr><br>
 
-    <!-- Área de Exibição dos Planejamentos -->
+    <!-- 📋 SEÇÃO 3: LISTA DOS PLANEJAMENTOS DO PROFESSOR -->
     <div>
         <h2>📋 Meus Planejamentos Salvos</h2>
         <div id="listaPlanejamentos">Carregando planejamentos...</div>
     </div>
 
     <script>
+        // 1. Busca os RECADOS criados pelo gestor para mostrar ao professor
+        function carregarRecadosDaDirecao() {
+            fetch('/listar-recados')
+                .then(res => res.json())
+                .then(recados => {
+                    const div = document.getElementById('muralDirecao');
+                    if (!recados || recados.length === 0) {
+                        div.innerHTML = '<p>Nenhum comunicado oficial recente.</p>';
+                        return;
+                    }
+                    div.innerHTML = recados.map(r => `
+                        <div style="background: white; border-left: 4px solid #007bff; padding: 10px; margin-bottom: 10px;">
+                            <h4>${r.titulo}</h4>
+                            <p>${r.conteudo}</p>
+                            <small>Enviado por: <strong>${r.autor}</strong></small>
+                        </div>
+                    `).join('');
+                });
+        }
+
+        // 2. Busca os EVENTOS criados pelo gestor para mostrar ao professor
+        function carregarEventosDaDirecao() {
+            fetch('/listar-eventos')
+                .then(res => res.json())
+                .then(eventos => {
+                    const div = document.getElementById('calendarioDirecao');
+                    if (!eventos || eventos.length === 0) {
+                        div.innerHTML = '<p>Nenhum evento agendado.</p>';
+                        return;
+                    }
+                    div.innerHTML = eventos.map(e => `
+                        <div style="background: white; border-left: 4px solid #28a745; padding: 10px; margin-bottom: 10px;">
+                            <h4>${e.titulo}</h4>
+                            <p>📅 Data: ${e.data_evento}</p>
+                            ${e.descricao ? `<p>ℹ️ ${e.descricao}</p>` : ''}
+                        </div>
+                    `).join('');
+                });
+        }
+
+        // 3. Busca os PLANEJAMENTOS do próprio professor
         function carregarPlanejamentos() {
             fetch('/listar-planejamentos')
                 .then(res => res.json())
@@ -79,7 +133,9 @@
                 });
         });
 
-        // Carrega os dados na primeira abertura
+        // Executa todas as listagens quando o professor abre a página
+        carregarRecadosDaDirecao();
+        carregarEventosDaDirecao();
         carregarPlanejamentos();
     </script>
 </body>
