@@ -113,7 +113,33 @@ app.post('/criar-evento', (req, res) => {
     );
 });
 
-// Rota para buscar todos os recados salvos
+// 4. ROTAS DO PROFESSOR (Criar, Listar e Deletar Planejamentos)
+app.post('/criar-planejamento', (req, res) => {
+    const { materia, conteudo, data_planejada } = req.body;
+    db.run(`INSERT INTO planejamentos (materia, conteudo, data_planejada) VALUES (?, ?, ?)`, 
+        [materia, conteudo, data_planejada], (err) => {
+            if (err) return res.status(500).json({ erro: 'Erro ao salvar planejamento.' });
+            res.json({ mensagem: 'Planejamento salvo com sucesso!' });
+        }
+    );
+});
+
+app.get('/listar-planejamentos', (req, res) => {
+    db.all(`SELECT * FROM planejamentos ORDER BY data_planejada ASC`, [], (err, rows) => {
+        if (err) return res.status(500).json({ erro: err.message });
+        res.json(rows);
+    });
+});
+
+app.delete('/apagar-planejamento/:id', (req, res) => {
+    const { id } = req.params;
+    db.run(`DELETE FROM planejamentos WHERE id = ?`, [id], (err) => {
+        if (err) return res.status(500).json({ erro: err.message });
+        res.json({ mensagem: 'Planejamento apagado com sucesso!' });
+    });
+});
+
+// Rotas de listagem gerais
 app.get('/listar-recados', (req, res) => {
     db.all(`SELECT * FROM recados ORDER BY data_criacao DESC`, [], (err, rows) => {
         if (err) return res.status(500).json({ erro: err.message });
@@ -121,7 +147,6 @@ app.get('/listar-recados', (req, res) => {
     });
 });
 
-// Rota para buscar todos os eventos salvos
 app.get('/listar-eventos', (req, res) => {
     db.all(`SELECT * FROM eventos ORDER BY data_evento ASC`, [], (err, rows) => {
         if (err) return res.status(500).json({ erro: err.message });
@@ -129,7 +154,7 @@ app.get('/listar-eventos', (req, res) => {
     });
 });
 
-// Rota para apagar um recado específico
+// Rotas de exclusão gerais
 app.delete('/apagar-recado/:id', (req, res) => {
     const { id } = req.params;
     db.run(`DELETE FROM recados WHERE id = ?`, [id], (err) => {
@@ -138,7 +163,6 @@ app.delete('/apagar-recado/:id', (req, res) => {
     });
 });
 
-// Rota para apagar um evento específico
 app.delete('/apagar-evento/:id', (req, res) => {
     const { id } = req.params;
     db.run(`DELETE FROM eventos WHERE id = ?`, [id], (err) => {

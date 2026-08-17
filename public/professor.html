@@ -3,33 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduClass - Painel do Professor</title>
-    <script src="https://tailwindcss.com"></script>
+    <title>Painel do Professor - EduClass</title>
 </head>
-<body class="bg-gray-100 font-sans flex">
+<body>
 
-    <!-- Menu Lateral -->
-    <div class="w-64 bg-green-800 h-screen text-white p-6 shadow-xl">
-        <h1 class="text-2xl font-bold mb-8 text-center border-b border-green-600 pb-4">EduClass</h1>
-        <nav class="space-y-3">
-            <a href="#" class="block py-2.5 px-4 rounded bg-green-900 font-semibold">🏠 Minhas Turmas</a>
-            <a href="#" class="block py-2.5 px-4 rounded hover:bg-green-700 transition">📝 Lançar Notas</a>
-            <a href="/" class="block py-2.5 px-4 rounded hover:bg-red-600 transition mt-10">🚪 Sair</a>
-        </nav>
+    <h1>EduClass Professor</h1>
+    
+    <!-- Formulário de Planejamento de Aula -->
+    <div>
+        <h2>📝 Novo Planejamento de Aula</h2>
+        <form id="formPlanejamento">
+            <label for="materia">Matéria / Disciplina:</label><br>
+            <input type="text" id="materia" name="materia" required><br><br>
+
+            <label for="conteudo">Conteúdo da Aula:</label><br>
+            <textarea id="conteudo" name="conteudo" required></textarea><br><br>
+
+            <label for="data_planejada">Data Planejada:</label><br>
+            <input type="date" id="data_planejada" name="data_planejada" required><br><br>
+            
+            <button type="submit">Salvar Planejamento</button>
+        </form>
     </div>
 
-    <!-- Conteúdo Principal -->
-    <div class="flex-1 p-10">
-        <header class="flex justify-between items-center mb-8 border-b pb-4">
-            <h2 class="text-3xl font-bold text-gray-800">Painel do Professor</h2>
-            <span class="bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full">Ambiente: Docente</span>
-        </header>
+    <br><hr><br>
 
-        <div class="bg-white p-8 rounded-lg shadow-sm">
-            <h3 class="text-xl font-bold text-gray-800 mb-4">👋 Boas-vindas ao seu painel!</h3>
-            <p class="text-gray-600">Aqui você poderá gerenciar suas aulas, chamadas e notas dos alunos brevemente.</p>
-        </div>
+    <!-- Área de Exibição dos Planejamentos -->
+    <div>
+        <h2>📋 Meus Planejamentos Salvos</h2>
+        <div id="listaPlanejamentos">Carregando planejamentos...</div>
     </div>
 
+    <script>
+        function carregarPlanejamentos() {
+            fetch('/listar-planejamentos')
+                .then(res => res.json())
+                .then(dados => {
+                    const painel = document.getElementById('listaPlanejamentos');
+                    if (!dados || dados.length === 0) {
+                        painel.innerHTML = '<p>Nenhum planejamento salvo ainda.</p>';
+                        return;
+                    }
+                    painel.innerHTML = dados.map(p => `
+                        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                            <h3>Matéria: ${p.materia}</h3>
+                            <p><strong>Conteúdo:</strong> ${p.conteudo}</p>
+                            <p>📅 <strong>Data:</strong> ${p.data_planejada}</p>
+                            <button onclick="apagarPlanejamento(${p.id})">Apagar</button>
+                        </div>
+                    `).join('');
+                })
+                .catch(() => {
+                    document.getElementById('listaPlanejamentos').innerHTML = '<p>Erro ao carregar planejamentos.</p>';
+                });
+        }
+
+        function apagarPlanejamento(id) {
+            if (confirm('Deseja apagar este planejamento?')) {
+                fetch(`/apagar-planejamento/${id}`, { method: 'DELETE' })
+                    .then(res => res.json())
+                    .then(() => {
+                        carregarPlanejamentos();
+                    });
+            }
+        }
+
+        document.getElementById('formPlanejamento').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const dados = new URLSearchParams(new FormData(this));
+            
+            fetch('/criar-planejamento', { method: 'POST', body: dados })
+                .then(() => {
+                    this.reset();
+                    carregarPlanejamentos();
+                });
+        });
+
+        // Carrega os dados na primeira abertura
+        carregarPlanejamentos();
+    </script>
 </body>
 </html>
