@@ -7,7 +7,11 @@
 </head>
 <body>
 
-    <h1>EduClass Gestor</h1>
+    <!-- Cabeçalho com o Título e o Botão de Sair alinhados -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 20px;">
+        <h1 style="margin: 0;">EduClass Gestor</h1>
+        <a href="/logout" style="background-color: #dc3545; color: white; text-decoration: none; font-weight: bold; padding: 8px 15px; border-radius: 4px; font-family: sans-serif;">Sair do Sistema</a>
+    </div>
 
 <!-- Formulário de Cadastro de Professores -->
 <div style="border: 1px solid #007bff; background-color: #f0f9ff; padding: 15px; margin-bottom: 25px;">
@@ -182,60 +186,36 @@
                 .then(eventos => {
                     const calendarioDiv = document.getElementById('calendario');
                     if (!eventos || eventos.length === 0) {
-                        calendarioDiv.innerHTML = '<p>Nenhum evento agendado na agenda.</p>';
+                        calendarioDiv.innerHTML = '<p>Nenhum evento agendado.</p>';
                         return;
                     }
                     calendarioDiv.innerHTML = eventos.map(e => `
                         <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
                             <h3>${e.titulo}</h3>
-                            <p>📅 Data: ${e.data_evento}</p>
-                            ${e.descricao ? `<p>ℹ️ ${e.descricao}</p>` : ''}
+                            <p>Data: ${e.data_evento}</p>
+                            <p>${e.descricao || ''}</p>
                             <button onclick="apagarItem('/apagar-evento/${e.id}', 'evento')">Apagar Evento</button>
                         </div>
                     `).join('');
                 });
         }
-    
-        // Apaga recados ou eventos
+
         function apagarItem(url, tipo) {
-            if (confirm('Tem certeza que deseja remover este item permanentemente?')) {
+            if (confirm(`Tem certeza que deseja apagar este ${tipo}?`)) {
                 fetch(url, { method: 'DELETE' })
                     .then(res => res.json())
                     .then(() => {
-                        if (tipo === 'recado') carregarRecados();
-                        if (tipo === 'evento') carregarEventos();
+                        carregarRecados();
+                        carregarEventos();
                         atualizarContadores();
                     });
             }
         }
-    
-        document.getElementById('formRecado').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const dados = new URLSearchParams(new FormData(this));
-            fetch('/criar-recado', { method: 'POST', body: dados })
-                .then(() => {
-                    this.reset();
-                    carregarRecados();
-                    atualizarContadores();
-                });
-        });
-    
-        document.getElementById('formEvento').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const dados = new URLSearchParams(new FormData(this));
-            fetch('/criar-evento', { method: 'POST', body: dados })
-                .then(() => {
-                    this.reset();
-                    carregarEventos();
-                    atualizarContadores();
-                });
-        });
-    
-        // Roda automaticamente assim que abre a tela
+
+        // Executa ao carregar a página
+        atualizarContadores();
         carregarRecados();
         carregarEventos();
-        atualizarContadores();
     </script>
-    
 </body>
 </html>

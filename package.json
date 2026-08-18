@@ -4,10 +4,10 @@
     "description": "Sistema de Gestão Escolar e Professores",
     "main": "server.js",
     "scripts": {
-      "start": "node server.js"
+        "start": "node server.js"
     },
     "dependencies": {
-      "express": "^4.19.2"
+        "express": "^4.19.2",
+        "express-session": "^1.19.0"
     }
-  }
-  
+}

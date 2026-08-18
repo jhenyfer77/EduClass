@@ -1,8 +1,18 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const session = require('express-session'); // 1. Adicionado o módulo de sessão que você instalou
+
 const app = express();
 const PORT = 3000;
+
+// 2. Configuração da Sessão no Servidor
+app.use(session({
+    secret: 'chave-secreta-educlass', 
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+}));
 
 // Configurações essenciais para receber dados de formulários e JSON
 app.use(express.urlencoded({ extended: true }));
@@ -20,7 +30,6 @@ const db = new sqlite3.Database('./database.db', (err) => {
 
 // Cria todas as tabelas do sistema de uma vez só
 db.serialize(() => {
-    // 1. Tabela de Usuários (Gestores e Professores)
     db.run(`CREATE TABLE IF NOT EXISTS usuarios (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT NOT NULL,
@@ -29,7 +38,6 @@ db.serialize(() => {
         tipo TEXT CHECK(tipo IN ('gestor', 'professor')) NOT NULL
     )`);
 
-    // 2. Tabela de Recados (Mural de Avisos)
     db.run(`CREATE TABLE IF NOT EXISTS recados (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         titulo TEXT NOT NULL,
@@ -38,7 +46,6 @@ db.serialize(() => {
         data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP
     )`);
 
-    // 3. Tabela de Calendário (Eventos da Escola)
     db.run(`CREATE TABLE IF NOT EXISTS eventos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         titulo TEXT NOT NULL,
@@ -46,7 +53,6 @@ db.serialize(() => {
         descricao TEXT
     )`);
 
-    // 4. Tabela de Planejamento de Aula (Preenchido pelo Professor)
     db.run(`CREATE TABLE IF NOT EXISTS planejamentos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         materia TEXT NOT NULL,
@@ -60,9 +66,9 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Rota para processar o Login
+// Rota para processar o Login (Atualizada com a Opção A e com Sessão)
 app.post('/login', (req, res) => {
-    const { email, senha } = req.body;
+    const { email, senha } = req.body; // Usa "senha" pois você alterou o HTML para "senha"
 
     db.get(`SELECT * FROM usuarios WHERE email = ?`, [email], (err, usuario) => {
         if (err) {
@@ -72,11 +78,48 @@ app.post('/login', (req, res) => {
             return res.send('<h2>E-mail ou senha incorretos! <a href="/">Tentar novamente</a></h2>');
         }
 
+        // 3. Guarda quem logou na memória do servidor
+        req.session.usuarioLogado = {
+            id: usuario.id,
+            nome: usuario.nome,
+            tipo: usuario.tipo
+        };
+
         if (usuario.tipo === 'gestor') {
             res.redirect('/gestor.html');
         } else {
             res.redirect('/professor.html');
         }
+    });
+});
+
+// Rota para processar o Cadastro de novos usuários
+app.post('/cadastro', (req, res) => {
+    const { name, email, password, userType } = req.body;
+
+    if (!name || !email || !password || !userType) {
+        return res.send('<h2>Erro: Preencha todos os campos! <a href="/">Voltar</a></h2>');
+    }
+
+    db.run(
+        `INSERT INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, ?)`, 
+        [name, email, password, userType], 
+        (err) => {
+            if (err) {
+                return res.send('<h2>Erro: Este e-mail já está cadastrado! <a href="/">Voltar e tentar outro</a></h2>');
+            }
+            res.send('<h2>Cadastro realizado com sucesso! <a href="/">Clique aqui para fazer login</a></h2>');
+        }
+    );
+});
+
+// 4. Rota Nova: Para deslogar do sistema de forma segura
+app.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.send('Erro ao sair do sistema.');
+        }
+        res.redirect('/'); 
     });
 });
 
@@ -182,19 +225,15 @@ app.get('/criar-usuarios-teste', (req, res) => {
 
 // Rota para o Gestor ver o total de professores, recados e eventos
 app.get('/contadores-gestor', (req, res) => {
-    // Conta os professores (usuarios onde tipo = 'professor')
     db.get(`SELECT COUNT(*) AS total FROM usuarios WHERE tipo = 'professor'`, [], (err, rowProf) => {
         if (err) return res.status(500).json({ erro: err.message });
         
-        // Conta os recados
         db.get(`SELECT COUNT(*) AS total FROM recados`, [], (err, rowRec) => {
             if (err) return res.status(500).json({ erro: err.message });
             
-            // Conta os eventos
             db.get(`SELECT COUNT(*) AS total FROM eventos`, [], (err, rowEv) => {
                 if (err) return res.status(500).json({ erro: err.message });
                 
-                // Retorna os 3 números de uma vez só para o HTML
                 res.json({
                     professores: rowProf.total,
                     recados: rowRec.total,
@@ -205,37 +244,29 @@ app.get('/contadores-gestor', (req, res) => {
     });
 });
 
-// Rota para o Gestor listar os professores cadastrados
+// Nova rota para listar os professores cadastrados no painel do gestor
 app.get('/listar-professores', (req, res) => {
     db.all(`SELECT id, nome, email FROM usuarios WHERE tipo = 'professor' ORDER BY nome ASC`, [], (err, rows) => {
-        if (err) return res.status(500).json({ erro: err.message });
+        if (err) {
+            return res.status(500).json({ erro: err.message });
+        }
         res.json(rows);
     });
 });
 
-// NOVA: Rota para o Gestor excluir um professor cadastrado pelo ID
+// Nova rota para deletar um professor pelo painel do gestor
 app.delete('/apagar-professor/:id', (req, res) => {
     const { id } = req.params;
-    
-    // Deleta o usuário baseado no ID recebido
-    db.run(`DELETE FROM usuarios WHERE id = ? AND tipo = 'professor'`, [id], (err) => {
-        if (err) return res.status(500).json({ erro: err.message });
-        res.json({ mensagem: 'Professor excluído com sucesso!' });
-    });
-});
-
-// Rota auxiliar para forçar a criação dos alunos de teste sem apagar o banco
-app.get('/criar-alunos-teste', (req, res) => {
-    db.run(`CREATE TABLE IF NOT EXISTS alunos (id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL)`, () => {
-        db.run("INSERT INTO alunos (nome) VALUES ('Lucas Silva'), ('Maria Oliveira'), ('Pedro Santos'), ('Julia Costa')", (err) => {
-            if (err) return res.send('<h2>Erro ou alunos já inseridos! <a href="/professor.html">Voltar</a></h2>');
-            res.send('<h2>Alunos de teste criados com sucesso! <a href="/professor.html">Ir para a Chamada</a></h2>');
-        });
+    db.run(`DELETE FROM usuarios WHERE id = ?`, [id], (err) => {
+        if (err) {
+            return res.status(500).json({ erro: err.message });
+        }
+        res.json({ mensagem: 'Professor removido com sucesso!' });
     });
 });
 
 
-// Inicializa o servidor
+// Inicialização do servidor
 app.listen(PORT, () => {
-    console.log(`EduClass rodando em http://localhost:${PORT}`);
+    console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

@@ -7,7 +7,11 @@
 </head>
 <body>
 
-    <h1>EduClass Professor</h1>
+    <!-- Cabeçalho com o Título e o Botão de Sair alinhados perfeitamente no topo -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 20px;">
+        <h1 style="margin: 0;">EduClass Professor</h1>
+        <a href="/logout" style="background-color: #dc3545; color: white; text-decoration: none; font-weight: bold; padding: 8px 15px; border-radius: 4px; font-family: sans-serif;">Sair do Sistema</a>
+    </div>
 
     <!-- SEÇÃO 1: MURAL E AGENDA DA COORDENAÇÃO (APENAS LEITURA) -->
     <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 30px;">
@@ -19,7 +23,7 @@
         <h2>📅 Agenda e Eventos Escolares</h2>
         <div id="calendarioDirecao">Carregando eventos escolares...</div>
     </div>
-
+    
     <hr>
 
     <!-- SEÇÃO 2: FORMULÁRIO DE PLANEJAMENTO -->
@@ -35,7 +39,7 @@
             <label for="data_planejada">Data Planejada:</label><br>
             <input type="date" id="data_planejada" name="data_planejada" required><br><br>
             
-            <button type="submit">Salvar Planejamento</button>
+            <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px;">Salvar Planejamento</button>
         </form>
     </div>
 
@@ -103,7 +107,7 @@
                             <h3>Matéria: ${p.materia}</h3>
                             <p><strong>Conteúdo:</strong> ${p.conteudo}</p>
                             <p>📅 <strong>Data:</strong> ${p.data_planejada}</p>
-                            <button onclick="apagarPlanejamento(${p.id})">Apagar</button>
+                            <button onclick="apagarPlanejamento(${p.id})" style="background-color: #dc3545; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer;">Apagar</button>
                         </div>
                     `).join('');
                 })
@@ -133,7 +137,7 @@
                 });
         });
 
-        // Executa apenas as listagens corretas
+        // Executa as listagens ao abrir a página
         carregarRecadosDaDirecao();
         carregarEventosDaDirecao();
         carregarPlanejamentos();

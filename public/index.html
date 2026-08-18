@@ -3,26 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduuClass - Login</title>
-    <script src="https://tailwindcss.com"></script>
+    <title>EduClass - Login</title>
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">EduClass</h2>
-        <form action="/login" method="POST">
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">E-mail</label>
-                <input type="email" name="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" required>
-            </div>
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Senha</label>
-                <input type="password" name="senha" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" required>
-            </div>
-            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700 transition">
-                Entrar
-            </button>
-        </form>
+<body>
+
+    <!-- Container principal que divide a tela em duas partes -->
+    <main class="login-container">
         
-    </div>
+        <!-- Lado Esquerdo: Apresentação/Banner -->
+        <section class="login-banner">
+            <div class="logo">
+                <h2>EduClass</h2> 
+            </div>
+            
+            <h1>Página de Login e Cadastro</h1>
+            
+            <footer class="banner-footer">
+                <p>suporte@educlass.com.br</p>
+            </footer>
+        </section>
+
+        <!-- Lado Direito: Formulário de Login -->
+        <section class="login-form-container" id="loginSection">
+            <div class="brand-header">
+                <span>Gestão Escolar</span>
+            </div>
+
+            <h2>Entrar</h2>
+            <p>Por favor, faça o login para acessar sua conta.</p>
+
+            <!-- Formulário que enviará os dados de login para o seu server.js -->
+            <form action="/login" method="POST" class="login-form">
+                
+                <!-- Campo de E-mail -->
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="seu.email@escola.com" required>
+                </div>
+
+                <!-- Campo de Senha -->
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="senha" placeholder="••••••••" required>
+                </div>
+
+                <!-- Campo de Seleção do Tipo de Usuário -->
+                <div class="form-group">
+                    <label for="user-type">Acessar como</label>
+                    <select id="user-type" name="userType" required>
+                        <option value="" disabled selected>Selecione seu perfil...</option>
+                        <option value="professor">Professor</option>
+                        <option value="gestor">Gestor / Administrador</option>
+                    </select>
+                </div>
+
+                <!-- Botão de Entrar -->
+                <button type="submit" class="btn-submit">Entrar</button>
+            </form>
+
+            <div class="form-footer">
+                <p>Precisa de uma conta? <a href="#" id="btnShowRegister">Criar uma agora</a></p>
+            </div>
+        </section>
+
+        <!-- Formulário de Cadastro (Inicia escondido no HTML puro) -->
+        <section class="login-form-container" id="registerSection" style="display: none;">
+            <div class="brand-header">
+                <span>Gestão Escolar</span>
+            </div>
+
+            <h2>Criar Conta</h2>
+            <p>Preencha os dados abaixo para se cadastrar.</p>
+
+            <!-- Formulário que enviará os dados de cadastro para o seu server.js -->
+            <form action="/cadastro" method="POST" class="login-form">
+                
+                <div class="form-group">
+                    <label for="newName">Nome Completo</label>
+                    <input type="text" id="newName" name="name" placeholder="Seu nome" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="newEmail">E-mail</label>
+                    <input type="email" id="newEmail" name="email" placeholder="seu.email@escola.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="newPassword">Senha</label>
+                    <input type="password" id="newPassword" name="password" placeholder="••••••••" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="new-user-type"> Cadastrar como</label>
+                    <select id="new-user-type" name="userType" required>
+                        <option value="" disabled selected>Selecione seu perfil...</option>
+                        <option value="professor">Professor</option>
+                        <option value="gestor">Gestor / Administrador</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-submit">Cadastrar</button>
+            </form>
+
+            <div class="form-footer">
+                <p>Já tem uma conta? <a href="#" id="btnShowLogin">Fazer Login</a></p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Script simples para alternar entre as telas de Login e Cadastro -->
+    <script>
+        const loginSection = document.getElementById('loginSection');
+        const registerSection = document.getElementById('registerSection');
+        const btnShowRegister = document.getElementById('btnShowRegister');
+        const btnShowLogin = document.getElementById('btnShowLogin');
+
+        btnShowRegister.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginSection.style.display = 'none';
+            registerSection.style.display = 'block';
+        });
+
+        btnShowLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerSection.style.display = 'none';
+            loginSection.style.display = 'block';
+        });
+    </script>
+
 </body>
 </html>
