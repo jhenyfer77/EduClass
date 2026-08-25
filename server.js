@@ -227,30 +227,17 @@ app.get('/criar-usuarios-teste', (req, res) => {
 app.get('/contadores-gestor', (req, res) => {
     db.get(`SELECT COUNT(*) AS total FROM usuarios WHERE tipo = 'professor'`, [], (err, rowProf) => {
         if (err) return res.status(500).json({ erro: err.message });
-        
         db.get(`SELECT COUNT(*) AS total FROM recados`, [], (err, rowRec) => {
             if (err) return res.status(500).json({ erro: err.message });
-            
-            db.get(`SELECT COUNT(*) AS total FROM eventos`, [], (err, rowEv) => {
+            db.get(`SELECT COUNT(*) AS total FROM eventos`, [], (err, rowEve) => {
                 if (err) return res.status(500).json({ erro: err.message });
-                
                 res.json({
                     professores: rowProf.total,
                     recados: rowRec.total,
-                    eventos: rowEv.total
+                    eventos: rowEve.total
                 });
             });
         });
-    });
-});
-
-// Nova rota para listar os professores cadastrados no painel do gestor
-app.get('/listar-professores', (req, res) => {
-    db.all(`SELECT id, nome, email FROM usuarios WHERE tipo = 'professor' ORDER BY nome ASC`, [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ erro: err.message });
-        }
-        res.json(rows);
     });
 });
 
@@ -264,7 +251,6 @@ app.delete('/apagar-professor/:id', (req, res) => {
         res.json({ mensagem: 'Professor removido com sucesso!' });
     });
 });
-
 
 // Inicialização do servidor
 app.listen(PORT, () => {
