@@ -30,6 +30,7 @@ const db = new sqlite3.Database('./database.db', (err) => {
 
 // Cria todas as tabelas do sistema de uma vez só
 db.serialize(() => {
+
     db.run(`CREATE TABLE IF NOT EXISTS usuarios (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT NOT NULL,
@@ -58,6 +59,16 @@ db.serialize(() => {
         materia TEXT NOT NULL,
         conteudo TEXT NOT NULL,
         data_planejada TEXT NOT NULL
+    )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS alunos (
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        nome TEXT NOT NULL,
+
+        turma TEXT NOT NULL
+
     )`);
 });
 
@@ -195,6 +206,56 @@ app.get('/listar-eventos', (req, res) => {
         if (err) return res.status(500).json({ erro: err.message });
         res.json(rows);
     });
+});
+
+// Rota para cadastrar um novo aluno
+
+app.post('/cadastrar-aluno', (req, res) => {
+
+    const { nome, turma } = req.body;
+
+    if (!nome || !turma) {
+
+        return res.status(400).json({
+
+            erro: 'Nome e turma são obrigatórios.'
+
+        });
+
+    }
+
+    db.run(
+
+        `INSERT INTO alunos (nome, turma) VALUES (?, ?)`,
+
+        [nome, turma],
+
+        (err) => {
+
+            if (err) {
+
+                console.error('ERRO AO CADASTRAR ALUNO:', err);
+            
+                
+            
+                return res.status(500).json({
+            
+                    erro: err.message
+            
+                });
+            
+            }
+
+            res.json({
+
+                mensagem: 'Aluno cadastrado com sucesso!'
+
+            });
+
+        }
+
+    );
+
 });
 
 // Rotas de exclusão gerais

@@ -48,6 +48,66 @@
         </div>
     </div>
 
+<!-- Formulário de Cadastro de Alunos -->
+
+<div style="border: 1px solid #16a34a; background-color: #f0fdf4; padding: 15px; margin-bottom: 25px;">
+
+    <h2>🎓 Cadastrar Novo Aluno</h2>
+
+    <form id="formAluno" onsubmit="cadastrarAluno(event)">
+
+        <label for="nome_aluno">Nome do Aluno:</label><br>
+
+        <input
+
+            type="text"
+
+            id="nome_aluno"
+
+            name="nome"
+
+            placeholder="Ex: João Silva"
+
+            required
+
+        >
+
+        <br><br>
+
+        <label for="turma_aluno">Turma:</label><br>
+
+        <input
+
+            type="text"
+
+            id="turma_aluno"
+
+            name="turma"
+
+            placeholder="Ex: 2ºC"
+
+            required
+
+        >
+
+        <br><br>
+
+        <button
+
+            type="submit"
+
+            style="background-color: #16a34a; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px;"
+
+        >
+
+            Cadastrar Aluno
+
+        </button>
+
+    </form>
+
+</div>
+
     <!-- Área Oculta que vai mostrar a lista de professores -->
     <div id="areaProfessores" style="display: none; border: 1px solid #007bff; background: #f0fdfa; padding: 15px; margin-bottom: 30px;">
         <h3>👨‍🏫 Professores Cadastrados</h3>
@@ -211,6 +271,44 @@
                     });
             }
         }
+
+        async function cadastrarAluno(event) {
+
+event.preventDefault();
+
+const form = document.getElementById('formAluno');
+
+const dados = new URLSearchParams(new FormData(form));
+
+try {
+
+    const response = await fetch('/cadastrar-aluno', {
+
+        method: 'POST',
+
+        body: dados
+
+    });
+
+    const resultado = await response.json();
+
+    if (!response.ok) {
+
+        throw new Error(resultado.erro || 'Erro ao cadastrar aluno.');
+
+    }
+
+    alert('✅ Aluno cadastrado com sucesso!');
+
+    form.reset();
+
+} catch (error) {
+
+    alert('❌ ' + error.message);
+
+}
+
+}
 
         // Executa ao carregar a página
         atualizarContadores();
