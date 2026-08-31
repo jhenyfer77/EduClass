@@ -1,0 +1,1229 @@
+/* =====================================================
+   EDUCLASS — STYLE.CSS
+   Design tecnológico / azul claro / painel 3D
+===================================================== */
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    font-family: "Segoe UI", "Inter", Arial, sans-serif;
+    color: #172033;
+    background: #082d55;
+}
+
+
+/* =====================================================
+   FUNDO PRINCIPAL
+===================================================== */
+
+.login-container {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 40px;
+
+    background:
+
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(66, 211, 255, 0.32),
+            transparent 32%
+        ),
+
+        radial-gradient(
+            circle at 85% 75%,
+            rgba(71, 151, 255, 0.30),
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(0, 183, 255, 0.10),
+            transparent 40%
+        ),
+
+        linear-gradient(
+            135deg,
+            #0c3767,
+            #0b4b82 45%,
+            #0a315e
+        );
+}
+
+
+/* =====================================================
+   GRADE 3D
+===================================================== */
+
+.tech-grid {
+
+    position: absolute;
+
+    width: 150%;
+    height: 150%;
+
+    top: -25%;
+    left: -25%;
+
+    background-image:
+
+        linear-gradient(
+            rgba(190, 239, 255, 0.11) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(190, 239, 255, 0.11) 1px,
+            transparent 1px
+        );
+
+    background-size: 55px 55px;
+
+    transform:
+        perspective(600px)
+        rotateX(60deg);
+
+    opacity: 0.65;
+
+    pointer-events: none;
+
+    animation: gridMove 15s linear infinite;
+}
+
+@keyframes gridMove {
+
+    from {
+
+        transform:
+            perspective(600px)
+            rotateX(60deg)
+            translateY(0);
+    }
+
+    to {
+
+        transform:
+            perspective(600px)
+            rotateX(60deg)
+            translateY(55px);
+    }
+}
+
+
+/* =====================================================
+   LUZES DO FUNDO
+===================================================== */
+
+.light {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    filter: blur(70px);
+
+    animation:
+        lightMove 8s ease-in-out infinite alternate;
+}
+
+
+/* Luz superior esquerda */
+
+.light-1 {
+
+    width: 360px;
+    height: 360px;
+
+    top: -120px;
+    left: -100px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(83, 220, 255, 0.35),
+            transparent 70%
+        );
+}
+
+
+/* Luz inferior direita */
+
+.light-2 {
+
+    width: 420px;
+    height: 420px;
+
+    right: -140px;
+    bottom: -170px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(86, 169, 255, 0.30),
+            transparent 70%
+        );
+
+    animation-delay: -3s;
+}
+
+
+/* Luz central */
+
+.light-3 {
+
+    width: 220px;
+    height: 220px;
+
+    top: 35%;
+    right: 15%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(75, 206, 255, 0.18),
+            transparent 70%
+        );
+
+    animation-delay: -5s;
+}
+
+
+@keyframes lightMove {
+
+    from {
+        transform: translate(0, 0);
+    }
+
+    to {
+        transform: translate(40px, -25px);
+    }
+}
+
+
+/* =====================================================
+   JANELA CENTRAL
+===================================================== */
+
+.login-card {
+
+    width: 1000px;
+
+    min-height: 600px;
+
+    display: flex;
+
+    position: relative;
+
+    z-index: 10;
+
+    overflow: hidden;
+
+    border-radius: 28px;
+
+    background:
+        rgba(7, 25, 51, 0.78);
+
+    border:
+        1px solid rgba(179, 237, 255, 0.28);
+
+    backdrop-filter: blur(30px);
+
+    -webkit-backdrop-filter: blur(30px);
+
+    box-shadow:
+
+        0 45px 100px rgba(0, 25, 60, 0.45),
+
+        0 0 80px rgba(0, 190, 255, 0.15),
+
+        inset 0 1px 1px rgba(255, 255, 255, 0.18);
+
+    transform:
+        perspective(1500px)
+        rotateX(2deg);
+
+    transition: 0.5s ease;
+}
+
+
+.login-card:hover {
+
+    transform: none;
+
+    box-shadow:
+
+        0 55px 120px rgba(0, 25, 60, 0.50),
+
+        0 0 100px rgba(0, 190, 255, 0.20),
+
+        inset 0 1px 1px rgba(255, 255, 255, 0.22);
+}
+
+
+/* =====================================================
+   LADO ESQUERDO
+===================================================== */
+
+.login-banner {
+
+    width: 46%;
+
+    padding: 48px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    position: relative;
+
+    overflow: hidden;
+
+    color: white;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            #0b467e,
+            #07325f 60%,
+            #05284c
+        );
+
+    border-right:
+        1px solid rgba(116, 220, 255, 0.20);
+}
+
+
+/* Brilho interno */
+
+.login-banner::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    right: -130px;
+    top: -100px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(0, 205, 255, 0.16);
+
+    filter: blur(50px);
+
+    pointer-events: none;
+}
+
+
+/* Linha tecnológica */
+
+.login-banner::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 160px;
+    height: 2px;
+
+    right: 40px;
+    bottom: 80px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #4ddcff,
+            transparent
+        );
+
+    box-shadow:
+        0 0 15px rgba(0, 220, 255, 0.7);
+}
+
+
+/* =====================================================
+   LOGO
+===================================================== */
+
+.logo {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    position: relative;
+
+    z-index: 3;
+}
+
+
+.logo-symbol {
+
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    color: white;
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #087cff,
+            #00d9ff
+        );
+
+    border:
+        1px solid rgba(255, 255, 255, 0.25);
+
+    box-shadow:
+
+        0 0 25px rgba(0, 204, 255, 0.35),
+
+        inset 0 1px 2px rgba(255, 255, 255, 0.45);
+}
+
+
+.logo h2 {
+
+    font-size: 24px;
+
+    line-height: 1;
+
+    letter-spacing: 0.5px;
+}
+
+
+.logo span {
+
+    display: block;
+
+    margin-top: 4px;
+
+    color: #66ddff;
+
+    font-size: 7px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+
+/* =====================================================
+   CONTEÚDO DO BANNER
+===================================================== */
+
+.banner-content {
+
+    margin-top: auto;
+    margin-bottom: auto;
+
+    position: relative;
+
+    z-index: 3;
+}
+
+
+/* Status */
+
+.status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 7px 12px;
+
+    margin-bottom: 20px;
+
+    border-radius: 30px;
+
+    color: #7ce7ff;
+
+    background:
+        rgba(0, 213, 255, 0.08);
+
+    border:
+        1px solid rgba(96, 225, 255, 0.22);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+
+.status span {
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #00e5ff;
+
+    box-shadow:
+        0 0 12px #00e5ff;
+
+    animation:
+        pulse 1.8s infinite;
+}
+
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.35;
+    }
+}
+
+
+/* Título */
+
+.banner-content h1 {
+
+    max-width: 390px;
+
+    margin-bottom: 20px;
+
+    font-size: 44px;
+
+    line-height: 1.06;
+
+    letter-spacing: -1.5px;
+}
+
+
+.banner-content h1 strong {
+    display: block;
+
+    background: linear-gradient(
+        90deg,
+        #ffffff,
+        #58dcff
+    );
+
+    background-clip: text;
+    color: transparent;
+}
+
+
+.banner-content > p {
+
+    max-width: 380px;
+
+    margin-bottom: 25px;
+
+    color:
+        rgba(230, 247, 255, 0.68);
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+
+/* =====================================================
+   RODAPÉ DO BANNER
+===================================================== */
+
+.banner-bottom {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    position: relative;
+
+    z-index: 3;
+
+    color:
+        rgba(255, 255, 255, 0.35);
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+
+/* =====================================================
+   ÁREA DO FORMULÁRIO
+===================================================== */
+
+.login-form-container {
+
+    width: 54%;
+
+    padding: 55px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    background:
+        rgba(250, 253, 255, 0.98);
+
+    color: #172033;
+}
+
+
+/* =====================================================
+   TOPO DO FORMULÁRIO
+===================================================== */
+
+.form-top {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 17px;
+}
+
+
+.section-number {
+
+    color: #008cff;
+
+    font-size: 11px;
+
+    font-weight: 900;
+}
+
+
+.section-name {
+
+    color: #8b9bb0;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+
+/* =====================================================
+   TÍTULOS
+===================================================== */
+
+.login-form-container h2 {
+
+    margin-bottom: 7px;
+
+    color: #061b35;
+
+    font-size: 31px;
+
+    line-height: 1.15;
+
+    letter-spacing: -0.8px;
+}
+
+
+.form-subtitle {
+
+    margin-bottom: 27px;
+
+    color: #718096;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   GRUPOS
+===================================================== */
+
+.form-group {
+
+    margin-bottom: 17px;
+}
+
+
+.form-group label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #506176;
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+
+/* =====================================================
+   INPUTS
+===================================================== */
+
+.form-group input {
+
+    width: 100%;
+
+    height: 48px;
+
+    padding: 0 14px;
+
+    border:
+        1px solid #d9e2ec;
+
+    border-radius: 9px;
+
+    outline: none;
+
+    background: #f7faff;
+
+    color: #172033;
+
+    font-size: 13px;
+
+    transition: 0.3s;
+}
+
+
+.form-group input::placeholder {
+
+    color: #a2afbf;
+}
+
+
+.form-group input:hover {
+
+    border-color: #74d9ff;
+
+}
+
+
+.form-group input:focus {
+
+    border-color: #008cff;
+
+    background: white;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+
+        0 0 0 3px rgba(0, 140, 255, 0.08),
+
+        0 8px 20px rgba(0, 100, 200, 0.08);
+}
+
+
+/* =====================================================
+   BOTÕES DE PERFIL
+===================================================== */
+
+.profile-options {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+}
+
+
+.profile-option {
+
+    position: relative;
+
+    cursor: pointer;
+}
+
+
+.profile-option input {
+
+    position: absolute;
+
+    opacity: 0;
+
+    width: 0;
+    height: 0;
+
+    pointer-events: none;
+}
+
+
+.profile-button {
+
+    width: 100%;
+
+    min-height: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    border:
+        1px solid #d8e3ef;
+
+    border-radius: 10px;
+
+    background: #f7faff;
+
+    color: #53657a;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.3s ease;
+}
+
+
+.profile-icon {
+
+    font-size: 14px;
+
+    color: #7b8da2;
+
+    transition: 0.3s;
+}
+
+
+/* Hover */
+
+.profile-button:hover {
+
+    border-color: #42bfff;
+
+    background: #f0faff;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(0, 150, 255, 0.10);
+}
+
+
+/* Selecionado */
+
+.profile-option input:checked + .profile-button {
+
+    color: #006fc9;
+
+    border-color: #00a8ee;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #e7f9ff,
+            #edf6ff
+        );
+
+    box-shadow:
+
+        0 0 0 2px rgba(0, 168, 238, 0.08),
+
+        0 8px 20px rgba(0, 150, 255, 0.14);
+}
+
+
+.profile-option input:checked
++ .profile-button
+.profile-icon {
+
+    color: #008cff;
+
+    transform: scale(1.15);
+
+    text-shadow:
+        0 0 10px rgba(0, 174, 255, 0.5);
+}
+
+
+/* =====================================================
+   BOTÃO PRINCIPAL
+===================================================== */
+
+.btn-submit {
+
+    width: 100%;
+
+    height: 50px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 17px;
+
+    margin-top: 4px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    color: white;
+
+    background:
+
+        linear-gradient(
+            100deg,
+            #0755b8,
+            #008cff,
+            #00bfe8
+        );
+
+    background-size: 200% 100%;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.7px;
+
+    cursor: pointer;
+
+    box-shadow:
+
+        0 8px 20px rgba(0, 140, 255, 0.22);
+
+    transition: 0.4s;
+}
+
+
+.btn-submit:hover {
+
+    background-position: 100% 0;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+
+        0 12px 30px rgba(0, 140, 255, 0.32);
+}
+
+
+.btn-submit:active {
+
+    transform:
+        translateY(1px);
+}
+
+
+.btn-submit b {
+
+    font-size: 20px;
+
+    font-weight: 400;
+}
+
+
+/* =====================================================
+   RODAPÉ DO FORMULÁRIO
+===================================================== */
+
+.form-footer {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    margin-top: 19px;
+
+    color: #8795a7;
+
+    font-size: 11px;
+}
+
+
+.form-footer a {
+
+    color: #008cff;
+
+    font-weight: 800;
+
+    text-decoration: none;
+
+    transition: 0.2s;
+}
+
+
+.form-footer a:hover {
+
+    color: #00a9e8;
+
+    text-decoration: underline;
+}
+
+
+/* =====================================================
+   CADASTRO
+===================================================== */
+
+.register-container {
+
+    padding-top: 45px;
+}
+
+
+/* Linhas do cadastro */
+
+.form-row {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 15px;
+}
+
+
+.register-container .form-group {
+
+    margin-bottom: 14px;
+}
+
+
+/* =====================================================
+   RESPONSIVIDADE
+===================================================== */
+
+@media (max-width: 950px) {
+
+    .login-container {
+
+        padding: 20px;
+
+        overflow-y: auto;
+    }
+
+
+    .login-card {
+
+        width: 100%;
+
+        max-width: 620px;
+
+        min-height: auto;
+
+        flex-direction: column;
+    }
+
+
+    .login-banner {
+
+        width: 100%;
+
+        min-height: 330px;
+
+        padding: 38px;
+    }
+
+
+    .login-form-container {
+
+        width: 100%;
+
+        padding: 40px;
+    }
+
+
+    .banner-content h1 {
+
+        font-size: 36px;
+    }
+}
+
+
+/* =====================================================
+   CELULAR
+===================================================== */
+
+@media (max-width: 600px) {
+
+    .login-container {
+
+        padding: 12px;
+
+        align-items: flex-start;
+
+        padding-top: 25px;
+
+        padding-bottom: 25px;
+    }
+
+
+    .login-card {
+
+        border-radius: 20px;
+    }
+
+
+    .login-banner {
+
+        min-height: 270px;
+
+        padding: 28px;
+    }
+
+
+    .login-form-container {
+
+        padding: 30px 24px;
+    }
+
+
+    .banner-content h1 {
+
+        font-size: 31px;
+    }
+
+
+    .banner-content > p {
+
+        font-size: 12px;
+    }
+
+
+    .form-row {
+
+        grid-template-columns: 1fr;
+
+        gap: 0;
+    }
+
+
+    .profile-options {
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 8px;
+    }
+
+
+    .profile-button {
+
+        min-height: 48px;
+
+        font-size: 11px;
+    }
+
+
+    .login-form-container h2 {
+
+        font-size: 27px;
+    }
+}
+
+
+/* =====================================================
+   CELULAR PEQUENO
+===================================================== */
+
+@media (max-width: 380px) {
+
+    .login-banner {
+
+        min-height: 250px;
+
+        padding: 24px;
+    }
+
+
+    .login-form-container {
+
+        padding: 26px 20px;
+    }
+
+
+    .banner-content h1 {
+
+        font-size: 27px;
+    }
+
+
+    .logo h2 {
+
+        font-size: 21px;
+    }
+
+
+    .profile-options {
+
+        grid-template-columns: 1fr;
+    }
+}

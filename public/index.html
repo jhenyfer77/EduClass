@@ -1,136 +1,619 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduClass - Login</title>
+
+    <title>EduClass | Plataforma Educacional</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <!-- Container principal que divide a tela em duas partes -->
     <main class="login-container">
-        
-        <!-- Lado Esquerdo: Apresentação/Banner -->
-        <section class="login-banner">
-            <div class="logo">
-                <h2>EduClass</h2> 
-            </div>
-            
-            <h1>Página de Login e Cadastro</h1>
-            
-            <footer class="banner-footer">
-                <p>suporte@educlass.com.br</p>
-            </footer>
-        </section>
 
-        <!-- Lado Direito: Formulário de Login -->
-        <section class="login-form-container" id="loginSection">
-            <div class="brand-header">
-                <span>Gestão Escolar</span>
-            </div>
+        <!-- =========================================
+             FUNDO TECNOLÓGICO
+        ========================================== -->
 
-            <h2>Entrar</h2>
-            <p>Por favor, faça o login para acessar sua conta.</p>
+        <div class="tech-grid"></div>
 
-            <!-- Formulário que enviará os dados de login para o seu server.js -->
-            <form action="/login" method="POST" class="login-form">
-                
-                <!-- Campo de E-mail -->
-                <div class="form-group">
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" name="email" placeholder="seu.email@escola.com" required>
+        <div class="light light-1"></div>
+        <div class="light light-2"></div>
+        <div class="light light-3"></div>
+
+
+        <!-- =========================================
+             JANELA CENTRAL
+        ========================================== -->
+
+        <div class="login-card">
+
+
+            <!-- =====================================
+                 LADO ESQUERDO
+            ====================================== -->
+
+            <section class="login-banner">
+
+
+                <!-- LOGO -->
+
+                <div class="logo">
+
+                    <div class="logo-symbol">
+                        EC
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            EduClass
+                        </h2>
+
+                        <span>
+                            SMART EDUCATION
+                        </span>
+
+                    </div>
+
                 </div>
 
-                <!-- Campo de Senha -->
-                <div class="form-group">
-                    <label for="password">Senha</label>
-                    <input type="password" id="password" name="senha" placeholder="••••••••" required>
+
+                <!-- CONTEÚDO -->
+
+                <div class="banner-content">
+
+
+                    <div class="status">
+
+                        <span></span>
+
+                        SISTEMA ONLINE
+
+                    </div>
+
+
+                    <h1>
+
+
+                        <strong>
+                         UM NOVO JEITO DE EDUCAR    
+                        </strong>
+
+                    </h1>
+
+
+                    <p>
+
+                        Uma nova experiência para professores
+                        organizarem, acompanharem e transformarem
+                        a rotina escolar.
+
+                    </p>
+
+
                 </div>
 
-                <!-- Campo de Seleção do Tipo de Usuário -->
-                <div class="form-group">
-                    <label for="user-type">Acessar como</label>
-                    <select id="user-type" name="userType" required>
-                        <option value="" disabled selected>Selecione seu perfil...</option>
-                        <option value="professor">Professor</option>
-                        <option value="gestor">Gestor / Administrador</option>
-                    </select>
+
+                <!-- RODAPÉ -->
+
+                <div class="banner-bottom">
+
+                    <span>
+                        EDUCLASS PLATFORM
+                    </span>
+
+                    <span>
+                        v1.0
+                    </span>
+
                 </div>
 
-                <!-- Botão de Entrar -->
-                <button type="submit" class="btn-submit">Entrar</button>
-            </form>
+            </section>
 
-            <div class="form-footer">
-                <p>Precisa de uma conta? <a href="#" id="btnShowRegister">Criar uma agora</a></p>
-            </div>
-        </section>
 
-        <!-- Formulário de Cadastro (Inicia escondido no HTML puro) -->
-        <section class="login-form-container" id="registerSection" style="display: none;">
-            <div class="brand-header">
-                <span>Gestão Escolar</span>
-            </div>
 
-            <h2>Criar Conta</h2>
-            <p>Preencha os dados abaixo para se cadastrar.</p>
+            <!-- =====================================
+                 LOGIN
+            ====================================== -->
 
-            <!-- Formulário que enviará os dados de cadastro para o seu server.js -->
-            <form action="/cadastro" method="POST" class="login-form">
-                
-                <div class="form-group">
-                    <label for="newName">Nome Completo</label>
-                    <input type="text" id="newName" name="name" placeholder="Seu nome" required>
+            <section
+                class="login-form-container"
+                id="loginSection"
+            >
+
+
+                <!-- IDENTIFICAÇÃO -->
+
+                <div class="form-top">
+
+                    <span class="section-number">
+                        01
+                    </span>
+
+                    <span class="section-name">
+                        ACESSO
+                    </span>
+
                 </div>
 
-                <div class="form-group">
-                    <label for="newEmail">E-mail</label>
-                    <input type="email" id="newEmail" name="email" placeholder="seu.email@escola.com" required>
+
+                <h2>
+                    Bem-vindo de volta.
+                </h2>
+
+
+                <p class="form-subtitle">
+
+                    Entre na plataforma para continuar.
+
+                </p>
+
+
+
+                <!-- FORMULÁRIO -->
+
+                <form
+                    action="/login"
+                    method="POST"
+                    class="login-form"
+                >
+
+
+                    <!-- E-MAIL -->
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            E-MAIL
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Digite seu e-mail"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- SENHA -->
+
+                    <div class="form-group">
+
+                        <label for="password">
+                            SENHA
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="senha"
+                            placeholder="Digite sua senha"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- PERFIL -->
+
+                    <div class="form-group">
+
+                        <label>
+                            PERFIL DE ACESSO
+                        </label>
+
+
+                        <div class="profile-options">
+
+
+                            <!-- PROFESSOR -->
+
+                            <label class="profile-option">
+
+                                <input
+                                    type="radio"
+                                    name="userType"
+                                    value="professor"
+                                    required
+                                >
+
+                                <div class="profile-button">
+
+                                    <span class="profile-icon">
+                                        ◉
+                                    </span>
+
+                                    <span>
+                                        Professor
+                                    </span>
+
+                                </div>
+
+                            </label>
+
+
+
+                            <!-- GESTÃO -->
+
+                            <label class="profile-option">
+
+                                <input
+                                    type="radio"
+                                    name="userType"
+                                    value="gestor"
+                                    required
+                                >
+
+                                <div class="profile-button">
+
+                                    <span class="profile-icon">
+                                        ◆
+                                    </span>
+
+                                    <span>
+                                        Gestão
+                                    </span>
+
+                                </div>
+
+                            </label>
+
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- BOTÃO -->
+
+                    <button
+                        type="submit"
+                        class="btn-submit"
+                    >
+
+                        <span>
+                            ENTRAR NA PLATAFORMA
+                        </span>
+
+                        <b>
+                            →
+                        </b>
+
+                    </button>
+
+
+                </form>
+
+
+
+                <!-- RODAPÉ -->
+
+                <div class="form-footer">
+
+                    <span>
+                        Ainda não possui acesso?
+                    </span>
+
+                    <a
+                        href="#"
+                        id="btnShowRegister"
+                    >
+                        Criar conta
+                    </a>
+
                 </div>
 
-                <div class="form-group">
-                    <label for="newPassword">Senha</label>
-                    <input type="password" id="newPassword" name="password" placeholder="••••••••" required>
+
+            </section>
+
+
+
+            <!-- =====================================
+                 CADASTRO
+            ====================================== -->
+
+            <section
+                class="login-form-container register-container"
+                id="registerSection"
+                style="display: none;"
+            >
+
+
+                <!-- IDENTIFICAÇÃO -->
+
+                <div class="form-top">
+
+                    <span class="section-number">
+                        02
+                    </span>
+
+                    <span class="section-name">
+                        CADASTRO
+                    </span>
+
                 </div>
 
-                <div class="form-group">
-                    <label for="new-user-type"> Cadastrar como</label>
-                    <select id="new-user-type" name="userType" required>
-                        <option value="" disabled selected>Selecione seu perfil...</option>
-                        <option value="professor">Professor</option>
-                        <option value="gestor">Gestor / Administrador</option>
-                    </select>
+
+                <h2>
+                    Crie seu acesso.
+                </h2>
+
+
+                <p class="form-subtitle">
+
+                    Configure seu perfil na plataforma EduClass.
+
+                </p>
+
+
+
+                <!-- FORMULÁRIO -->
+
+                <form
+                    action="/cadastro"
+                    method="POST"
+                    class="login-form"
+                >
+
+
+                    <!-- PRIMEIRA LINHA -->
+
+                    <div class="form-row">
+
+
+                        <!-- NOME -->
+
+                        <div class="form-group">
+
+                            <label for="newName">
+                                NOME COMPLETO
+                            </label>
+
+                            <input
+                                type="text"
+                                id="newName"
+                                name="name"
+                                placeholder="Seu nome"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- E-MAIL -->
+
+                        <div class="form-group">
+
+                            <label for="newEmail">
+                                E-MAIL
+                            </label>
+
+                            <input
+                                type="email"
+                                id="newEmail"
+                                name="email"
+                                placeholder="Seu e-mail"
+                                required
+                            >
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- SEGUNDA LINHA -->
+
+                    <div class="form-row">
+
+
+                        <!-- SENHA -->
+
+                        <div class="form-group">
+
+                            <label for="newPassword">
+                                SENHA
+                            </label>
+
+                            <input
+                                type="password"
+                                id="newPassword"
+                                name="password"
+                                placeholder="Crie uma senha"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- PERFIL -->
+
+                        <div class="form-group">
+
+                            <label>
+                                PERFIL
+                            </label>
+
+
+                            <div class="profile-options">
+
+
+                                <!-- PROFESSOR -->
+
+                                <label class="profile-option">
+
+                                    <input
+                                        type="radio"
+                                        name="userType"
+                                        value="professor"
+                                        required
+                                    >
+
+                                    <div class="profile-button">
+
+                                        <span class="profile-icon">
+                                            ◉
+                                        </span>
+
+                                        <span>
+                                            Professor
+                                        </span>
+
+                                    </div>
+
+                                </label>
+
+
+
+                                <!-- GESTÃO -->
+
+                                <label class="profile-option">
+
+                                    <input
+                                        type="radio"
+                                        name="userType"
+                                        value="gestor"
+                                        required
+                                    >
+
+                                    <div class="profile-button">
+
+                                        <span class="profile-icon">
+                                            ◆
+                                        </span>
+
+                                        <span>
+                                            Gestão
+                                        </span>
+
+                                    </div>
+
+                                </label>
+
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- BOTÃO -->
+
+                    <button
+                        type="submit"
+                        class="btn-submit"
+                    >
+
+                        <span>
+                            CRIAR MEU ACESSO
+                        </span>
+
+                        <b>
+                            →
+                        </b>
+
+                    </button>
+
+
+                </form>
+
+
+
+                <!-- RODAPÉ -->
+
+                <div class="form-footer">
+
+                    <span>
+                        Já possui uma conta?
+                    </span>
+
+                    <a
+                        href="#"
+                        id="btnShowLogin"
+                    >
+                        Voltar para login
+                    </a>
+
                 </div>
 
-                <button type="submit" class="btn-submit">Cadastrar</button>
-            </form>
 
-            <div class="form-footer">
-                <p>Já tem uma conta? <a href="#" id="btnShowLogin">Fazer Login</a></p>
-            </div>
-        </section>
+            </section>
+
+
+        </div>
 
     </main>
 
-    <!-- Script simples para alternar entre as telas de Login e Cadastro -->
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
     <script>
-        const loginSection = document.getElementById('loginSection');
-        const registerSection = document.getElementById('registerSection');
-        const btnShowRegister = document.getElementById('btnShowRegister');
-        const btnShowLogin = document.getElementById('btnShowLogin');
 
-        btnShowRegister.addEventListener('click', (e) => {
-            e.preventDefault();
-            loginSection.style.display = 'none';
-            registerSection.style.display = 'block';
-        });
+        const loginSection =
+            document.getElementById("loginSection");
 
-        btnShowLogin.addEventListener('click', (e) => {
-            e.preventDefault();
-            registerSection.style.display = 'none';
-            loginSection.style.display = 'block';
-        });
+        const registerSection =
+            document.getElementById("registerSection");
+
+        const btnShowRegister =
+            document.getElementById("btnShowRegister");
+
+        const btnShowLogin =
+            document.getElementById("btnShowLogin");
+
+
+        /* Abrir cadastro */
+
+        btnShowRegister.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                loginSection.style.display = "none";
+
+                registerSection.style.display = "flex";
+
+            }
+        );
+
+
+        /* Voltar para login */
+
+        btnShowLogin.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+
+                registerSection.style.display = "none";
+
+                loginSection.style.display = "flex";
+
+            }
+        );
+
     </script>
 
 </body>
+
 </html>

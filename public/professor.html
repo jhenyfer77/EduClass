@@ -1,149 +1,1276 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel do Professor - EduClass</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>EduClass | Painel do Professor</title>
+
+    <link rel="stylesheet" href="professor.css">
 </head>
+
 <body>
 
-   <!-- Cole este bloco no lugar do cabeçalho antigo -->
-<div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 20px;">
-    <h1 style="margin: 0;">EduClass Professor</h1>
-    <div>
-        <a href="/VideoAula.html" style="background-color: #007bff; color: white; text-decoration: none; font-weight: bold; padding: 8px 15px; border-radius: 4px; font-family: sans-serif; margin-right: 10px;">🎥 Espaço de Formação</a>
-        <a href="/logout" style="background-color: #dc3545; color: white; text-decoration: none; font-weight: bold; padding: 8px 15px; border-radius: 4px; font-family: sans-serif;">Sair do Sistema</a>
-    </div>
-</div>
+    <!-- =================================================
+         FUNDO
+    ================================================== -->
 
-    <!-- SEÇÃO 1: MURAL E AGENDA DA COORDENAÇÃO (APENAS LEITURA) -->
-    <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 30px;">
-        <h2>📢 Comunicados da Direção / Coordenação</h2>
-        <div id="muralDirecao">Carregando recados da direção...</div>
+    <div class="background-grid"></div>
 
-        <br>
+    <div class="background-light light-one"></div>
+    <div class="background-light light-two"></div>
 
-        <h2>📅 Agenda e Eventos Escolares</h2>
-        <div id="calendarioDirecao">Carregando eventos escolares...</div>
-    </div>
-    
-    <hr>
 
-    <!-- SEÇÃO 2: FORMULÁRIO DE PLANEJAMENTO -->
-    <div>
-        <h2>📝 Novo Planejamento de Aula</h2>
-        <form id="formPlanejamento">
-            <label for="materia">Matéria / Disciplina:</label><br>
-            <input type="text" id="materia" name="materia" required><br><br>
+    <!-- =================================================
+         DASHBOARD
+    ================================================== -->
 
-            <label for="conteudo">Conteúdo da Aula:</label><br>
-            <textarea id="conteudo" name="conteudo" required></textarea><br><br>
+    <main class="dashboard">
 
-            <label for="data_planejada">Data Planejada:</label><br>
-            <input type="date" id="data_planejada" name="data_planejada" required><br><br>
-            
-            <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px;">Salvar Planejamento</button>
-        </form>
-    </div>
 
-    <br><hr><br>
+        <!-- =================================================
+             CABEÇALHO
+        ================================================== -->
 
-    <!-- SEÇÃO 3: LISTA DOS PLANEJAMENTOS DO PROFESSOR -->
-    <div>
-        <h2>📋 Meus Planejamentos Salvos</h2>
-        <div id="listaPlanejamentos">Carregando planejamentos...</div>
-    </div>
+        <header class="dashboard-header">
+
+            <div class="header-left">
+
+                <div class="edu-logo">
+                    EC
+                </div>
+
+                <div>
+
+                    <h1>
+                        EduClass
+                    </h1>
+
+                    <span>
+                        PAINEL DO PROFESSOR
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="header-right">
+
+                <a
+                    href="/VideoAula.html"
+                    class="header-button training-button"
+                >
+                    🎥
+                    <span>
+                        Espaço de Formação
+                    </span>
+                </a>
+
+
+                <a
+                    href="/logout"
+                    class="header-button logout-button"
+                >
+                    ↪
+                    <span>
+                        Sair
+                    </span>
+                </a>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             LABEL DE BOAS-VINDAS
+        ================================================== -->
+
+        <section class="welcome-label">
+
+            <div class="welcome-icon">
+                ✦
+            </div>
+
+            <div class="welcome-text">
+
+                <span>
+                    AMBIENTE DO PROFESSOR
+                </span>
+
+                <h2>
+                    Olá, Professor! 👋
+                </h2>
+
+                <p>
+                    Organize suas aulas, acompanhe os eventos
+                    e fique por dentro dos comunicados da escola.
+                </p>
+
+            </div>
+
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                SISTEMA ONLINE
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             GRID PRINCIPAL
+        ================================================== -->
+
+        <section class="dashboard-grid">
+
+
+            <!-- =================================================
+                 CALENDÁRIO
+            ================================================== -->
+
+            <div class="dashboard-card calendar-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-label">
+                            AGENDA ESCOLAR
+                        </span>
+
+                        <h2>
+                            Calendário
+                        </h2>
+
+                    </div>
+
+
+                    <div class="calendar-navigation">
+
+                        <button
+                            id="previousMonth"
+                            type="button"
+                        >
+                            ‹
+                        </button>
+
+                        <button
+                            id="nextMonth"
+                            type="button"
+                        >
+                            ›
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MÊS -->
+
+                <div class="calendar-month">
+
+                    <button
+                        id="currentMonthButton"
+                        type="button"
+                    >
+                        Hoje
+                    </button>
+
+                    <h3 id="calendarMonth">
+                        Carregando...
+                    </h3>
+
+                </div>
+
+
+                <!-- DIAS DA SEMANA -->
+
+                <div class="calendar-week">
+
+                    <span>DOM</span>
+                    <span>SEG</span>
+                    <span>TER</span>
+                    <span>QUA</span>
+                    <span>QUI</span>
+                    <span>SEX</span>
+                    <span>SÁB</span>
+
+                </div>
+
+
+                <!-- DIAS -->
+
+                <div
+                    class="calendar-days"
+                    id="calendarDays"
+                >
+                </div>
+
+
+                <!-- PRÓXIMO EVENTO -->
+
+                <div class="next-event">
+
+                    <div class="next-event-icon">
+                        📌
+                    </div>
+
+                    <div class="next-event-info">
+
+                        <span>
+                            PRÓXIMO EVENTO
+                        </span>
+
+                        <strong id="nextEventTitle">
+                            Carregando...
+                        </strong>
+
+                        <p id="nextEventDate">
+                            —
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 COMUNICADOS
+            ================================================== -->
+
+            <div class="dashboard-card announcements-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-label">
+                            COMUNICAÇÃO
+                        </span>
+
+                        <h2>
+                            Comunicados
+                        </h2>
+
+                    </div>
+
+                    <div class="card-icon">
+                        📢
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="announcements-list"
+                    id="muralDirecao"
+                >
+
+                    <div class="loading-card">
+
+                        <span class="loading-icon">
+                            ◌
+                        </span>
+
+                        Carregando comunicados...
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 PLANEJAMENTO
+            ================================================== -->
+
+            <div class="dashboard-card planning-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-label">
+                            ORGANIZAÇÃO
+                        </span>
+
+                        <h2>
+                            Planejamento de Aula
+                        </h2>
+
+                    </div>
+
+                    <div class="card-icon">
+                        📝
+                    </div>
+
+                </div>
+
+
+                <form
+                    id="formPlanejamento"
+                    class="planning-form"
+                >
+
+
+                    <div class="input-group">
+
+                        <label for="materia">
+                            DISCIPLINA
+                        </label>
+
+                        <input
+                            type="text"
+                            id="materia"
+                            name="materia"
+                            placeholder="Ex.: Biologia"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <div class="input-group">
+
+                        <label for="data_planejada">
+                            DATA DA AULA
+                        </label>
+
+                        <input
+                            type="date"
+                            id="data_planejada"
+                            name="data_planejada"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <div class="input-group full-input">
+
+                        <label for="conteudo">
+                            CONTEÚDO DA AULA
+                        </label>
+
+                        <textarea
+                            id="conteudo"
+                            name="conteudo"
+                            placeholder="Descreva o conteúdo, objetivos ou atividades da aula..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+
+                    <button
+                        type="submit"
+                        class="save-planning"
+                    >
+
+                        <span>
+                            + SALVAR PLANEJAMENTO
+                        </span>
+
+                        <b>
+                            →
+                        </b>
+
+                    </button>
+
+                </form>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 MEUS PLANEJAMENTOS
+            ================================================== -->
+
+            <div class="dashboard-card saved-planning-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-label">
+                            SEUS REGISTROS
+                        </span>
+
+                        <h2>
+                            Meus Planejamentos
+                        </h2>
+
+                    </div>
+
+                    <div class="planning-counter">
+                        <span id="planningCount">
+                            0
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="saved-planning-list"
+                    id="listaPlanejamentos"
+                >
+
+                    <div class="loading-card">
+
+                        <span class="loading-icon">
+                            ◌
+                        </span>
+
+                        Carregando planejamentos...
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             RODAPÉ
+        ================================================== -->
+
+        <footer class="dashboard-footer">
+
+            <span>
+                EDUCLASS PLATFORM
+            </span>
+
+            <span>
+                Gestão Escolar Inteligente
+            </span>
+
+            <span>
+                © 2026
+            </span>
+
+        </footer>
+
+    </main>
+
+
+
+    <!-- =================================================
+         JAVASCRIPT
+    ================================================== -->
 
     <script>
-        // 1. Busca os RECADOS criados pelo gestor para mostrar ao professor
-        function carregarRecadosDaDirecao() {
-            fetch('/listar-recados')
-                .then(res => res.json())
-                .then(recados => {
-                    const div = document.getElementById('muralDirecao');
-                    if (!recados || recados.length === 0) {
-                        div.innerHTML = '<p>Nenhum comunicado oficial recente.</p>';
-                        return;
+
+        /* =================================================
+           VARIÁVEIS
+        ================================================== */
+
+        let currentCalendarDate = new Date();
+
+        let eventosEscolares = [];
+
+
+
+        /* =================================================
+           NOMES DOS MESES
+        ================================================== */
+
+        const meses = [
+            "Janeiro",
+            "Fevereiro",
+            "Março",
+            "Abril",
+            "Maio",
+            "Junho",
+            "Julho",
+            "Agosto",
+            "Setembro",
+            "Outubro",
+            "Novembro",
+            "Dezembro"
+        ];
+
+
+
+        /* =================================================
+           RENDERIZAR CALENDÁRIO
+        ================================================== */
+
+        function renderCalendar() {
+
+            const year =
+                currentCalendarDate.getFullYear();
+
+            const month =
+                currentCalendarDate.getMonth();
+
+
+            document.getElementById(
+                "calendarMonth"
+            ).textContent =
+                `${meses[month]} ${year}`;
+
+
+            const firstDay =
+                new Date(
+                    year,
+                    month,
+                    1
+                ).getDay();
+
+
+            const daysInMonth =
+                new Date(
+                    year,
+                    month + 1,
+                    0
+                ).getDate();
+
+
+            const calendarDays =
+                document.getElementById(
+                    "calendarDays"
+                );
+
+
+            calendarDays.innerHTML = "";
+
+
+            /* Espaços antes do primeiro dia */
+
+            for (
+                let i = 0;
+                i < firstDay;
+                i++
+            ) {
+
+                const emptyDay =
+                    document.createElement("div");
+
+                emptyDay.className =
+                    "calendar-day empty";
+
+                calendarDays.appendChild(
+                    emptyDay
+                );
+            }
+
+
+            /* Dias */
+
+            for (
+                let day = 1;
+                day <= daysInMonth;
+                day++
+            ) {
+
+                const dayElement =
+                    document.createElement("div");
+
+                dayElement.className =
+                    "calendar-day";
+
+
+                const today =
+                    new Date();
+
+
+                if (
+                    day === today.getDate() &&
+                    month === today.getMonth() &&
+                    year === today.getFullYear()
+                ) {
+
+                    dayElement.classList.add(
+                        "today"
+                    );
+                }
+
+
+                /* Verificar eventos */
+
+                const hasEvent =
+                    eventosEscolares.some(
+                        evento => {
+
+                            const eventDate =
+                                new Date(
+                                    evento.data_evento
+                                );
+
+                            return (
+                                eventDate.getDate() === day &&
+                                eventDate.getMonth() === month &&
+                                eventDate.getFullYear() === year
+                            );
+                        }
+                    );
+
+
+                if (hasEvent) {
+
+                    dayElement.classList.add(
+                        "has-event"
+                    );
+                }
+
+
+                dayElement.innerHTML = `
+                    <span>${day}</span>
+                    ${
+                        hasEvent
+                        ? '<i></i>'
+                        : ''
                     }
-                    div.innerHTML = recados.map(r => `
-                        <div style="background: white; border-left: 4px solid #007bff; padding: 10px; margin-bottom: 10px;">
-                            <h4>${r.titulo}</h4>
-                            <p>${r.conteudo}</p>
-                            <small>Enviado por: <strong>${r.autor}</strong></small>
-                        </div>
-                    `).join('');
-                });
+                `;
+
+
+                calendarDays.appendChild(
+                    dayElement
+                );
+            }
+
         }
 
-        // 2. Busca os EVENTOS criados pelo gestor para mostrar ao professor
+
+
+        /* =================================================
+           MUDAR MÊS
+        ================================================== */
+
+        document
+            .getElementById("previousMonth")
+            .addEventListener(
+                "click",
+                function() {
+
+                    currentCalendarDate.setMonth(
+                        currentCalendarDate.getMonth() - 1
+                    );
+
+                    renderCalendar();
+
+                }
+            );
+
+
+        document
+            .getElementById("nextMonth")
+            .addEventListener(
+                "click",
+                function() {
+
+                    currentCalendarDate.setMonth(
+                        currentCalendarDate.getMonth() + 1
+                    );
+
+                    renderCalendar();
+
+                }
+            );
+
+
+        /* Voltar para o mês atual */
+
+        document
+            .getElementById("currentMonthButton")
+            .addEventListener(
+                "click",
+                function() {
+
+                    currentCalendarDate =
+                        new Date();
+
+                    renderCalendar();
+
+                }
+            );
+
+
+
+        /* =================================================
+           EVENTOS
+        ================================================== */
+
         function carregarEventosDaDirecao() {
-            fetch('/listar-eventos')
-                .then(res => res.json())
-                .then(eventos => {
-                    const div = document.getElementById('calendarioDirecao');
-                    if (!eventos || eventos.length === 0) {
-                        div.innerHTML = '<p>Nenhum evento agendado.</p>';
-                        return;
+
+            fetch("/listar-eventos")
+
+                .then(response => {
+
+                    if (!response.ok) {
+                        throw new Error(
+                            "Erro ao carregar eventos"
+                        );
                     }
-                    div.innerHTML = eventos.map(e => `
-                        <div style="background: white; border-left: 4px solid #28a745; padding: 10px; margin-bottom: 10px;">
-                            <h4>${e.titulo}</h4>
-                            <p>📅 Data: ${e.data_evento}</p>
-                            ${e.descricao ? `<p>ℹ️ ${e.descricao}</p>` : ''}
-                        </div>
-                    `).join('');
+
+                    return response.json();
+
+                })
+
+                .then(eventos => {
+
+                    eventosEscolares =
+                        eventos || [];
+
+                    renderCalendar();
+
+                    mostrarProximoEvento();
+
+                })
+
+                .catch(error => {
+
+                    console.error(error);
+
+                    eventosEscolares = [];
+
+                    renderCalendar();
+
+                    document.getElementById(
+                        "nextEventTitle"
+                    ).textContent =
+                        "Nenhum evento encontrado";
+
+                    document.getElementById(
+                        "nextEventDate"
+                    ).textContent =
+                        "Sua agenda está livre.";
+
                 });
         }
 
-        // 3. Busca os PLANEJAMENTOS do próprio professor
-        function carregarPlanejamentos() {
-            fetch('/listar-planejamentos')
-                .then(res => res.json())
-                .then(dados => {
-                    const painel = document.getElementById('listaPlanejamentos');
-                    if (!dados || dados.length === 0) {
-                        painel.innerHTML = '<p>Nenhum planejamento salvo ainda.</p>';
+
+
+        /* =================================================
+           PRÓXIMO EVENTO
+        ================================================== */
+
+        function mostrarProximoEvento() {
+
+            const agora =
+                new Date();
+
+
+            const eventosFuturos =
+                eventosEscolares
+                    .map(evento => {
+
+                        return {
+                            ...evento,
+                            dataConvertida:
+                                new Date(
+                                    evento.data_evento
+                                )
+                        };
+
+                    })
+                    .filter(evento =>
+                        evento.dataConvertida >= agora
+                    )
+                    .sort(
+                        (a, b) =>
+                            a.dataConvertida -
+                            b.dataConvertida
+                    );
+
+
+            if (
+                eventosFuturos.length === 0
+            ) {
+
+                document.getElementById(
+                    "nextEventTitle"
+                ).textContent =
+                    "Nenhum próximo evento";
+
+                document.getElementById(
+                    "nextEventDate"
+                ).textContent =
+                    "Não há eventos cadastrados.";
+
+                return;
+            }
+
+
+            const proximo =
+                eventosFuturos[0];
+
+
+            document.getElementById(
+                "nextEventTitle"
+            ).textContent =
+                proximo.titulo;
+
+
+            const data =
+                proximo.dataConvertida;
+
+
+            document.getElementById(
+                "nextEventDate"
+            ).textContent =
+                `📅 ${data.toLocaleDateString(
+                    "pt-BR"
+                )}`;
+
+        }
+
+
+
+        /* =================================================
+           COMUNICADOS
+        ================================================== */
+
+        function carregarRecadosDaDirecao() {
+
+            fetch("/listar-recados")
+
+                .then(response =>
+                    response.json()
+                )
+
+                .then(recados => {
+
+                    const mural =
+                        document.getElementById(
+                            "muralDirecao"
+                        );
+
+
+                    if (
+                        !recados ||
+                        recados.length === 0
+                    ) {
+
+                        mural.innerHTML = `
+
+                            <div class="empty-card">
+
+                                <span>
+                                    📭
+                                </span>
+
+                                <p>
+                                    Nenhum comunicado
+                                    oficial recente.
+                                </p>
+
+                            </div>
+
+                        `;
+
                         return;
                     }
-                    painel.innerHTML = dados.map(p => `
-                        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-                            <h3>Matéria: ${p.materia}</h3>
-                            <p><strong>Conteúdo:</strong> ${p.conteudo}</p>
-                            <p>📅 <strong>Data:</strong> ${p.data_planejada}</p>
-                            <button onclick="apagarPlanejamento(${p.id})" style="background-color: #dc3545; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer;">Apagar</button>
-                        </div>
-                    `).join('');
+
+
+                    mural.innerHTML =
+                        recados.map(
+                            recado => `
+
+                            <article
+                                class="announcement"
+                            >
+
+                                <div
+                                    class="announcement-icon"
+                                >
+                                    📢
+                                </div>
+
+
+                                <div
+                                    class="announcement-content"
+                                >
+
+                                    <span
+                                        class="announcement-tag"
+                                    >
+                                        COMUNICADO
+                                    </span>
+
+                                    <h3>
+                                        ${recado.titulo}
+                                    </h3>
+
+                                    <p>
+                                        ${recado.conteudo}
+                                    </p>
+
+                                    <small>
+                                        Enviado por:
+                                        <strong>
+                                            ${recado.autor}
+                                        </strong>
+                                    </small>
+
+                                </div>
+
+                            </article>
+
+                        `
+                        ).join("");
+
                 })
-                .catch(() => {
-                    document.getElementById('listaPlanejamentos').innerHTML = '<p>Erro ao carregar planejamentos.</p>';
+
+                .catch(error => {
+
+                    console.error(error);
+
+                    document.getElementById(
+                        "muralDirecao"
+                    ).innerHTML = `
+
+                        <div class="empty-card">
+
+                            <span>
+                                ⚠️
+                            </span>
+
+                            <p>
+                                Não foi possível
+                                carregar os comunicados.
+                            </p>
+
+                        </div>
+
+                    `;
+
                 });
+
         }
+
+
+
+        /* =================================================
+           PLANEJAMENTOS
+        ================================================== */
+
+        function carregarPlanejamentos() {
+
+            fetch("/listar-planejamentos")
+
+                .then(response =>
+                    response.json()
+                )
+
+                .then(dados => {
+
+                    const lista =
+                        document.getElementById(
+                            "listaPlanejamentos"
+                        );
+
+
+                    const contador =
+                        document.getElementById(
+                            "planningCount"
+                        );
+
+
+                    contador.textContent =
+                        dados
+                            ? dados.length
+                            : 0;
+
+
+                    if (
+                        !dados ||
+                        dados.length === 0
+                    ) {
+
+                        lista.innerHTML = `
+
+                            <div class="empty-card">
+
+                                <span>
+                                    📝
+                                </span>
+
+                                <p>
+                                    Você ainda não possui
+                                    planejamentos salvos.
+                                </p>
+
+                            </div>
+
+                        `;
+
+                        return;
+                    }
+
+
+                    lista.innerHTML =
+                        dados.map(
+                            planejamento => `
+
+                            <article
+                                class="saved-planning"
+                            >
+
+                                <div
+                                    class="planning-top"
+                                >
+
+                                    <span
+                                        class="planning-subject"
+                                    >
+                                        ${planejamento.materia}
+                                    </span>
+
+                                    <span
+                                        class="planning-date"
+                                    >
+                                        📅
+                                        ${planejamento.data_planejada}
+                                    </span>
+
+                                </div>
+
+
+                                <h3>
+                                    Planejamento de aula
+                                </h3>
+
+
+                                <p>
+                                    ${planejamento.conteudo}
+                                </p>
+
+
+                                <button
+                                    type="button"
+                                    onclick="apagarPlanejamento(${planejamento.id})"
+                                    class="delete-planning"
+                                >
+                                    Excluir planejamento
+                                </button>
+
+                            </article>
+
+                        `
+                        ).join("");
+
+                })
+
+                .catch(error => {
+
+                    console.error(error);
+
+                    document.getElementById(
+                        "listaPlanejamentos"
+                    ).innerHTML = `
+
+                        <div class="empty-card">
+
+                            <span>
+                                ⚠️
+                            </span>
+
+                            <p>
+                                Erro ao carregar
+                                planejamentos.
+                            </p>
+
+                        </div>
+
+                    `;
+
+                });
+
+        }
+
+
+
+        /* =================================================
+           APAGAR PLANEJAMENTO
+        ================================================== */
 
         function apagarPlanejamento(id) {
-            if (confirm('Deseja apagar este planejamento?')) {
-                fetch(`/apagar-planejamento/${id}`, { method: 'DELETE' })
-                    .then(res => res.json())
-                    .then(() => {
-                        carregarPlanejamentos();
-                    });
+
+            const confirmar =
+                confirm(
+                    "Deseja realmente excluir este planejamento?"
+                );
+
+
+            if (!confirmar) {
+                return;
             }
+
+
+            fetch(
+                `/apagar-planejamento/${id}`,
+                {
+                    method: "DELETE"
+                }
+            )
+
+            .then(response =>
+                response.json()
+            )
+
+            .then(() => {
+
+                carregarPlanejamentos();
+
+            })
+
+            .catch(error => {
+
+                console.error(error);
+
+                alert(
+                    "Não foi possível excluir o planejamento."
+                );
+
+            });
+
         }
 
-        document.getElementById('formPlanejamento').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const dados = new URLSearchParams(new FormData(this));
-            
-            fetch('/criar-planejamento', { method: 'POST', body: dados })
-                .then(() => {
-                    this.reset();
-                    carregarPlanejamentos();
-                });
-        });
 
-        // Executa as listagens ao abrir a página
-        carregarRecadosDaDirecao();
+
+        /* =================================================
+           SALVAR PLANEJAMENTO
+        ================================================== */
+
+        document
+            .getElementById("formPlanejamento")
+            .addEventListener(
+                "submit",
+                function(event) {
+
+                    event.preventDefault();
+
+
+                    const dados =
+                        new URLSearchParams(
+                            new FormData(this)
+                        );
+
+
+                    const botao =
+                        this.querySelector(
+                            "button"
+                        );
+
+
+                    botao.disabled = true;
+
+                    botao.innerHTML =
+                        "<span>SALVANDO...</span>";
+
+
+                    fetch(
+                        "/criar-planejamento",
+                        {
+                            method: "POST",
+                            body: dados
+                        }
+                    )
+
+                    .then(response => {
+
+                        if (!response.ok) {
+
+                            throw new Error(
+                                "Erro ao salvar"
+                            );
+                        }
+
+                        return response.text();
+
+                    })
+
+                    .then(() => {
+
+                        this.reset();
+
+                        carregarPlanejamentos();
+
+                        botao.disabled = false;
+
+                        botao.innerHTML =
+                            `
+                            <span>
+                                + SALVAR PLANEJAMENTO
+                            </span>
+
+                            <b>
+                                →
+                            </b>
+                            `;
+
+                    })
+
+                    .catch(error => {
+
+                        console.error(error);
+
+                        alert(
+                            "Não foi possível salvar o planejamento."
+                        );
+
+                        botao.disabled = false;
+
+                        botao.innerHTML =
+                            `
+                            <span>
+                                + SALVAR PLANEJAMENTO
+                            </span>
+
+                            <b>
+                                →
+                            </b>
+                            `;
+
+                    });
+
+                }
+            );
+
+
+
+        /* =================================================
+           INICIALIZAÇÃO
+        ================================================== */
+
+        renderCalendar();
+
         carregarEventosDaDirecao();
+
+        carregarRecadosDaDirecao();
+
         carregarPlanejamentos();
+
     </script>
+
 </body>
+
 </html>
