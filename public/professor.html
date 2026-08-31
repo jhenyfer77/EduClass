@@ -1320,7 +1320,101 @@
                 }
             );
 
+/* =================================================
 
+   CHAMADA
+
+================================================= */
+
+function carregarAlunosParaChamada() {
+
+fetch("/listar-alunos")
+
+    .then(response => {
+
+        if (!response.ok) {
+
+            throw new Error("Erro ao carregar alunos.");
+
+        }
+
+        return response.json();
+
+    })
+
+    .then(alunos => {
+
+        const lista =
+
+            document.getElementById("listaChamada");
+
+        if (!alunos || alunos.length === 0) {
+
+            lista.innerHTML = `
+
+                <p>Nenhum aluno cadastrado pela gestão.</p>
+
+            `;
+
+            return;
+
+        }
+
+        lista.innerHTML = alunos.map(aluno => `
+
+            <div class="chamada-aluno">
+
+                <strong>
+
+                    ${aluno.nome}
+
+                </strong>
+
+                <span>
+
+                    Turma: ${aluno.turma}
+
+                </span>
+
+                <label>
+
+                    <input
+
+                        type="checkbox"
+
+                        name="presenca"
+
+                        value="${aluno.id}"
+
+                    >
+
+                    Presente
+
+                </label>
+
+            </div>
+
+        `).join("");
+
+    })
+
+    .catch(error => {
+
+        console.error(error);
+
+        document.getElementById(
+
+            "listaChamada"
+
+        ).innerHTML = `
+
+            <p>Não foi possível carregar os alunos.</p>
+
+        `;
+
+    });
+
+}
 
         /* =================================================
            INICIALIZAÇÃO
@@ -1333,6 +1427,10 @@
         carregarRecadosDaDirecao();
 
         carregarPlanejamentos();
+
+        carregarAlunosParaChamada();
+
+
 
     </script>
 

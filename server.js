@@ -258,6 +258,38 @@ app.post('/cadastrar-aluno', (req, res) => {
 
 });
 
+// Rota para o professor listar os alunos
+
+app.get('/listar-alunos', (req, res) => {
+
+    db.all(
+
+        `SELECT * FROM alunos ORDER BY turma ASC, nome ASC`,
+
+        [],
+
+        (err, rows) => {
+
+            if (err) {
+
+                console.error('ERRO AO LISTAR ALUNOS:', err);
+
+                return res.status(500).json({
+
+                    erro: err.message
+
+                });
+
+            }
+
+            res.json(rows);
+
+        }
+
+    );
+
+});
+
 // Rotas de exclusão gerais
 app.delete('/apagar-recado/:id', (req, res) => {
     const { id } = req.params;
