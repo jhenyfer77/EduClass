@@ -75,7 +75,7 @@
 
                 <a
 
-                href="#chamada"
+                href="/chamada.html"
         
                 class="header-button"
         
@@ -92,8 +92,8 @@
             </a>
 
                 <a
-                    href="/logout"
-                    class="header-button logout-button"
+                    href="/professor_menu_relatorio.html"
+                    class="header-button"
                 >
                     ↪
                     <span>
@@ -152,6 +152,52 @@
         ================================================== -->
 
         <section class="dashboard-grid">
+
+            <div class="dashboard-card" style="grid-column: 1 / -1;">
+
+                <div class="card-header">
+            
+                    <div>
+            
+                        <span class="card-label">
+            
+                            ACOMPANHAMENTO
+            
+                        </span>
+            
+                        <h2>
+            
+                            Relatórios
+            
+                        </h2>
+            
+                    </div>
+            
+                    <div class="card-icon">
+            
+                        📊
+            
+                    </div>
+            
+                </div>
+            
+                <a
+            
+                    href="/relatorios.html"
+                    class="header-button"
+                    style="display: inline-flex; text-decoration: none;"
+                >
+                    📊
+            
+                    <span>
+            
+                        Abrir Relatórios
+            
+                    </span>
+            
+                </a>
+            
+            </div>
 
 
             <!-- =================================================
@@ -471,54 +517,7 @@
             </div>
 
         </section>
-
-        <!-- =================================================
-
-             CHAMADA
-
-        ================================================== -->
-
-        <section id="chamada" class="dashboard-card">
-
-            <div class="card-header">
-
-                <div>
-
-                    <span class="card-label">
-
-                        FREQUÊNCIA
-
-                    </span>
-
-                    <h2>
-
-                        Chamada
-
-                    </h2>
-
-                </div>
-
-                <div class="card-icon">
-
-                    📋
-
-                </div>
-
-            </div>
-
-            <p>
-
-                Selecione a turma e registre a presença dos alunos.
-
-            </p>
-
-            <div id="listaChamada">
-
-                Carregando alunos...
-
-            </div>
-
-        </section>
+        
 
         <!-- =================================================
 
@@ -1320,102 +1319,6 @@
                 }
             );
 
-/* =================================================
-
-   CHAMADA
-
-================================================= */
-
-function carregarAlunosParaChamada() {
-
-fetch("/listar-alunos")
-
-    .then(response => {
-
-        if (!response.ok) {
-
-            throw new Error("Erro ao carregar alunos.");
-
-        }
-
-        return response.json();
-
-    })
-
-    .then(alunos => {
-
-        const lista =
-
-            document.getElementById("listaChamada");
-
-        if (!alunos || alunos.length === 0) {
-
-            lista.innerHTML = `
-
-                <p>Nenhum aluno cadastrado pela gestão.</p>
-
-            `;
-
-            return;
-
-        }
-
-        lista.innerHTML = alunos.map(aluno => `
-
-            <div class="chamada-aluno">
-
-                <strong>
-
-                    ${aluno.nome}
-
-                </strong>
-
-                <span>
-
-                    Turma: ${aluno.turma}
-
-                </span>
-
-                <label>
-
-                    <input
-
-                        type="checkbox"
-
-                        name="presenca"
-
-                        value="${aluno.id}"
-
-                    >
-
-                    Presente
-
-                </label>
-
-            </div>
-
-        `).join("");
-
-    })
-
-    .catch(error => {
-
-        console.error(error);
-
-        document.getElementById(
-
-            "listaChamada"
-
-        ).innerHTML = `
-
-            <p>Não foi possível carregar os alunos.</p>
-
-        `;
-
-    });
-
-}
-
         /* =================================================
            INICIALIZAÇÃO
         ================================================== */
@@ -1428,12 +1331,12 @@ fetch("/listar-alunos")
 
         carregarPlanejamentos();
 
-        carregarAlunosParaChamada();
-
 
 
     </script>
 
 </body>
+
+
 
 </html>

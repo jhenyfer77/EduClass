@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EduClass | Relatórios</title>
+
+    <link rel="stylesheet" href="css/professor.css">
+
+</head>
+
+<body>
+
+    <main class="dashboard">
+
+        <header class="dashboard-header">
+
+            <div class="header-left">
+
+                <div class="edu-logo">EC</div>
+
+                <div>
+
+                    <h1>EduClass</h1>
+
+                    <span>RELATÓRIOS DOS ALUNOS</span>
+
+                </div>
+
+            </div>
+
+            <div class="header-right">
+
+                <a href="/professor.html" class="header-button">
+
+                    ←
+
+                    <span>Voltar</span>
+
+                </a>
+
+                <a href="/logout" class="header-button logout-button">
+
+                    ↪
+
+                    <span>Sair</span>
+
+                </a>
+
+            </div>
+
+        </header>
+
+        <section class="dashboard-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <span class="card-label">ACOMPANHAMENTO</span>
+
+                    <h2>Novo relatório</h2>
+
+                </div>
+
+                <div class="card-icon">📝</div>
+
+            </div>
+
+            <p>
+
+                Selecione um aluno e registre as informações sobre seu acompanhamento.
+
+            </p>
+
+            <div class="input-group">
+
+                <label for="turma">
+            
+                    TURMA
+            
+                </label>
+            
+                <select id="turma">
+            
+                    <option value="">
+            
+                        Selecione a turma
+            
+                    </option>
+            
+                </select>
+            
+            </div>
+            
+            <div class="input-group">
+            
+                <label for="aluno">
+            
+                    ALUNO
+            
+                </label>
+            
+                <select id="aluno" disabled>
+            
+                    <option value="">
+            
+                        Primeiro selecione uma turma
+            
+                    </option>
+            
+                </select>
+            
+            </div>
+
+            <div class="input-group">
+
+                <label for="conteudo">
+
+                    RELATÓRIO
+
+                </label>
+
+                <textarea
+
+                    id="conteudo"
+
+                    rows="8"
+
+                    placeholder="Digite aqui o relatório sobre o aluno..."
+
+                ></textarea>
+
+            </div>
+
+            <button
+
+                type="button"
+
+                id="btnEnviarRelatorio"
+
+                class="save-planning"
+
+            >
+
+                Enviar relatório
+
+            </button>
+
+        </section>
+
+        <footer class="dashboard-footer">
+
+            <span>EDUCLASS PLATFORM</span>
+
+            <span>
+
+                Gestão Escolar Inteligente
+
+            </span>
+
+            <span>
+
+                ©️ 2026
+
+            </span>
+
+        </footer>
+
+    </main>
+
+    <script src="js/relatorios.js"></script>
+
+</body>
+
+</html>

@@ -70,6 +70,53 @@ db.serialize(() => {
         turma TEXT NOT NULL
 
     )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS frequencias (
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+    
+        aluno_id INTEGER NOT NULL,
+    
+        turma TEXT NOT NULL,
+    
+        status TEXT NOT NULL,
+    
+        data_chamada DATETIME DEFAULT CURRENT_TIMESTAMP
+    
+    )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS frequencias (
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+    
+        aluno_id INTEGER NOT NULL,
+    
+        turma TEXT NOT NULL,
+    
+        status TEXT NOT NULL,
+    
+        data_chamada DATETIME DEFAULT CURRENT_TIMESTAMP
+    
+    )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS relatorios (
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+    
+        aluno_id INTEGER NOT NULL,
+    
+        aluno_nome TEXT NOT NULL,
+    
+        turma TEXT NOT NULL,
+    
+        professor TEXT,
+    
+        conteudo TEXT NOT NULL,
+    
+        data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP
+    
+    )`);
+
 });
 
 // Rota para a página de login
@@ -208,6 +255,84 @@ app.get('/listar-eventos', (req, res) => {
     });
 });
 
+app.get('/listar-alunos', (req, res) => {
+
+    db.all('SELECT * FROM alunos ORDER BY nome', [], (err, rows) => {
+
+        if (err) {
+
+            console.error('Erro ao listar alunos:', err.message);
+
+            return res.status(500).json({ erro: 'Erro ao listar alunos.' });
+
+        }
+
+        res.json(rows);
+
+    });
+
+});
+
+app.post('/registrar-chamada', (req, res) => {
+
+    const { turma, chamada } = req.body;
+
+    if (!turma || !chamada) {
+
+        return res.status(400).json({
+
+            erro: 'Dados da chamada incompletos.'
+
+        });
+
+    }
+
+    const stmt = db.prepare(`
+
+        INSERT INTO frequencias (aluno_id, turma, status)
+
+        VALUES (?, ?, ?)
+
+    `);
+
+    chamada.forEach(aluno => {
+
+        stmt.run(
+
+            aluno.aluno_id,
+
+            turma,
+
+            aluno.status
+
+        );
+
+    });
+
+    stmt.finalize(err => {
+
+        if (err) {
+
+            console.error('Erro ao registrar chamada:', err.message);
+
+            return res.status(500).json({
+
+                erro: 'Erro ao registrar chamada.'
+
+            });
+
+        }
+
+        res.json({
+
+            mensagem: 'Chamada registrada com sucesso!'
+
+        });
+
+    });
+
+});
+
 // Rota para cadastrar um novo aluno
 
 app.post('/cadastrar-aluno', (req, res) => {
@@ -255,6 +380,94 @@ app.post('/cadastrar-aluno', (req, res) => {
         }
 
     );
+
+});
+
+app.get('/listar-alunos', (req, res) => {
+
+    db.all(
+
+        `SELECT * FROM alunos ORDER BY nome ASC`,
+
+        [],
+
+        (err, rows) => {
+
+            if (err) {
+
+                return res.status(500).json({
+
+                    erro: err.message
+
+                });
+
+            }
+
+            res.json(rows);
+
+        }
+
+    );
+
+});
+
+app.post('/registrar-chamada', (req, res) => {
+
+    const { turma, chamada } = req.body;
+
+    if (!turma || !chamada) {
+
+        return res.status(400).json({
+
+            erro: 'Turma e chamada são obrigatórios.'
+
+        });
+
+    }
+
+    const stmt = db.prepare(`
+
+        INSERT INTO frequencias
+
+        (aluno_id, turma, status)
+
+        VALUES (?, ?, ?)
+
+    `);
+
+    chamada.forEach(item => {
+
+        stmt.run(
+
+            item.aluno_id,
+
+            turma,
+
+            item.status
+
+        );
+
+    });
+
+    stmt.finalize(err => {
+
+        if (err) {
+
+            return res.status(500).json({
+
+                erro: err.message
+
+            });
+
+        }
+
+        res.json({
+
+            mensagem: 'Chamada registrada com sucesso!'
+
+        });
+
+    });
 
 });
 
@@ -332,6 +545,64 @@ app.get('/contadores-gestor', (req, res) => {
             });
         });
     });
+});
+
+app.post('/criar-relatorio', (req, res) => {
+
+    const { aluno_id, aluno_nome, turma, professor, conteudo } = req.body;
+
+    if (!aluno_id || !aluno_nome || !turma || !conteudo) {
+
+        return res.status(400).json({
+
+            erro: 'Preencha todos os campos obrigatórios.'
+
+        });
+
+    }
+
+    db.run(`
+
+        INSERT INTO relatorios
+
+        (aluno_id, aluno_nome, turma, professor, conteudo)
+
+        VALUES (?, ?, ?, ?, ?)
+
+    `, [
+
+        aluno_id,
+
+        aluno_nome,
+
+        turma,
+
+        professor || '',
+
+        conteudo
+
+    ], function(err) {
+
+        if (err) {
+
+            console.error('Erro ao criar relatório:', err.message);
+
+            return res.status(500).json({
+
+                erro: 'Erro ao criar relatório.'
+
+            });
+
+        }
+
+        res.json({
+
+            mensagem: 'Relatório enviado para a gestão com sucesso!'
+
+        });
+
+    });
+
 });
 
 // Nova rota para deletar um professor pelo painel do gestor
