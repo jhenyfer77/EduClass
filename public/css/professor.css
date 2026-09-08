@@ -120,10 +120,10 @@ body {
 ========================================================= */
 
 .dashboard {
-    width: 100%;
-    max-width: 1350px;
+    width: calc(100% - 40px);
+    max-width: 1200px;
 
-    margin: auto;
+    margin: 0 auto;
 
     position: relative;
 }
@@ -1605,4 +1605,863 @@ body {
 
         text-align: center;
     }
+}
+
+/* ==========================================
+   BARRA LATERAL
+========================================== */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+
+    background: var(--navy);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+
+    display: flex;
+    flex-direction: column;
+
+    z-index: 1000;
+}
+
+/* LOGO */
+
+.sidebar-logo {
+    height: 80px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 0 20px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-logo span {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--blue);
+    color: white;
+
+    border-radius: 10px;
+
+    font-weight: bold;
+}
+
+.sidebar-logo h2 {
+    margin: 0;
+
+    color: white;
+
+    font-size: 20px;
+}
+
+/* MENU */
+
+.sidebar-menu {
+    padding: 25px 12px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.sidebar-menu a,
+.sidebar-sair a {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 13px 15px;
+
+    color: #cbd5e1;
+
+    text-decoration: none;
+
+    border-radius: 9px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: 0.2s;
+}
+
+.sidebar-menu a:hover,
+.sidebar-sair a:hover {
+    background: rgba(255, 255, 255, 0.08);
+
+    color: white;
+}
+
+/* ITEM ATIVO */
+
+.sidebar-menu .menu-ativo {
+    background: var(--blue);
+
+    color: white;
+}
+
+/* SAIR */
+
+.sidebar-sair {
+    margin-top: auto;
+
+    padding: 15px 12px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-sair a {
+    color: #fca5a5;
+}
+
+.sidebar-sair a:hover {
+    background: rgba(239, 68, 68, 0.12);
+
+    color: #fecaca;
+}
+
+/* =========================================================
+   MENU LATERAL PROFESSOR
+========================================================= */
+
+.sidebar-professor {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 210px;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #061426;
+
+    border-right: 1px solid rgba(100, 175, 230, 0.15);
+
+    z-index: 1000;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.sidebar-brand {
+    height: 82px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 0 16px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    box-sizing: border-box;
+}
+
+.sidebar-logo {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #159cff;
+
+    color: white;
+
+    border-radius: 11px;
+
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.sidebar-brand strong {
+    display: block;
+
+    color: white;
+
+    font-size: 17px;
+}
+
+.sidebar-brand small {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #6f9abd;
+
+    font-size: 7px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+
+/* =========================================================
+   MENU
+========================================================= */
+
+.sidebar-nav {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    padding: 22px 10px;
+}
+
+.sidebar-nav a {
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    min-height: 42px;
+
+    padding: 9px 11px;
+
+    color: #b7c7d9;
+
+    text-decoration: none;
+
+    border-radius: 9px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition: 0.2s ease;
+
+    box-sizing: border-box;
+}
+
+
+/* ÍCONE */
+
+.sidebar-nav a > span:first-child {
+    width: 22px;
+
+    text-align: center;
+
+    font-size: 16px;
+
+    flex-shrink: 0;
+}
+
+
+/* HOVER */
+
+.sidebar-nav a:hover {
+    color: white;
+
+    background: rgba(21, 156, 255, 0.10);
+}
+
+
+/* ITEM ATIVO */
+
+.sidebar-nav a.active {
+    color: white;
+
+    background: #159cff;
+
+    box-shadow: 0 5px 15px rgba(21, 156, 255, 0.18);
+}
+
+
+/* =========================================================
+   SAIR
+========================================================= */
+
+.sidebar-bottom {
+    margin-top: auto;
+
+    padding: 12px 10px 18px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-bottom a {
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 10px 11px;
+
+    color: #ff9bab;
+
+    text-decoration: none;
+
+    border-radius: 9px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.sidebar-bottom a:hover {
+    background: rgba(255, 100, 120, 0.08);
+
+    color: #ffb4bf;
+}
+
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .sidebar-professor {
+        width: 190px;
+    }
+
+    body {
+        padding-left: 190px;
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .sidebar-professor {
+        width: 65px;
+    }
+
+    .sidebar-brand {
+        justify-content: center;
+
+        padding: 0;
+    }
+
+    .sidebar-brand > div:last-child {
+        display: none;
+    }
+
+    .sidebar-nav a {
+        justify-content: center;
+
+        padding: 9px;
+    }
+
+    .sidebar-nav a > span:last-child,
+    .sidebar-bottom a > span:last-child {
+        display: none;
+    }
+
+    .sidebar-bottom a {
+        justify-content: center;
+    }
+
+    body {
+        padding-left: 65px;
+    }
+
+}
+
+/* =========================================================
+   MENU LATERAL DO PROFESSOR
+========================================================= */
+
+.professor-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 210px;
+    height: 100vh;
+
+    background: var(--navy);
+
+    border-right: 1px solid var(--border);
+
+    display: flex;
+    flex-direction: column;
+
+    z-index: 9999;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.professor-sidebar-brand {
+    height: 80px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 0 15px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+
+.professor-sidebar-logo {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--blue);
+
+    color: white;
+
+    border-radius: 10px;
+
+    font-size: 12px;
+    font-weight: 900;
+}
+
+
+.professor-sidebar-brand strong {
+    display: block;
+
+    color: white;
+
+    font-size: 16px;
+}
+
+
+.professor-sidebar-brand small {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--text-soft);
+
+    font-size: 7px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   ITENS DA BARRA
+========================================================= */
+
+.professor-sidebar-nav {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    padding: 20px 10px;
+}
+
+
+.professor-sidebar-nav a {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    min-height: 40px;
+
+    padding: 8px 10px;
+
+    color: #b7c7d9;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition: 0.2s ease;
+}
+
+
+.professor-sidebar-nav a:hover {
+    background: rgba(21, 156, 255, 0.10);
+
+    color: white;
+}
+
+
+.professor-sidebar-nav a.active {
+    background: var(--blue);
+
+    color: white;
+
+    box-shadow:
+        0 4px 12px
+        rgba(21, 156, 255, 0.18);
+}
+
+
+.professor-sidebar-nav a span:first-child {
+    width: 22px;
+
+    text-align: center;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   BOTÃO SAIR
+========================================================= */
+
+.professor-sidebar-bottom {
+    margin-top: auto;
+
+    padding: 12px 10px 18px;
+
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+
+.professor-sidebar-bottom a {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px;
+
+    color: #ff9bab;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+.professor-sidebar-bottom a:hover {
+    background: rgba(239,68,68,0.10);
+
+    color: #ffb4bf;
+}
+
+/* =========================================================
+   ESCONDER AS SEÇÕES QUANDO ESTIVER NO INÍCIO
+========================================================= */
+
+.professor-sections {
+    display: none;
+}
+
+
+/* Quando clicar em uma opção */
+.professor-sections.professor-sections-visible {
+    display: grid;
+}
+
+
+/* Todas as seções ficam escondidas */
+.professor-section {
+    display: none !important;
+}
+
+
+/* Mostra somente a seção selecionada */
+.professor-section.professor-section-active {
+    display: block !important;
+}
+
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .professor-sidebar {
+        width: 65px;
+    }
+
+    body {
+        padding-left: 65px;
+    }
+
+    .professor-sidebar-brand {
+        justify-content: center;
+
+        padding: 0;
+    }
+
+    .professor-sidebar-brand > div:last-child {
+        display: none;
+    }
+
+    .professor-sidebar-nav a {
+        justify-content: center;
+
+        padding: 9px;
+    }
+
+    .professor-sidebar-nav a span:last-child,
+    .professor-sidebar-bottom a span:last-child {
+        display: none;
+    }
+
+}
+
+/* =========================================================
+   TELAS DO PROFESSOR
+========================================================= */
+
+/* Todos os conteúdos ficam escondidos */
+.professor-tela {
+    display: none;
+}
+
+
+/* =========================================================
+   MENU LATERAL
+========================================================= */
+
+.sidebar-professor {
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 210px;
+    height: 100vh;
+
+    background: #061426;
+
+    display: flex;
+    flex-direction: column;
+
+    z-index: 9999;
+
+    border-right: 1px solid rgba(255,255,255,0.08);
+
+}
+
+
+.sidebar-brand {
+
+    height: 80px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 0 16px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,0.08);
+
+}
+
+
+.sidebar-logo {
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #159cff;
+
+    color: white;
+
+    border-radius: 11px;
+
+    font-weight: 900;
+
+}
+
+
+.sidebar-brand strong {
+
+    display: block;
+
+    color: white;
+
+    font-size: 17px;
+
+}
+
+
+.sidebar-brand small {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #7da0bd;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+}
+
+
+/* =========================================================
+   LINKS
+========================================================= */
+
+.sidebar-nav {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    padding: 20px 10px;
+
+}
+
+
+.sidebar-nav a {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    min-height: 40px;
+
+    padding: 8px 10px;
+
+    color: #c1cedb;
+
+    text-decoration: none;
+
+    border-radius: 9px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition: 0.2s;
+
+}
+
+
+.sidebar-nav a:hover {
+
+    color: white;
+
+    background:
+        rgba(21,156,255,0.10);
+
+}
+
+
+.sidebar-nav a.active {
+
+    color: white;
+
+    background: #159cff;
+
+}
+
+
+.sidebar-nav a span:first-child {
+
+    width: 22px;
+
+    text-align: center;
+
+    font-size: 15px;
+
+}
+
+
+/* =========================================================
+   SAIR
+========================================================= */
+
+.sidebar-bottom {
+
+    margin-top: auto;
+
+    padding: 12px 10px 18px;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,0.08);
+
+}
+
+
+.sidebar-bottom a {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px;
+
+    color: #ff9bab;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================================================
+   ESPAÇO DA BARRA
+========================================================= */
+
+body {
+
+    padding-left: 210px;
+
 }

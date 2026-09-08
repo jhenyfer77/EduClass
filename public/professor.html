@@ -1,14 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>EduClass | Painel do Professor</title>
 
@@ -28,7 +24,82 @@
 
 
     <!-- =================================================
-         DASHBOARD
+         MENU LATERAL
+    ================================================== -->
+
+    <aside class="professor-sidebar">
+
+        <div class="professor-sidebar-brand">
+
+            <div class="professor-sidebar-logo">
+                EC
+            </div>
+
+            <div>
+                <strong>EduClass</strong>
+                <small>PROFESSOR</small>
+            </div>
+
+        </div>
+
+
+        <nav class="professor-sidebar-nav">
+
+            <a href="#" class="sidebar-link active" data-tela="inicio">
+                <span>🏠</span>
+                <span>Início</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link" data-tela="chamada">
+                <span>📋</span>
+                <span>Chamada</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link" data-tela="recados">
+                <span>📢</span>
+                <span>Recados</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link" data-tela="planejamento">
+                <span>📝</span>
+                <span>Planejamento</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link" data-tela="calendario">
+                <span>📅</span>
+                <span>Calendário</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link" data-tela="video-aula">
+                <span>🎥</span>
+                <span>Vídeo Aula</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link" data-tela="meus-planejamentos">
+                <span>📚</span>
+                <span>Meus Planejamentos</span>
+            </a>
+
+
+            <a href="#" class="sidebar-link" data-tela="relatorios">
+                <span>📊</span>
+                <span>Relatórios</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- =================================================
+         CONTEÚDO PRINCIPAL
     ================================================== -->
 
     <main class="dashboard">
@@ -61,39 +132,13 @@
             </div>
 
 
+            <!-- SAIR FICA AQUI EM CIMA -->
+
             <div class="header-right">
 
                 <a
-                    href="/VideoAula.html"
-                    class="header-button training-button"
-                >
-                    🎥
-                    <span>
-                        Espaço de Formação
-                    </span>
-                </a>
-
-                <a
-
-                href="/chamada.html"
-        
-                class="header-button"
-        
-            >
-        
-                📋
-        
-                <span>
-        
-                    Chamada
-        
-                </span>
-        
-            </a>
-
-                <a
-                    href="/professor_menu_relatorio.html"
-                    class="header-button"
+                    href="index.html"
+                    class="header-button logout-button"
                 >
                     ↪
                     <span>
@@ -108,14 +153,18 @@
 
 
         <!-- =================================================
-             LABEL DE BOAS-VINDAS
+             INÍCIO
         ================================================== -->
 
-        <section class="welcome-label">
+        <section
+            class="welcome-label"
+            id="tela-inicio"
+        >
 
             <div class="welcome-icon">
                 ✦
             </div>
+
 
             <div class="welcome-text">
 
@@ -148,63 +197,243 @@
 
 
         <!-- =================================================
-             GRID PRINCIPAL
+             CONTEÚDO DAS TELAS
         ================================================== -->
 
         <section class="dashboard-grid">
 
-            <div class="dashboard-card" style="grid-column: 1 / -1;">
+
+
+            <!-- =================================================
+                 CHAMADA
+            ================================================== -->
+
+            <div
+                class="dashboard-card professor-tela"
+                id="tela-chamada"
+            >
 
                 <div class="card-header">
-            
+
                     <div>
-            
+
                         <span class="card-label">
-            
-                            ACOMPANHAMENTO
-            
+                            FREQUÊNCIA
                         </span>
-            
+
                         <h2>
-            
-                            Relatórios
-            
+                            Chamada
                         </h2>
-            
+
                     </div>
-            
+
                     <div class="card-icon">
-            
-                        📊
-            
+                        📋
                     </div>
-            
+
                 </div>
-            
-                <a
-            
-                    href="/relatorios.html"
-                    class="header-button"
-                    style="display: inline-flex; text-decoration: none;"
-                >
-                    📊
-            
+
+
+                <div class="empty-card">
+
                     <span>
-            
-                        Abrir Relatórios
-            
+                        📋
                     </span>
-            
-                </a>
-            
+
+                    <strong>
+                        Controle de presença
+                    </strong>
+
+                    <p>
+                        Aqui você poderá realizar a chamada
+                        dos alunos.
+                    </p>
+
+                </div>
+
             </div>
+
+
+
+            <!-- =================================================
+                 RECADOS
+            ================================================== -->
+
+            <div
+                class="dashboard-card announcements-card professor-tela"
+                id="tela-recados"
+            >
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-label">
+                            COMUNICAÇÃO
+                        </span>
+
+                        <h2>
+                            Recados
+                        </h2>
+
+                    </div>
+
+                    <div class="card-icon">
+                        📢
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="announcements-list"
+                    id="muralDirecao"
+                >
+
+                    <div class="announcement">
+
+                        <div class="announcement-icon">
+                            📢
+                        </div>
+
+                        <div class="announcement-content">
+
+                            <span class="announcement-tag">
+                                COMUNICADO
+                            </span>
+
+                            <h3>
+                                Bem-vindo ao EduClass
+                            </h3>
+
+                            <p>
+                                Consulte aqui os recados
+                                enviados pela direção.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 PLANEJAMENTO
+            ================================================== -->
+
+            <div
+                class="dashboard-card planning-card professor-tela"
+                id="tela-planejamento"
+            >
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-label">
+                            ORGANIZAÇÃO
+                        </span>
+
+                        <h2>
+                            Planejamento de Aula
+                        </h2>
+
+                    </div>
+
+                    <div class="card-icon">
+                        📝
+                    </div>
+
+                </div>
+
+
+                <form
+                    id="formPlanejamento"
+                    class="planning-form"
+                >
+
+                    <div class="input-group">
+
+                        <label for="materia">
+                            DISCIPLINA
+                        </label>
+
+                        <input
+                            type="text"
+                            id="materia"
+                            name="materia"
+                            placeholder="Ex.: Biologia"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="data_planejada">
+                            DATA DA AULA
+                        </label>
+
+                        <input
+                            type="date"
+                            id="data_planejada"
+                            name="data_planejada"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="input-group full-input">
+
+                        <label for="conteudo">
+                            CONTEÚDO DA AULA
+                        </label>
+
+                        <textarea
+                            id="conteudo"
+                            name="conteudo"
+                            placeholder="Descreva o conteúdo, objetivos ou atividades da aula..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="save-planning"
+                    >
+
+                        <span>
+                            + SALVAR PLANEJAMENTO
+                        </span>
+
+                        <b>
+                            →
+                        </b>
+
+                    </button>
+
+                </form>
+
+            </div>
+
 
 
             <!-- =================================================
                  CALENDÁRIO
             ================================================== -->
 
-            <div class="dashboard-card calendar-card">
+            <div
+                class="dashboard-card calendar-card professor-tela"
+                id="tela-calendario"
+            >
 
                 <div class="card-header">
 
@@ -242,8 +471,6 @@
                 </div>
 
 
-                <!-- MÊS -->
-
                 <div class="calendar-month">
 
                     <button
@@ -260,8 +487,6 @@
                 </div>
 
 
-                <!-- DIAS DA SEMANA -->
-
                 <div class="calendar-week">
 
                     <span>DOM</span>
@@ -275,16 +500,12 @@
                 </div>
 
 
-                <!-- DIAS -->
-
                 <div
                     class="calendar-days"
                     id="calendarDays"
                 >
                 </div>
 
-
-                <!-- PRÓXIMO EVENTO -->
 
                 <div class="next-event">
 
@@ -299,7 +520,7 @@
                         </span>
 
                         <strong id="nextEventTitle">
-                            Carregando...
+                            Nenhum evento
                         </strong>
 
                         <p id="nextEventDate">
@@ -315,154 +536,51 @@
 
 
             <!-- =================================================
-                 COMUNICADOS
+                 VÍDEO AULA
             ================================================== -->
 
-            <div class="dashboard-card announcements-card">
+            <div
+                class="dashboard-card professor-tela"
+                id="tela-video-aula"
+            >
 
                 <div class="card-header">
 
                     <div>
 
                         <span class="card-label">
-                            COMUNICAÇÃO
+                            CONTEÚDO
                         </span>
 
                         <h2>
-                            Comunicados
+                            Vídeo Aula
                         </h2>
 
                     </div>
 
                     <div class="card-icon">
-                        📢
+                        🎥
                     </div>
 
                 </div>
 
 
-                <div
-                    class="announcements-list"
-                    id="muralDirecao"
-                >
+                <div class="empty-card">
 
-                    <div class="loading-card">
+                    <span>
+                        🎥
+                    </span>
 
-                        <span class="loading-icon">
-                            ◌
-                        </span>
+                    <strong>
+                        Vídeo aulas
+                    </strong>
 
-                        Carregando comunicados...
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- =================================================
-                 PLANEJAMENTO
-            ================================================== -->
-
-            <div class="dashboard-card planning-card">
-
-                <div class="card-header">
-
-                    <div>
-
-                        <span class="card-label">
-                            ORGANIZAÇÃO
-                        </span>
-
-                        <h2>
-                            Planejamento de Aula
-                        </h2>
-
-                    </div>
-
-                    <div class="card-icon">
-                        📝
-                    </div>
+                    <p>
+                        Aqui ficarão disponíveis as vídeo aulas
+                        para os professores.
+                    </p>
 
                 </div>
-
-
-                <form
-                    id="formPlanejamento"
-                    class="planning-form"
-                >
-
-
-                    <div class="input-group">
-
-                        <label for="materia">
-                            DISCIPLINA
-                        </label>
-
-                        <input
-                            type="text"
-                            id="materia"
-                            name="materia"
-                            placeholder="Ex.: Biologia"
-                            required
-                        >
-
-                    </div>
-
-
-
-                    <div class="input-group">
-
-                        <label for="data_planejada">
-                            DATA DA AULA
-                        </label>
-
-                        <input
-                            type="date"
-                            id="data_planejada"
-                            name="data_planejada"
-                            required
-                        >
-
-                    </div>
-
-
-
-                    <div class="input-group full-input">
-
-                        <label for="conteudo">
-                            CONTEÚDO DA AULA
-                        </label>
-
-                        <textarea
-                            id="conteudo"
-                            name="conteudo"
-                            placeholder="Descreva o conteúdo, objetivos ou atividades da aula..."
-                            required
-                        ></textarea>
-
-                    </div>
-
-
-
-                    <button
-                        type="submit"
-                        class="save-planning"
-                    >
-
-                        <span>
-                            + SALVAR PLANEJAMENTO
-                        </span>
-
-                        <b>
-                            →
-                        </b>
-
-                    </button>
-
-                </form>
 
             </div>
 
@@ -472,7 +590,10 @@
                  MEUS PLANEJAMENTOS
             ================================================== -->
 
-            <div class="dashboard-card saved-planning-card">
+            <div
+                class="dashboard-card saved-planning-card professor-tela"
+                id="tela-meus-planejamentos"
+            >
 
                 <div class="card-header">
 
@@ -489,9 +610,11 @@
                     </div>
 
                     <div class="planning-counter">
+
                         <span id="planningCount">
                             0
                         </span>
+
                     </div>
 
                 </div>
@@ -502,13 +625,19 @@
                     id="listaPlanejamentos"
                 >
 
-                    <div class="loading-card">
+                    <div class="empty-card">
 
-                        <span class="loading-icon">
-                            ◌
+                        <span>
+                            📚
                         </span>
 
-                        Carregando planejamentos...
+                        <strong>
+                            Nenhum planejamento salvo
+                        </strong>
+
+                        <p>
+                            Seus planejamentos aparecerão aqui.
+                        </p>
 
                     </div>
 
@@ -516,13 +645,77 @@
 
             </div>
 
+
+
+            <!-- =================================================
+                 RELATÓRIOS
+            ================================================== -->
+
+            <div
+                class="dashboard-card professor-tela"
+                id="tela-relatorios"
+            >
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-label">
+                            ACOMPANHAMENTO
+                        </span>
+
+                        <h2>
+                            Relatórios
+                        </h2>
+
+                    </div>
+
+                    <div class="card-icon">
+                        📊
+                    </div>
+
+                </div>
+
+
+                <div class="empty-card">
+
+                    <span>
+                        📊
+                    </span>
+
+                    <strong>
+                        Relatórios
+                    </strong>
+
+                    <p>
+                        Acompanhe os dados e informações
+                        do ambiente escolar.
+                    </p>
+
+
+                    <a
+                        href="/relatorios.html"
+                        class="header-button training-button"
+                    >
+
+                        📊
+
+                        <span>
+                            Abrir Relatórios
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
         </section>
-        
+
+
 
         <!-- =================================================
-
              RODAPÉ
-
         ================================================== -->
 
         <footer class="dashboard-footer">
@@ -551,792 +744,148 @@
 
     <script>
 
-        /* =================================================
-           VARIÁVEIS
-        ================================================== */
-
-        let currentCalendarDate = new Date();
-
-        let eventosEscolares = [];
-
-
-
-        /* =================================================
-           NOMES DOS MESES
-        ================================================== */
-
-        const meses = [
-            "Janeiro",
-            "Fevereiro",
-            "Março",
-            "Abril",
-            "Maio",
-            "Junho",
-            "Julho",
-            "Agosto",
-            "Setembro",
-            "Outubro",
-            "Novembro",
-            "Dezembro"
-        ];
-
-
-
-        /* =================================================
-           RENDERIZAR CALENDÁRIO
-        ================================================== */
-
-        function renderCalendar() {
-
-            const year =
-                currentCalendarDate.getFullYear();
-
-            const month =
-                currentCalendarDate.getMonth();
-
-
-            document.getElementById(
-                "calendarMonth"
-            ).textContent =
-                `${meses[month]} ${year}`;
-
-
-            const firstDay =
-                new Date(
-                    year,
-                    month,
-                    1
-                ).getDay();
-
-
-            const daysInMonth =
-                new Date(
-                    year,
-                    month + 1,
-                    0
-                ).getDate();
-
-
-            const calendarDays =
-                document.getElementById(
-                    "calendarDays"
-                );
-
-
-            calendarDays.innerHTML = "";
-
-
-            /* Espaços antes do primeiro dia */
-
-            for (
-                let i = 0;
-                i < firstDay;
-                i++
-            ) {
-
-                const emptyDay =
-                    document.createElement("div");
-
-                emptyDay.className =
-                    "calendar-day empty";
-
-                calendarDays.appendChild(
-                    emptyDay
-                );
-            }
-
-
-            /* Dias */
-
-            for (
-                let day = 1;
-                day <= daysInMonth;
-                day++
-            ) {
-
-                const dayElement =
-                    document.createElement("div");
-
-                dayElement.className =
-                    "calendar-day";
-
-
-                const today =
-                    new Date();
-
-
-                if (
-                    day === today.getDate() &&
-                    month === today.getMonth() &&
-                    year === today.getFullYear()
-                ) {
-
-                    dayElement.classList.add(
-                        "today"
-                    );
-                }
-
-
-                /* Verificar eventos */
-
-                const hasEvent =
-                    eventosEscolares.some(
-                        evento => {
-
-                            const eventDate =
-                                new Date(
-                                    evento.data_evento
-                                );
-
-                            return (
-                                eventDate.getDate() === day &&
-                                eventDate.getMonth() === month &&
-                                eventDate.getFullYear() === year
-                            );
-                        }
-                    );
-
-
-                if (hasEvent) {
-
-                    dayElement.classList.add(
-                        "has-event"
-                    );
-                }
-
-
-                dayElement.innerHTML = `
-                    <span>${day}</span>
-                    ${
-                        hasEvent
-                        ? '<i></i>'
-                        : ''
-                    }
-                `;
-
-
-                calendarDays.appendChild(
-                    dayElement
-                );
-            }
-
-        }
-
-
-
-        /* =================================================
-           MUDAR MÊS
-        ================================================== */
-
-        document
-            .getElementById("previousMonth")
-            .addEventListener(
-                "click",
-                function() {
-
-                    currentCalendarDate.setMonth(
-                        currentCalendarDate.getMonth() - 1
-                    );
-
-                    renderCalendar();
-
-                }
+        const botoesMenu =
+            document.querySelectorAll(
+                ".sidebar-link[data-tela]"
             );
 
 
-        document
-            .getElementById("nextMonth")
-            .addEventListener(
-                "click",
-                function() {
-
-                    currentCalendarDate.setMonth(
-                        currentCalendarDate.getMonth() + 1
-                    );
-
-                    renderCalendar();
-
-                }
+        const telasProfessor =
+            document.querySelectorAll(
+                ".professor-tela"
             );
 
 
-        /* Voltar para o mês atual */
-
-        document
-            .getElementById("currentMonthButton")
-            .addEventListener(
-                "click",
-                function() {
-
-                    currentCalendarDate =
-                        new Date();
-
-                    renderCalendar();
-
-                }
+        const telaInicial =
+            document.querySelector(
+                "#tela-inicio"
             );
 
 
 
-        /* =================================================
-           EVENTOS
-        ================================================== */
+        function abrirTelaProfessor(nome) {
 
-        function carregarEventosDaDirecao() {
+            /* =========================================
+               ESCONDE TODAS AS TELAS
+            ========================================= */
 
-            fetch("/listar-eventos")
+            telasProfessor.forEach(function(tela) {
 
-                .then(response => {
-
-                    if (!response.ok) {
-                        throw new Error(
-                            "Erro ao carregar eventos"
-                        );
-                    }
-
-                    return response.json();
-
-                })
-
-                .then(eventos => {
-
-                    eventosEscolares =
-                        eventos || [];
-
-                    renderCalendar();
-
-                    mostrarProximoEvento();
-
-                })
-
-                .catch(error => {
-
-                    console.error(error);
-
-                    eventosEscolares = [];
-
-                    renderCalendar();
-
-                    document.getElementById(
-                        "nextEventTitle"
-                    ).textContent =
-                        "Nenhum evento encontrado";
-
-                    document.getElementById(
-                        "nextEventDate"
-                    ).textContent =
-                        "Sua agenda está livre.";
-
-                });
-        }
-
-
-
-        /* =================================================
-           PRÓXIMO EVENTO
-        ================================================== */
-
-        function mostrarProximoEvento() {
-
-            const agora =
-                new Date();
-
-
-            const eventosFuturos =
-                eventosEscolares
-                    .map(evento => {
-
-                        return {
-                            ...evento,
-                            dataConvertida:
-                                new Date(
-                                    evento.data_evento
-                                )
-                        };
-
-                    })
-                    .filter(evento =>
-                        evento.dataConvertida >= agora
-                    )
-                    .sort(
-                        (a, b) =>
-                            a.dataConvertida -
-                            b.dataConvertida
-                    );
-
-
-            if (
-                eventosFuturos.length === 0
-            ) {
-
-                document.getElementById(
-                    "nextEventTitle"
-                ).textContent =
-                    "Nenhum próximo evento";
-
-                document.getElementById(
-                    "nextEventDate"
-                ).textContent =
-                    "Não há eventos cadastrados.";
-
-                return;
-            }
-
-
-            const proximo =
-                eventosFuturos[0];
-
-
-            document.getElementById(
-                "nextEventTitle"
-            ).textContent =
-                proximo.titulo;
-
-
-            const data =
-                proximo.dataConvertida;
-
-
-            document.getElementById(
-                "nextEventDate"
-            ).textContent =
-                `📅 ${data.toLocaleDateString(
-                    "pt-BR"
-                )}`;
-
-        }
-
-
-
-        /* =================================================
-           COMUNICADOS
-        ================================================== */
-
-        function carregarRecadosDaDirecao() {
-
-            fetch("/listar-recados")
-
-                .then(response =>
-                    response.json()
-                )
-
-                .then(recados => {
-
-                    const mural =
-                        document.getElementById(
-                            "muralDirecao"
-                        );
-
-
-                    if (
-                        !recados ||
-                        recados.length === 0
-                    ) {
-
-                        mural.innerHTML = `
-
-                            <div class="empty-card">
-
-                                <span>
-                                    📭
-                                </span>
-
-                                <p>
-                                    Nenhum comunicado
-                                    oficial recente.
-                                </p>
-
-                            </div>
-
-                        `;
-
-                        return;
-                    }
-
-
-                    mural.innerHTML =
-                        recados.map(
-                            recado => `
-
-                            <article
-                                class="announcement"
-                            >
-
-                                <div
-                                    class="announcement-icon"
-                                >
-                                    📢
-                                </div>
-
-
-                                <div
-                                    class="announcement-content"
-                                >
-
-                                    <span
-                                        class="announcement-tag"
-                                    >
-                                        COMUNICADO
-                                    </span>
-
-                                    <h3>
-                                        ${recado.titulo}
-                                    </h3>
-
-                                    <p>
-                                        ${recado.conteudo}
-                                    </p>
-
-                                    <small>
-                                        Enviado por:
-                                        <strong>
-                                            ${recado.autor}
-                                        </strong>
-                                    </small>
-
-                                </div>
-
-                            </article>
-
-                        `
-                        ).join("");
-
-                })
-
-                .catch(error => {
-
-                    console.error(error);
-
-                    document.getElementById(
-                        "muralDirecao"
-                    ).innerHTML = `
-
-                        <div class="empty-card">
-
-                            <span>
-                                ⚠️
-                            </span>
-
-                            <p>
-                                Não foi possível
-                                carregar os comunicados.
-                            </p>
-
-                        </div>
-
-                    `;
-
-                });
-
-        }
-
-
-
-        /* =================================================
-           PLANEJAMENTOS
-        ================================================== */
-
-        function carregarPlanejamentos() {
-
-            fetch("/listar-planejamentos")
-
-                .then(response =>
-                    response.json()
-                )
-
-                .then(dados => {
-
-                    const lista =
-                        document.getElementById(
-                            "listaPlanejamentos"
-                        );
-
-
-                    const contador =
-                        document.getElementById(
-                            "planningCount"
-                        );
-
-
-                    contador.textContent =
-                        dados
-                            ? dados.length
-                            : 0;
-
-
-                    if (
-                        !dados ||
-                        dados.length === 0
-                    ) {
-
-                        lista.innerHTML = `
-
-                            <div class="empty-card">
-
-                                <span>
-                                    📝
-                                </span>
-
-                                <p>
-                                    Você ainda não possui
-                                    planejamentos salvos.
-                                </p>
-
-                            </div>
-
-                        `;
-
-                        return;
-                    }
-
-
-                    lista.innerHTML =
-                        dados.map(
-                            planejamento => `
-
-                            <article
-                                class="saved-planning"
-                            >
-
-                                <div
-                                    class="planning-top"
-                                >
-
-                                    <span
-                                        class="planning-subject"
-                                    >
-                                        ${planejamento.materia}
-                                    </span>
-
-                                    <span
-                                        class="planning-date"
-                                    >
-                                        📅
-                                        ${planejamento.data_planejada}
-                                    </span>
-
-                                </div>
-
-
-                                <h3>
-                                    Planejamento de aula
-                                </h3>
-
-
-                                <p>
-                                    ${planejamento.conteudo}
-                                </p>
-
-
-                                <button
-                                    type="button"
-                                    onclick="apagarPlanejamento(${planejamento.id})"
-                                    class="delete-planning"
-                                >
-                                    Excluir planejamento
-                                </button>
-
-                            </article>
-
-                        `
-                        ).join("");
-
-                })
-
-                .catch(error => {
-
-                    console.error(error);
-
-                    document.getElementById(
-                        "listaPlanejamentos"
-                    ).innerHTML = `
-
-                        <div class="empty-card">
-
-                            <span>
-                                ⚠️
-                            </span>
-
-                            <p>
-                                Erro ao carregar
-                                planejamentos.
-                            </p>
-
-                        </div>
-
-                    `;
-
-                });
-
-        }
-
-
-
-        /* =================================================
-           APAGAR PLANEJAMENTO
-        ================================================== */
-
-        function apagarPlanejamento(id) {
-
-            const confirmar =
-                confirm(
-                    "Deseja realmente excluir este planejamento?"
-                );
-
-
-            if (!confirmar) {
-                return;
-            }
-
-
-            fetch(
-                `/apagar-planejamento/${id}`,
-                {
-                    method: "DELETE"
-                }
-            )
-
-            .then(response =>
-                response.json()
-            )
-
-            .then(() => {
-
-                carregarPlanejamentos();
-
-            })
-
-            .catch(error => {
-
-                console.error(error);
-
-                alert(
-                    "Não foi possível excluir o planejamento."
-                );
+                tela.style.display = "none";
 
             });
 
+
+            /* =========================================
+               REMOVE ATIVO DOS BOTÕES
+            ========================================= */
+
+            botoesMenu.forEach(function(botao) {
+
+                botao.classList.remove("active");
+
+            });
+
+
+            /* =========================================
+               INÍCIO
+            ========================================= */
+
+            if (nome === "inicio") {
+
+                telaInicial.style.display = "flex";
+
+            }
+
+            else {
+
+                /* =====================================
+                   ESCONDE O OLÁ PROFESSOR
+                ===================================== */
+
+                telaInicial.style.display = "none";
+
+
+                /* =====================================
+                   PROCURA A TELA
+                ===================================== */
+
+                const tela =
+                    document.getElementById(
+                        "tela-" + nome
+                    );
+
+
+                /* =====================================
+                   MOSTRA A TELA
+                ===================================== */
+
+                if (tela) {
+
+                    tela.style.display = "block";
+
+                }
+
+            }
+
+
+            /* =========================================
+               MARCA O BOTÃO CLICADO
+            ========================================= */
+
+            const botao =
+                document.querySelector(
+                    '[data-tela="' + nome + '"]'
+                );
+
+
+            if (botao) {
+
+                botao.classList.add("active");
+
+            }
+
         }
 
 
 
-        /* =================================================
-           SALVAR PLANEJAMENTO
-        ================================================== */
+        /* =============================================
+           CLIQUE NOS BOTÕES
+        ============================================= */
 
-        document
-            .getElementById("formPlanejamento")
-            .addEventListener(
-                "submit",
+        botoesMenu.forEach(function(botao) {
+
+            botao.addEventListener(
+                "click",
                 function(event) {
 
                     event.preventDefault();
 
 
-                    const dados =
-                        new URLSearchParams(
-                            new FormData(this)
+                    const nome =
+                        botao.getAttribute(
+                            "data-tela"
                         );
 
 
-                    const botao =
-                        this.querySelector(
-                            "button"
-                        );
-
-
-                    botao.disabled = true;
-
-                    botao.innerHTML =
-                        "<span>SALVANDO...</span>";
-
-
-                    fetch(
-                        "/criar-planejamento",
-                        {
-                            method: "POST",
-                            body: dados
-                        }
-                    )
-
-                    .then(response => {
-
-                        if (!response.ok) {
-
-                            throw new Error(
-                                "Erro ao salvar"
-                            );
-                        }
-
-                        return response.text();
-
-                    })
-
-                    .then(() => {
-
-                        this.reset();
-
-                        carregarPlanejamentos();
-
-                        botao.disabled = false;
-
-                        botao.innerHTML =
-                            `
-                            <span>
-                                + SALVAR PLANEJAMENTO
-                            </span>
-
-                            <b>
-                                →
-                            </b>
-                            `;
-
-                    })
-
-                    .catch(error => {
-
-                        console.error(error);
-
-                        alert(
-                            "Não foi possível salvar o planejamento."
-                        );
-
-                        botao.disabled = false;
-
-                        botao.innerHTML =
-                            `
-                            <span>
-                                + SALVAR PLANEJAMENTO
-                            </span>
-
-                            <b>
-                                →
-                            </b>
-                            `;
-
-                    });
+                    abrirTelaProfessor(nome);
 
                 }
             );
 
-        /* =================================================
-           INICIALIZAÇÃO
-        ================================================== */
-
-        renderCalendar();
-
-        carregarEventosDaDirecao();
-
-        carregarRecadosDaDirecao();
-
-        carregarPlanejamentos();
+        });
 
 
+
+        /* =============================================
+           COMEÇA NO INÍCIO
+        ============================================= */
+
+        abrirTelaProfessor("inicio");
 
     </script>
 
+
 </body>
-
-
 
 </html>
