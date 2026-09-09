@@ -234,24 +234,56 @@
                 </div>
 
 
-                <div class="empty-card">
+                <div class="chamada-container">
 
-                    <span>
-                        📋
-                    </span>
-
-                    <strong>
-                        Controle de presença
-                    </strong>
-
-                    <p>
-                        Aqui você poderá realizar a chamada
-                        dos alunos.
-                    </p>
-
+                    <div class="chamada-topo">
+                
+                        <div>
+                            <label for="selectTurma">
+                                SELECIONE A TURMA
+                            </label>
+                
+                            <select id="selectTurma">
+                                <option value="">
+                                    Escolha uma turma
+                                </option>
+                            </select>
+                        </div>
+                
+                        <button
+                            type="button"
+                            id="btnSalvarChamada"
+                            class="save-planning"
+                        >
+                            <span>✓ SALVAR CHAMADA</span>
+                            <b>→</b>
+                        </button>
+                
+                    </div>
+                
+                
+                    <div
+                        id="listaAlunosChamada"
+                        class="lista-alunos-chamada"
+                    >
+                
+                        <div class="empty-card">
+                
+                            <span>📋</span>
+                
+                            <strong>
+                                Selecione uma turma
+                            </strong>
+                
+                            <p>
+                                Os alunos da turma aparecerão aqui.
+                            </p>
+                
+                        </div>
+                
+                    </div>
+                
                 </div>
-
-            </div>
 
 
 
@@ -882,6 +914,409 @@
         ============================================= */
 
         abrirTelaProfessor("inicio");
+
+        // =====================================================
+// CHAMADA - CARREGAR TURMAS E ALUNOS
+// =====================================================
+
+const selectTurma = document.getElementById("selectTurma");
+const listaAlunosChamada = document.getElementById("listaAlunosChamada");
+const btnSalvarChamada = document.getElementById("btnSalvarChamada");
+
+
+// =====================================================
+// CARREGAR AS TURMAS EXISTENTES
+// =====================================================
+
+async function carregarTurmas() {
+
+    try {
+
+        const resposta = await fetch("/listar-alunos");
+
+        if (!resposta.ok) {
+            throw new Error("Erro ao buscar alunos");
+        }
+
+        const alunos = await resposta.json();
+
+        // Pega somente as turmas existentes
+        const turmas = [...new Set(
+            alunos.map(aluno => aluno.turma)
+        )].sort();
+
+        selectTurma.innerHTML = `
+            <option value="">
+                Escolha uma turma
+            </option>
+        `;
+
+        turmas.forEach(turma => {
+
+            const option = document.createElement("option");
+
+            option.value = turma;
+            option.textContent = turma;
+
+            selectTurma.appendChild(option);
+
+        });
+
+    } catch (erro) {
+
+        console.error("Erro ao carregar turmas:", erro);
+
+        listaAlunosChamada.innerHTML = `
+            <div class="empty-card">
+
+                <span>⚠️</span>
+
+                <strong>
+                    Erro ao carregar alunos
+                </strong>
+
+                <p>
+                    Verifique se o servidor está funcionando.
+                </p>
+
+            </div>
+        `;
+
+    }
+
+}
+
+
+// =====================================================
+// QUANDO ESCOLHER UMA TURMA
+// =====================================================
+
+selectTurma.addEventListener("change", async function() {
+
+    const turmaSelecionada = this.value;
+
+    if (!turmaSelecionada) {
+
+        listaAlunosChamada.innerHTML = `
+            <div class="empty-card">
+
+                <span>📋</span>
+
+                <strong>
+                    Selecione uma turma
+                </strong>
+
+                <p>
+                    Os alunos da turma aparecerão aqui.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    listaAlunosChamada.innerHTML = `
+        <div class="empty-card">
+
+            <span>⏳</span>
+
+            <strong>
+                Carregando alunos...
+            </strong>
+
+        </div>
+    `;
+
+
+    try {
+
+        const resposta = await fetch(
+            "/listar-alunos?turma=" +
+            encodeURIComponent(turmaSelecionada)
+        );
+
+
+        if (!resposta.ok) {
+            throw new Error("Erro ao buscar alunos");
+        }
+
+
+        const alunos = await resposta.json();
+
+
+        if (alunos.length === 0) {
+
+            listaAlunosChamada.innerHTML = `
+                <div class="empty-card">
+
+                    <span>👨‍🎓</span>
+
+                    <strong>
+                        Nenhum aluno encontrado
+                    </strong>
+
+                    <p>
+                        Não existem alunos cadastrados nessa turma.
+                    </p>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        // =================================================
+        // MOSTRA OS ALUNOS
+        // =================================================
+
+        listaAlunosChamada.innerHTML = "";
+
+
+        alunos.forEach((aluno, index) => {
+
+            const alunoHTML = document.createElement("div");
+
+            alunoHTML.className = "aluno-chamada";
+
+            alunoHTML.innerHTML = `
+
+                <div class="aluno-info">
+
+                    <div class="aluno-numero">
+                        ${index + 1}
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            ${aluno.nome}
+                        </strong>
+
+                        <small>
+                            Turma ${aluno.turma}
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="status-aluno">
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="aluno-${aluno.id}"
+                            value="presente"
+                            checked
+                        >
+
+                        Presente
+                    </label>
+
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="aluno-${aluno.id}"
+                            value="ausente"
+                        >
+
+                        Ausente
+                    </label>
+
+                </div>
+
+            `;
+
+
+            listaAlunosChamada.appendChild(alunoHTML);
+
+        });
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar alunos:",
+            erro
+        );
+
+
+        listaAlunosChamada.innerHTML = `
+            <div class="empty-card">
+
+                <span>⚠️</span>
+
+                <strong>
+                    Erro ao carregar alunos
+                </strong>
+
+                <p>
+                    Tente selecionar a turma novamente.
+                </p>
+
+            </div>
+        `;
+
+    }
+
+});
+
+
+// =====================================================
+// SALVAR CHAMADA
+// =====================================================
+
+btnSalvarChamada.addEventListener("click", async function() {
+
+    const turma = selectTurma.value;
+
+    if (!turma) {
+
+        alert("Selecione uma turma primeiro.");
+
+        return;
+    }
+
+
+    const alunos = document.querySelectorAll(
+        ".aluno-chamada"
+    );
+
+
+    if (alunos.length === 0) {
+
+        alert("Nenhum aluno para registrar.");
+
+        return;
+    }
+
+
+    const chamada = [];
+
+
+    alunos.forEach(alunoElement => {
+
+        const radioSelecionado =
+            alunoElement.querySelector(
+                'input[type="radio"]:checked'
+            );
+
+
+        if (radioSelecionado) {
+
+            const nomeAluno =
+                alunoElement
+                    .querySelector(".aluno-info strong")
+                    .textContent
+                    .trim();
+
+
+            const todosRadios =
+                alunoElement.querySelectorAll(
+                    'input[type="radio"]'
+                );
+
+
+            let alunoId = null;
+
+
+            todosRadios.forEach(radio => {
+
+                const nome =
+                    radio.name;
+
+                const id =
+                    nome.replace("aluno-", "");
+
+                alunoId = id;
+
+            });
+
+
+            chamada.push({
+
+                aluno_id: Number(alunoId),
+
+                status: radioSelecionado.value
+
+            });
+
+        }
+
+    });
+
+
+    try {
+
+        const resposta = await fetch(
+            "/registrar-chamada",
+            {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    turma: turma,
+
+                    chamada: chamada
+
+                })
+
+            }
+        );
+
+
+        const resultado =
+            await resposta.json();
+
+
+        if (!resposta.ok) {
+
+            alert(
+                resultado.erro ||
+                "Erro ao salvar chamada."
+            );
+
+            return;
+        }
+
+
+        alert(
+            "Chamada registrada com sucesso!"
+        );
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao salvar chamada:",
+            erro
+        );
+
+        alert(
+            "Erro de conexão com o servidor."
+        );
+
+    }
+
+});
+
+
+// =====================================================
+// CARREGA AS TURMAS QUANDO ABRIR A PÁGINA
+// =====================================================
+
+carregarTurmas();
 
     </script>
 

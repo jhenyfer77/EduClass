@@ -1,15 +1,12 @@
 let alunos = [];
 
 const turmaSelect = document.getElementById("turma");
-
 const listaChamada = document.getElementById("listaChamada");
-
 const btnRegistrar = document.getElementById("btnRegistrar");
 
+
 // =====================================================
-
-// CARREGAR ALUNOS
-
+// CARREGAR TURMAS E ALUNOS DO BANCO
 // =====================================================
 
 function carregarAlunos() {
@@ -19,9 +16,7 @@ function carregarAlunos() {
         .then(response => {
 
             if (!response.ok) {
-
                 throw new Error("Erro ao carregar alunos.");
-
             }
 
             return response.json();
@@ -29,6 +24,8 @@ function carregarAlunos() {
         })
 
         .then(dados => {
+
+            console.log("ALUNOS RECEBIDOS DO SERVIDOR:", dados);
 
             alunos = dados || [];
 
@@ -41,55 +38,43 @@ function carregarAlunos() {
             console.error(error);
 
             listaChamada.innerHTML = `
-
                 <p>
-
                     Não foi possível carregar os alunos.
-
                 </p>
-
             `;
 
         });
 
 }
 
+
 // =====================================================
-
-// CARREGAR TURMAS NO SELECT
-
+// COLOCAR AS TURMAS NO SELECT
 // =====================================================
 
 function carregarTurmas() {
 
+    turmaSelect.innerHTML = `
+        <option value="">
+            Selecione a turma
+        </option>
+    `;
+
     const turmas = [
-
         ...new Set(
-
-            alunos.map(aluno => aluno.turma)
-
+            alunos
+                .map(aluno => aluno.turma)
+                .filter(turma => turma)
         )
-
     ];
 
-    turmaSelect.innerHTML = `
-
-        <option value="">
-
-            Selecione a turma
-
-        </option>
-
-    `;
+    turmas.sort();
 
     turmas.forEach(turma => {
 
-        const option =
-
-            document.createElement("option");
+        const option = document.createElement("option");
 
         option.value = turma;
-
         option.textContent = turma;
 
         turmaSelect.appendChild(option);
@@ -98,121 +83,154 @@ function carregarTurmas() {
 
 }
 
-// =====================================================
-
-// QUANDO SELECIONAR A TURMA
 
 // =====================================================
+// QUANDO ESCOLHER A TURMA
+// =====================================================
 
-turmaSelect.addEventListener("change", function() {
+turmaSelect.addEventListener("change", function () {
 
     const turmaSelecionada = this.value;
 
     if (!turmaSelecionada) {
 
         listaChamada.innerHTML = `
-
             <p>
-
                 Selecione uma turma para carregar os alunos.
-
             </p>
-
         `;
 
         return;
-
     }
 
-    const alunosDaTurma =
 
-        alunos.filter(
+    // =================================================
+    // BUSCA OS ALUNOS DA TURMA NO SERVIDOR
+    // =================================================
 
-            aluno => aluno.turma === turmaSelecionada
+    fetch(
+        "/listar-alunos?turma=" +
+        encodeURIComponent(turmaSelecionada)
+    )
 
-        );
+        .then(response => {
 
-    if (alunosDaTurma.length === 0) {
+            if (!response.ok) {
+                throw new Error("Erro ao buscar alunos da turma.");
+            }
 
-        listaChamada.innerHTML = `
+            return response.json();
 
-            <p>
+        })
 
-                Nenhum aluno encontrado nessa turma.
+        .then(alunosDaTurma => {
 
-            </p>
+            console.log(
+                "TURMA SELECIONADA:",
+                turmaSelecionada
+            );
 
-        `;
+            console.log(
+                "ALUNOS ENCONTRADOS:",
+                alunosDaTurma
+            );
 
-        return;
 
-    }
+            // =============================================
+            // NENHUM ALUNO
+            // =============================================
 
-    listaChamada.innerHTML =
+            if (
+                !Array.isArray(alunosDaTurma) ||
+                alunosDaTurma.length === 0
+            ) {
 
-        alunosDaTurma.map(aluno => `
+                listaChamada.innerHTML = `
+                    <p>
+                        Nenhum aluno encontrado nessa turma.
+                    </p>
+                `;
 
-            <div class="chamada-aluno">
+                return;
+            }
 
-                <strong>
 
-                    ${aluno.nome}
+            // =============================================
+            // MOSTRAR TODOS OS ALUNOS
+            // =============================================
 
-                </strong>
+            listaChamada.innerHTML = alunosDaTurma.map(aluno => {
 
-                <div>
+                return `
+                    <div class="chamada-aluno">
 
-                    <label>
+                        <strong>
+                            ${aluno.nome}
+                        </strong>
 
-                        <input
+                        <div>
 
-                            type="radio"
+                            <label>
 
-                            name="presenca-${aluno.id}"
+                                <input
+                                    type="radio"
+                                    name="presenca-${aluno.id}"
+                                    value="presente"
+                                    checked
+                                >
 
-                            value="presente"
+                                Presente
 
-                            checked
+                            </label>
 
-                        >
 
-                        Presente
+                            <label>
 
-                    </label>
+                                <input
+                                    type="radio"
+                                    name="presenca-${aluno.id}"
+                                    value="falta"
+                                >
 
-                    <label>
+                                Falta
 
-                        <input
+                            </label>
 
-                            type="radio"
+                        </div>
 
-                            name="presenca-${aluno.id}"
+                    </div>
+                `;
 
-                            value="falta"
+            }).join("");
 
-                        >
+        })
 
-                        Falta
+        .catch(error => {
 
-                    </label>
+            console.error(
+                "ERRO AO CARREGAR ALUNOS:",
+                error
+            );
 
-                </div>
+            listaChamada.innerHTML = `
+                <p>
+                    Erro ao carregar os alunos.
+                </p>
+            `;
 
-            </div>
-
-        `).join("");
+        });
 
 });
 
-// =====================================================
 
+// =====================================================
 // REGISTRAR CHAMADA
-
 // =====================================================
 
-btnRegistrar.addEventListener("click", function() {
+btnRegistrar.addEventListener("click", function () {
 
     const turma = turmaSelect.value;
+
 
     if (!turma) {
 
@@ -222,94 +240,125 @@ btnRegistrar.addEventListener("click", function() {
 
     }
 
-    const alunosDaTurma =
 
-        alunos.filter(
+    // Pega os alunos que já foram carregados
+    // para a turma selecionada
 
-            aluno => aluno.turma === turma
+    fetch(
+        "/listar-alunos?turma=" +
+        encodeURIComponent(turma)
+    )
 
-        );
+        .then(response => {
 
-    const chamada = alunosDaTurma.map(aluno => {
+            if (!response.ok) {
+                throw new Error("Erro ao buscar alunos.");
+            }
 
-        const selecionado =
-
-            document.querySelector(
-
-                `input[name="presenca-${aluno.id}"]:checked`
-
-            );
-
-        return {
-
-            aluno_id: aluno.id,
-
-            status: selecionado
-
-                ? selecionado.value
-
-                : "falta"
-
-        };
-
-    });
-
-    fetch("/registrar-chamada", {
-
-        method: "POST",
-
-        headers: {
-
-            "Content-Type": "application/json"
-
-        },
-
-        body: JSON.stringify({
-
-            turma: turma,
-
-            chamada: chamada
+            return response.json();
 
         })
 
-    })
+        .then(alunosDaTurma => {
 
-    .then(response => {
+            if (
+                !Array.isArray(alunosDaTurma) ||
+                alunosDaTurma.length === 0
+            ) {
 
-        if (!response.ok) {
+                alert(
+                    "Nenhum aluno encontrado nessa turma."
+                );
 
-            throw new Error("Erro ao registrar chamada.");
+                return;
 
-        }
+            }
 
-        return response.json();
 
-    })
+            const chamada = alunosDaTurma.map(aluno => {
 
-    .then(resultado => {
+                const selecionado =
+                    document.querySelector(
+                        `input[name="presenca-${aluno.id}"]:checked`
+                    );
 
-        alert(resultado.mensagem);
 
-    })
+                return {
 
-    .catch(error => {
+                    aluno_id: aluno.id,
 
-        console.error(error);
+                    status: selecionado
+                        ? selecionado.value
+                        : "falta"
 
-        alert(
+                };
 
-            "Não foi possível registrar a chamada."
+            });
 
-        );
 
-    });
+            return fetch("/registrar-chamada", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    turma: turma,
+
+                    chamada: chamada
+
+                })
+
+            });
+
+        })
+
+        .then(response => {
+
+            if (!response) {
+                return;
+            }
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Erro ao registrar chamada."
+                );
+
+            }
+
+            return response.json();
+
+        })
+
+        .then(resultado => {
+
+            if (resultado) {
+
+                alert(resultado.mensagem);
+
+            }
+
+        })
+
+        .catch(error => {
+
+            console.error(error);
+
+            alert(
+                "Não foi possível registrar a chamada."
+            );
+
+        });
 
 });
 
+
 // =====================================================
-
 // INICIAR
-
 // =====================================================
 
 carregarAlunos();

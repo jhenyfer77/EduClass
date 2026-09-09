@@ -2465,3 +2465,142 @@ body {
     padding-left: 210px;
 
 }
+
+/* =====================================================
+   CHAMADA
+===================================================== */
+
+.chamada-container {
+    width: 100%;
+}
+
+.chamada-topo {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.chamada-topo label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+#selectTurma {
+    min-width: 250px;
+    padding: 13px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: #10243a;
+    color: white;
+    font-size: 15px;
+    outline: none;
+}
+
+#selectTurma:focus {
+    border-color: #199cf0;
+}
+
+.lista-alunos-chamada {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.aluno-chamada {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 16px 20px;
+
+    background: rgba(255,255,255,0.03);
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    border-radius: 12px;
+
+    transition: 0.2s;
+}
+
+.aluno-chamada:hover {
+    background: rgba(25,156,240,0.08);
+    border-color: rgba(25,156,240,0.3);
+}
+
+.aluno-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.aluno-numero {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #159bea;
+
+    color: white;
+
+    font-weight: bold;
+}
+
+.aluno-info strong {
+    display: block;
+    color: white;
+    font-size: 16px;
+}
+
+.aluno-info small {
+    display: block;
+    margin-top: 4px;
+    color: #7190aa;
+}
+
+.status-aluno {
+    display: flex;
+    gap: 18px;
+}
+
+.status-aluno label {
+    color: #b9cde0;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.status-aluno input {
+    margin-right: 6px;
+}
+
+@media (max-width: 700px) {
+
+    .chamada-topo {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #selectTurma {
+        width: 100%;
+    }
+
+    .aluno-chamada {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .status-aluno {
+        width: 100%;
+    }
+
+}
