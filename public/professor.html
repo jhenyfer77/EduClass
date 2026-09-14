@@ -3,148 +3,284 @@
 
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>EduClass | Painel do Professor</title>
+    <title>EduClass | Professor</title>
 
-    <link rel="stylesheet" href="css/professor.css">
+    <!-- Fonte -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- =================================================
-         FUNDO
-    ================================================== -->
+    <!-- =====================================================
+         OVERLAY MOBILE
+         ===================================================== -->
 
-    <div class="background-grid"></div>
-
-    <div class="background-light light-one"></div>
-    <div class="background-light light-two"></div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 
-    <!-- =================================================
-         MENU LATERAL
-    ================================================== -->
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
 
-    <aside class="professor-sidebar">
+    <aside class="sidebar" id="sidebar">
 
-        <div class="professor-sidebar-brand">
+        <!-- LOGO -->
 
-            <div class="professor-sidebar-logo">
-                EC
-            </div>
+        <div class="sidebar-header">
 
-            <div>
-                <strong>EduClass</strong>
-                <small>PROFESSOR</small>
+            <div class="logo">
+
+                <div class="logo-icon">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+
+                <div class="logo-text">
+                    Edu<span>Class</span>
+                </div>
+
             </div>
 
         </div>
 
 
-        <nav class="professor-sidebar-nav">
+        <!-- MENU -->
 
-            <a href="#" class="sidebar-link active" data-tela="inicio">
-                <span>🏠</span>
-                <span>Início</span>
+        <nav class="sidebar-menu">
+
+            <div class="menu-title">
+                Menu principal
+            </div>
+
+
+            <a href="#" class="menu-item active" data-page="inicio" data-tooltip="Início">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span class="menu-text">
+                    Início
+                </span>
+
             </a>
 
 
-            <a href="#" class="sidebar-link" data-tela="chamada">
-                <span>📋</span>
-                <span>Chamada</span>
+            <a href="#" class="menu-item" data-page="turmas" data-tooltip="Minhas turmas">
+
+                <i class="fa-solid fa-users"></i>
+
+                <span class="menu-text">
+                    Minhas turmas
+                </span>
+
             </a>
 
 
-            <a href="#" class="sidebar-link" data-tela="recados">
-                <span>📢</span>
-                <span>Recados</span>
+            <a href="#" class="menu-item" data-page="notas" data-tooltip="Notas">
+
+                <i class="fa-solid fa-clipboard-check"></i>
+
+                <span class="menu-text">
+                    Notas
+                </span>
+
             </a>
 
 
-            <a href="#" class="sidebar-link" data-tela="planejamento">
-                <span>📝</span>
-                <span>Planejamento</span>
+            <a href="#" class="menu-item" data-page="frequencia" data-tooltip="Frequência">
+
+                <i class="fa-solid fa-user-check"></i>
+
+                <span class="menu-text">
+                    Frequência
+                </span>
+
             </a>
 
 
-            <a href="#" class="sidebar-link" data-tela="calendario">
-                <span>📅</span>
-                <span>Calendário</span>
+            <a href="#" class="menu-item" data-page="planejamento" data-tooltip="Planejamento">
+
+                <i class="fa-solid fa-book-open"></i>
+
+                <span class="menu-text">
+                    Planejamento
+                </span>
+
             </a>
 
 
-            <a href="#" class="sidebar-link" data-tela="video-aula">
-                <span>🎥</span>
-                <span>Vídeo Aula</span>
+            <a href="#" class="menu-item" data-page="calendario" data-tooltip="Calendário">
+
+                <i class="fa-solid fa-calendar-days"></i>
+
+                <span class="menu-text">
+                    Calendário
+                </span>
+
             </a>
 
 
-            <a href="#" class="sidebar-link" data-tela="meus-planejamentos">
-                <span>📚</span>
-                <span>Meus Planejamentos</span>
+            <div class="menu-divider"></div>
+
+
+            <div class="menu-title">
+                Comunicação
+            </div>
+
+
+            <a href="#" class="menu-item" data-page="comunicados" data-tooltip="Comunicados">
+
+                <i class="fa-solid fa-bullhorn"></i>
+
+                <span class="menu-text">
+                    Comunicados
+                </span>
+
             </a>
 
 
-            <a href="#" class="sidebar-link" data-tela="relatorios">
-                <span>📊</span>
-                <span>Relatórios</span>
+            <a href="#" class="menu-item" data-page="mensagens" data-tooltip="Mensagens">
+
+                <i class="fa-solid fa-envelope"></i>
+
+                <span class="menu-text">
+                    Mensagens
+                </span>
+
+            </a>
+
+
+            <div class="menu-divider"></div>
+
+
+            <div class="menu-title">
+                Sistema
+            </div>
+
+
+            <a href="#" class="menu-item" data-page="configuracoes" data-tooltip="Configurações">
+
+                <i class="fa-solid fa-gear"></i>
+
+                <span class="menu-text">
+                    Configurações
+                </span>
+
+            </a>
+
+
+            <a href="index.html" class="menu-item" data-tooltip="Sair">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                <span class="menu-text">
+                    Sair
+                </span>
+
             </a>
 
         </nav>
+
+
+        <!-- PERFIL -->
+
+        <div class="sidebar-profile">
+
+            <div class="profile-avatar">
+                PR
+            </div>
+
+            <div class="profile-info">
+
+                <div class="profile-name">
+                    Professor
+                </div>
+
+                <div class="profile-role">
+                    Professor(a)
+                </div>
+
+            </div>
+
+        </div>
 
     </aside>
 
 
 
-    <!-- =================================================
+    <!-- =====================================================
          CONTEÚDO PRINCIPAL
-    ================================================== -->
+         ===================================================== -->
 
-    <main class="dashboard">
+    <main class="main-content">
 
 
         <!-- =================================================
-             CABEÇALHO
-        ================================================== -->
+             TOPBAR
+             ================================================= -->
 
-        <header class="dashboard-header">
+        <header class="topbar">
 
-            <div class="header-left">
+            <div class="topbar-left">
 
-                <div class="edu-logo">
-                    EC
-                </div>
+                <!-- BOTÃO TRÊS BARRINHAS -->
 
-                <div>
+                <button
+                    class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Abrir ou fechar menu"
+                >
 
-                    <h1>
-                        EduClass
+                    <i class="fa-solid fa-bars"></i>
+
+                </button>
+
+
+                <div class="page-title">
+
+                    <h1 id="pageTitle">
+                        Dashboard
                     </h1>
 
-                    <span>
-                        PAINEL DO PROFESSOR
-                    </span>
+                    <p>
+                        Painel do professor
+                    </p>
 
                 </div>
 
             </div>
 
 
-            <!-- SAIR FICA AQUI EM CIMA -->
+            <div class="topbar-right">
 
-            <div class="header-right">
+                <!-- NOTIFICAÇÕES -->
 
-                <a
-                    href="index.html"
-                    class="header-button logout-button"
+                <button
+                    class="notification-btn"
+                    id="notificationBtn"
+                    aria-label="Notificações"
                 >
-                    ↪
-                    <span>
-                        Sair
-                    </span>
-                </a>
+
+                    <i class="fa-regular fa-bell"></i>
+
+                    <span class="notification-dot"></span>
+
+                </button>
 
             </div>
 
@@ -153,197 +289,469 @@
 
 
         <!-- =================================================
-             INÍCIO
-        ================================================== -->
+             DASHBOARD
+             ================================================= -->
 
-        <section
-            class="welcome-label"
-            id="tela-inicio"
-        >
-
-            <div class="welcome-icon">
-                ✦
-            </div>
+        <section class="dashboard" id="dashboard">
 
 
-            <div class="welcome-text">
+            <!-- BOAS-VINDAS -->
 
-                <span>
-                    AMBIENTE DO PROFESSOR
-                </span>
+            <div class="welcome-section">
 
-                <h2>
-                    Olá, Professor! 👋
-                </h2>
+                <div class="welcome-text">
 
-                <p>
-                    Organize suas aulas, acompanhe os eventos
-                    e fique por dentro dos comunicados da escola.
-                </p>
+                    <h2>
+                        Olá, Professor!
+                    </h2>
 
-            </div>
+                    <p>
+                        Acompanhe suas aulas, turmas e atividades em um só lugar.
+                    </p>
+
+                </div>
 
 
-            <div class="system-status">
-
-                <span class="status-dot"></span>
-
-                SISTEMA ONLINE
+                <div class="date-badge" id="currentDate">
+                    Carregando data...
+                </div>
 
             </div>
-
-        </section>
-
-
-
-        <!-- =================================================
-             CONTEÚDO DAS TELAS
-        ================================================== -->
-
-        <section class="dashboard-grid">
 
 
 
             <!-- =================================================
-                 CHAMADA
-            ================================================== -->
+                 CARDS DE RESUMO
+                 ================================================= -->
 
-            <div
-                class="dashboard-card professor-tela"
-                id="tela-chamada"
-            >
+            <div class="stats-grid">
 
-                <div class="card-header">
 
-                    <div>
+                <!-- TURMAS -->
 
-                        <span class="card-label">
-                            FREQUÊNCIA
-                        </span>
+                <div class="stat-card">
 
-                        <h2>
-                            Chamada
-                        </h2>
-
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-users"></i>
                     </div>
 
-                    <div class="card-icon">
-                        📋
+                    <div class="stat-info">
+
+                        <div class="stat-label">
+                            Minhas turmas
+                        </div>
+
+                        <div class="stat-number">
+                            04
+                        </div>
+
                     </div>
 
                 </div>
 
 
-                <div class="chamada-container">
+                <!-- ALUNOS -->
 
-                    <div class="chamada-topo">
-                
-                        <div>
-                            <label for="selectTurma">
-                                SELECIONE A TURMA
-                            </label>
-                
-                            <select id="selectTurma">
-                                <option value="">
-                                    Escolha uma turma
-                                </option>
-                            </select>
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-user-group"></i>
+                    </div>
+
+                    <div class="stat-info">
+
+                        <div class="stat-label">
+                            Total de alunos
                         </div>
-                
-                        <button
-                            type="button"
-                            id="btnSalvarChamada"
-                            class="save-planning"
+
+                        <div class="stat-number">
+                            128
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- AULAS -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-chalkboard"></i>
+                    </div>
+
+                    <div class="stat-info">
+
+                        <div class="stat-label">
+                            Aulas hoje
+                        </div>
+
+                        <div class="stat-number">
+                            03
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PENDÊNCIAS -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+
+                    <div class="stat-info">
+
+                        <div class="stat-label">
+                            Pendências
+                        </div>
+
+                        <div class="stat-number">
+                            07
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 GRID
+                 ================================================= -->
+
+            <div class="dashboard-grid">
+
+
+                <!-- =================================================
+                     CALENDÁRIO
+                     ================================================= -->
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div class="card-title">
+
+                            <i class="fa-solid fa-calendar-days"></i>
+
+                            Calendário
+
+                        </div>
+
+                        <a href="#" class="card-action">
+                            Ver calendário
+                        </a>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div class="calendar-header">
+
+                            <div
+                                class="calendar-month"
+                                id="calendarMonth"
+                            >
+                                Setembro 2026
+                            </div>
+
+
+                            <div class="calendar-navigation">
+
+                                <button
+                                    id="prevMonth"
+                                    aria-label="Mês anterior"
+                                >
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </button>
+
+
+                                <button
+                                    id="nextMonth"
+                                    aria-label="Próximo mês"
+                                >
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="calendar-weekdays">
+
+                            <div>Dom</div>
+                            <div>Seg</div>
+                            <div>Ter</div>
+                            <div>Qua</div>
+                            <div>Qui</div>
+                            <div>Sex</div>
+                            <div>Sáb</div>
+
+                        </div>
+
+
+                        <div
+                            class="calendar-days"
+                            id="calendarDays"
                         >
-                            <span>✓ SALVAR CHAMADA</span>
-                            <b>→</b>
-                        </button>
-                
-                    </div>
-                
-                
-                    <div
-                        id="listaAlunosChamada"
-                        class="lista-alunos-chamada"
-                    >
-                
-                        <div class="empty-card">
-                
-                            <span>📋</span>
-                
-                            <strong>
-                                Selecione uma turma
-                            </strong>
-                
-                            <p>
-                                Os alunos da turma aparecerão aqui.
-                            </p>
-                
+                            <!-- JS gera os dias -->
                         </div>
-                
+
+
+                        <!-- PRÓXIMO EVENTO -->
+
+                        <div class="next-event">
+
+                            <div class="next-event-label">
+                                Próximo evento
+                            </div>
+
+                            <div class="next-event-title">
+                                Reunião pedagógica
+                            </div>
+
+                            <div class="next-event-info">
+
+                                <i class="fa-regular fa-clock"></i>
+
+                                Amanhã às 14:00
+
+                            </div>
+
+                        </div>
+
                     </div>
-                
+
                 </div>
+
+
+
+                <!-- =================================================
+                     COMUNICADOS
+                     ================================================= -->
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div class="card-title">
+
+                            <i class="fa-solid fa-bullhorn"></i>
+
+                            Comunicados
+
+                        </div>
+
+                        <a href="#" class="card-action">
+                            Ver todos
+                        </a>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div class="communication-list">
+
+
+                            <!-- COMUNICADO 1 -->
+
+                            <div class="communication-item">
+
+                                <div class="communication-icon">
+
+                                    <i class="fa-solid fa-building"></i>
+
+                                </div>
+
+
+                                <div class="communication-content">
+
+                                    <div class="communication-title">
+                                        Reunião pedagógica
+                                    </div>
+
+                                    <div class="communication-text">
+                                        A reunião pedagógica acontecerá
+                                        amanhã às 14h na sala de reuniões.
+                                    </div>
+
+                                    <div class="communication-date">
+                                        Hoje
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- COMUNICADO 2 -->
+
+                            <div class="communication-item">
+
+                                <div class="communication-icon">
+
+                                    <i class="fa-solid fa-file-lines"></i>
+
+                                </div>
+
+
+                                <div class="communication-content">
+
+                                    <div class="communication-title">
+                                        Entrega dos planejamentos
+                                    </div>
+
+                                    <div class="communication-text">
+                                        Os planejamentos pedagógicos devem
+                                        ser enviados até sexta-feira.
+                                    </div>
+
+                                    <div class="communication-date">
+                                        Ontem
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- COMUNICADO 3 -->
+
+                            <div class="communication-item">
+
+                                <div class="communication-icon">
+
+                                    <i class="fa-solid fa-circle-info"></i>
+
+                                </div>
+
+
+                                <div class="communication-content">
+
+                                    <div class="communication-title">
+                                        Atualização do sistema
+                                    </div>
+
+                                    <div class="communication-text">
+                                        O sistema EduClass recebeu novas
+                                        funcionalidades para professores.
+                                    </div>
+
+                                    <div class="communication-date">
+                                        08/09/2026
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
 
 
 
             <!-- =================================================
-                 RECADOS
-            ================================================== -->
+                 ACESSO RÁPIDO
+                 ================================================= -->
 
-            <div
-                class="dashboard-card announcements-card professor-tela"
-                id="tela-recados"
-            >
+            <div class="card">
 
                 <div class="card-header">
 
-                    <div>
+                    <div class="card-title">
 
-                        <span class="card-label">
-                            COMUNICAÇÃO
-                        </span>
+                        <i class="fa-solid fa-bolt"></i>
 
-                        <h2>
-                            Recados
-                        </h2>
+                        Acesso rápido
 
-                    </div>
-
-                    <div class="card-icon">
-                        📢
                     </div>
 
                 </div>
 
 
-                <div
-                    class="announcements-list"
-                    id="muralDirecao"
-                >
+                <div class="card-body">
 
-                    <div class="announcement">
+                    <div class="quick-actions">
 
-                        <div class="announcement-icon">
-                            📢
-                        </div>
 
-                        <div class="announcement-content">
+                        <a href="#" class="quick-action">
 
-                            <span class="announcement-tag">
-                                COMUNICADO
+                            <div class="quick-action-icon">
+
+                                <i class="fa-solid fa-pen-to-square"></i>
+
+                            </div>
+
+                            <span>
+                                Lançar notas
                             </span>
 
-                            <h3>
-                                Bem-vindo ao EduClass
-                            </h3>
+                        </a>
 
-                            <p>
-                                Consulte aqui os recados
-                                enviados pela direção.
-                            </p>
 
-                        </div>
+
+                        <a href="#" class="quick-action">
+
+                            <div class="quick-action-icon">
+
+                                <i class="fa-solid fa-user-check"></i>
+
+                            </div>
+
+                            <span>
+                                Registrar frequência
+                            </span>
+
+                        </a>
+
+
+
+                        <a href="#" class="quick-action">
+
+                            <div class="quick-action-icon">
+
+                                <i class="fa-solid fa-book-open"></i>
+
+                            </div>
+
+                            <span>
+                                Planejar aula
+                            </span>
+
+                        </a>
+
+
+
+                        <a href="#" class="quick-action">
+
+                            <div class="quick-action-icon">
+
+                                <i class="fa-solid fa-bullhorn"></i>
+
+                            </div>
+
+                            <span>
+                                Novo comunicado
+                            </span>
+
+                        </a>
 
                     </div>
 
@@ -354,972 +762,168 @@
 
 
             <!-- =================================================
-                 PLANEJAMENTO
-            ================================================== -->
+                 PRÓXIMAS AULAS
+                 ================================================= -->
 
-            <div
-                class="dashboard-card planning-card professor-tela"
-                id="tela-planejamento"
-            >
+            <div class="card" style="margin-top: 22px;">
 
                 <div class="card-header">
 
-                    <div>
+                    <div class="card-title">
 
-                        <span class="card-label">
-                            ORGANIZAÇÃO
-                        </span>
+                        <i class="fa-solid fa-chalkboard-user"></i>
 
-                        <h2>
-                            Planejamento de Aula
-                        </h2>
+                        Próximas aulas
 
                     </div>
 
-                    <div class="card-icon">
-                        📝
-                    </div>
-
-                </div>
-
-
-                <form
-                    id="formPlanejamento"
-                    class="planning-form"
-                >
-
-                    <div class="input-group">
-
-                        <label for="materia">
-                            DISCIPLINA
-                        </label>
-
-                        <input
-                            type="text"
-                            id="materia"
-                            name="materia"
-                            placeholder="Ex.: Biologia"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="input-group">
-
-                        <label for="data_planejada">
-                            DATA DA AULA
-                        </label>
-
-                        <input
-                            type="date"
-                            id="data_planejada"
-                            name="data_planejada"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="input-group full-input">
-
-                        <label for="conteudo">
-                            CONTEÚDO DA AULA
-                        </label>
-
-                        <textarea
-                            id="conteudo"
-                            name="conteudo"
-                            placeholder="Descreva o conteúdo, objetivos ou atividades da aula..."
-                            required
-                        ></textarea>
-
-                    </div>
-
-
-                    <button
-                        type="submit"
-                        class="save-planning"
-                    >
-
-                        <span>
-                            + SALVAR PLANEJAMENTO
-                        </span>
-
-                        <b>
-                            →
-                        </b>
-
-                    </button>
-
-                </form>
-
-            </div>
-
-
-
-            <!-- =================================================
-                 CALENDÁRIO
-            ================================================== -->
-
-            <div
-                class="dashboard-card calendar-card professor-tela"
-                id="tela-calendario"
-            >
-
-                <div class="card-header">
-
-                    <div>
-
-                        <span class="card-label">
-                            AGENDA ESCOLAR
-                        </span>
-
-                        <h2>
-                            Calendário
-                        </h2>
-
-                    </div>
-
-
-                    <div class="calendar-navigation">
-
-                        <button
-                            id="previousMonth"
-                            type="button"
-                        >
-                            ‹
-                        </button>
-
-                        <button
-                            id="nextMonth"
-                            type="button"
-                        >
-                            ›
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="calendar-month">
-
-                    <button
-                        id="currentMonthButton"
-                        type="button"
-                    >
-                        Hoje
-                    </button>
-
-                    <h3 id="calendarMonth">
-                        Carregando...
-                    </h3>
-
-                </div>
-
-
-                <div class="calendar-week">
-
-                    <span>DOM</span>
-                    <span>SEG</span>
-                    <span>TER</span>
-                    <span>QUA</span>
-                    <span>QUI</span>
-                    <span>SEX</span>
-                    <span>SÁB</span>
-
-                </div>
-
-
-                <div
-                    class="calendar-days"
-                    id="calendarDays"
-                >
-                </div>
-
-
-                <div class="next-event">
-
-                    <div class="next-event-icon">
-                        📌
-                    </div>
-
-                    <div class="next-event-info">
-
-                        <span>
-                            PRÓXIMO EVENTO
-                        </span>
-
-                        <strong id="nextEventTitle">
-                            Nenhum evento
-                        </strong>
-
-                        <p id="nextEventDate">
-                            —
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- =================================================
-                 VÍDEO AULA
-            ================================================== -->
-
-            <div
-                class="dashboard-card professor-tela"
-                id="tela-video-aula"
-            >
-
-                <div class="card-header">
-
-                    <div>
-
-                        <span class="card-label">
-                            CONTEÚDO
-                        </span>
-
-                        <h2>
-                            Vídeo Aula
-                        </h2>
-
-                    </div>
-
-                    <div class="card-icon">
-                        🎥
-                    </div>
-
-                </div>
-
-
-                <div class="empty-card">
-
-                    <span>
-                        🎥
-                    </span>
-
-                    <strong>
-                        Vídeo aulas
-                    </strong>
-
-                    <p>
-                        Aqui ficarão disponíveis as vídeo aulas
-                        para os professores.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- =================================================
-                 MEUS PLANEJAMENTOS
-            ================================================== -->
-
-            <div
-                class="dashboard-card saved-planning-card professor-tela"
-                id="tela-meus-planejamentos"
-            >
-
-                <div class="card-header">
-
-                    <div>
-
-                        <span class="card-label">
-                            SEUS REGISTROS
-                        </span>
-
-                        <h2>
-                            Meus Planejamentos
-                        </h2>
-
-                    </div>
-
-                    <div class="planning-counter">
-
-                        <span id="planningCount">
-                            0
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <div
-                    class="saved-planning-list"
-                    id="listaPlanejamentos"
-                >
-
-                    <div class="empty-card">
-
-                        <span>
-                            📚
-                        </span>
-
-                        <strong>
-                            Nenhum planejamento salvo
-                        </strong>
-
-                        <p>
-                            Seus planejamentos aparecerão aqui.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- =================================================
-                 RELATÓRIOS
-            ================================================== -->
-
-            <div
-                class="dashboard-card professor-tela"
-                id="tela-relatorios"
-            >
-
-                <div class="card-header">
-
-                    <div>
-
-                        <span class="card-label">
-                            ACOMPANHAMENTO
-                        </span>
-
-                        <h2>
-                            Relatórios
-                        </h2>
-
-                    </div>
-
-                    <div class="card-icon">
-                        📊
-                    </div>
-
-                </div>
-
-
-                <div class="empty-card">
-
-                    <span>
-                        📊
-                    </span>
-
-                    <strong>
-                        Relatórios
-                    </strong>
-
-                    <p>
-                        Acompanhe os dados e informações
-                        do ambiente escolar.
-                    </p>
-
-
-                    <a
-                        href="/relatorios.html"
-                        class="header-button training-button"
-                    >
-
-                        📊
-
-                        <span>
-                            Abrir Relatórios
-                        </span>
-
+                    <a href="#" class="card-action">
+                        Ver todas
                     </a>
 
                 </div>
 
+
+                <div class="table-container">
+
+                    <table class="data-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Horário
+                                </th>
+
+                                <th>
+                                    Turma
+                                </th>
+
+                                <th>
+                                    Disciplina
+                                </th>
+
+                                <th>
+                                    Sala
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            <tr>
+
+                                <td>
+                                    08:00
+                                </td>
+
+                                <td>
+                                    3º A
+                                </td>
+
+                                <td>
+                                    Biologia
+                                </td>
+
+                                <td>
+                                    Sala 12
+                                </td>
+
+                                <td>
+
+                                    <span class="badge badge-primary">
+                                        Próxima
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    10:00
+                                </td>
+
+                                <td>
+                                    2º B
+                                </td>
+
+                                <td>
+                                    Microbiologia
+                                </td>
+
+                                <td>
+                                    Laboratório
+                                </td>
+
+                                <td>
+
+                                    <span class="badge badge-success">
+                                        Confirmada
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    13:30
+                                </td>
+
+                                <td>
+                                    1º C
+                                </td>
+
+                                <td>
+                                    Ciências
+                                </td>
+
+                                <td>
+                                    Sala 08
+                                </td>
+
+                                <td>
+
+                                    <span class="badge badge-warning">
+                                        Aguardando
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
             </div>
 
         </section>
-
-
-
-        <!-- =================================================
-             RODAPÉ
-        ================================================== -->
-
-        <footer class="dashboard-footer">
-
-            <span>
-                EDUCLASS PLATFORM
-            </span>
-
-            <span>
-                Gestão Escolar Inteligente
-            </span>
-
-            <span>
-                © 2026
-            </span>
-
-        </footer>
 
     </main>
 
 
 
-    <!-- =================================================
+    <!-- =====================================================
          JAVASCRIPT
-    ================================================== -->
+         ===================================================== -->
 
-    <script>
-
-        const botoesMenu =
-            document.querySelectorAll(
-                ".sidebar-link[data-tela]"
-            );
-
-
-        const telasProfessor =
-            document.querySelectorAll(
-                ".professor-tela"
-            );
-
-
-        const telaInicial =
-            document.querySelector(
-                "#tela-inicio"
-            );
-
-
-
-        function abrirTelaProfessor(nome) {
-
-            /* =========================================
-               ESCONDE TODAS AS TELAS
-            ========================================= */
-
-            telasProfessor.forEach(function(tela) {
-
-                tela.style.display = "none";
-
-            });
-
-
-            /* =========================================
-               REMOVE ATIVO DOS BOTÕES
-            ========================================= */
-
-            botoesMenu.forEach(function(botao) {
-
-                botao.classList.remove("active");
-
-            });
-
-
-            /* =========================================
-               INÍCIO
-            ========================================= */
-
-            if (nome === "inicio") {
-
-                telaInicial.style.display = "flex";
-
-            }
-
-            else {
-
-                /* =====================================
-                   ESCONDE O OLÁ PROFESSOR
-                ===================================== */
-
-                telaInicial.style.display = "none";
-
-
-                /* =====================================
-                   PROCURA A TELA
-                ===================================== */
-
-                const tela =
-                    document.getElementById(
-                        "tela-" + nome
-                    );
-
-
-                /* =====================================
-                   MOSTRA A TELA
-                ===================================== */
-
-                if (tela) {
-
-                    tela.style.display = "block";
-
-                }
-
-            }
-
-
-            /* =========================================
-               MARCA O BOTÃO CLICADO
-            ========================================= */
-
-            const botao =
-                document.querySelector(
-                    '[data-tela="' + nome + '"]'
-                );
-
-
-            if (botao) {
-
-                botao.classList.add("active");
-
-            }
-
-        }
-
-
-
-        /* =============================================
-           CLIQUE NOS BOTÕES
-        ============================================= */
-
-        botoesMenu.forEach(function(botao) {
-
-            botao.addEventListener(
-                "click",
-                function(event) {
-
-                    event.preventDefault();
-
-
-                    const nome =
-                        botao.getAttribute(
-                            "data-tela"
-                        );
-
-
-                    abrirTelaProfessor(nome);
-
-                }
-            );
-
-        });
-
-
-
-        /* =============================================
-           COMEÇA NO INÍCIO
-        ============================================= */
-
-        abrirTelaProfessor("inicio");
-
-        // =====================================================
-// CHAMADA - CARREGAR TURMAS E ALUNOS
-// =====================================================
-
-const selectTurma = document.getElementById("selectTurma");
-const listaAlunosChamada = document.getElementById("listaAlunosChamada");
-const btnSalvarChamada = document.getElementById("btnSalvarChamada");
-
-
-// =====================================================
-// CARREGAR AS TURMAS EXISTENTES
-// =====================================================
-
-async function carregarTurmas() {
-
-    try {
-
-        const resposta = await fetch("/listar-alunos");
-
-        if (!resposta.ok) {
-            throw new Error("Erro ao buscar alunos");
-        }
-
-        const alunos = await resposta.json();
-
-        // Pega somente as turmas existentes
-        const turmas = [...new Set(
-            alunos.map(aluno => aluno.turma)
-        )].sort();
-
-        selectTurma.innerHTML = `
-            <option value="">
-                Escolha uma turma
-            </option>
-        `;
-
-        turmas.forEach(turma => {
-
-            const option = document.createElement("option");
-
-            option.value = turma;
-            option.textContent = turma;
-
-            selectTurma.appendChild(option);
-
-        });
-
-    } catch (erro) {
-
-        console.error("Erro ao carregar turmas:", erro);
-
-        listaAlunosChamada.innerHTML = `
-            <div class="empty-card">
-
-                <span>⚠️</span>
-
-                <strong>
-                    Erro ao carregar alunos
-                </strong>
-
-                <p>
-                    Verifique se o servidor está funcionando.
-                </p>
-
-            </div>
-        `;
-
-    }
-
-}
-
-
-// =====================================================
-// QUANDO ESCOLHER UMA TURMA
-// =====================================================
-
-selectTurma.addEventListener("change", async function() {
-
-    const turmaSelecionada = this.value;
-
-    if (!turmaSelecionada) {
-
-        listaAlunosChamada.innerHTML = `
-            <div class="empty-card">
-
-                <span>📋</span>
-
-                <strong>
-                    Selecione uma turma
-                </strong>
-
-                <p>
-                    Os alunos da turma aparecerão aqui.
-                </p>
-
-            </div>
-        `;
-
-        return;
-    }
-
-
-    listaAlunosChamada.innerHTML = `
-        <div class="empty-card">
-
-            <span>⏳</span>
-
-            <strong>
-                Carregando alunos...
-            </strong>
-
-        </div>
-    `;
-
-
-    try {
-
-        const resposta = await fetch(
-            "/listar-alunos?turma=" +
-            encodeURIComponent(turmaSelecionada)
-        );
-
-
-        if (!resposta.ok) {
-            throw new Error("Erro ao buscar alunos");
-        }
-
-
-        const alunos = await resposta.json();
-
-
-        if (alunos.length === 0) {
-
-            listaAlunosChamada.innerHTML = `
-                <div class="empty-card">
-
-                    <span>👨‍🎓</span>
-
-                    <strong>
-                        Nenhum aluno encontrado
-                    </strong>
-
-                    <p>
-                        Não existem alunos cadastrados nessa turma.
-                    </p>
-
-                </div>
-            `;
-
-            return;
-        }
-
-
-        // =================================================
-        // MOSTRA OS ALUNOS
-        // =================================================
-
-        listaAlunosChamada.innerHTML = "";
-
-
-        alunos.forEach((aluno, index) => {
-
-            const alunoHTML = document.createElement("div");
-
-            alunoHTML.className = "aluno-chamada";
-
-            alunoHTML.innerHTML = `
-
-                <div class="aluno-info">
-
-                    <div class="aluno-numero">
-                        ${index + 1}
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            ${aluno.nome}
-                        </strong>
-
-                        <small>
-                            Turma ${aluno.turma}
-                        </small>
-
-                    </div>
-
-                </div>
-
-
-                <div class="status-aluno">
-
-                    <label>
-                        <input
-                            type="radio"
-                            name="aluno-${aluno.id}"
-                            value="presente"
-                            checked
-                        >
-
-                        Presente
-                    </label>
-
-
-                    <label>
-                        <input
-                            type="radio"
-                            name="aluno-${aluno.id}"
-                            value="ausente"
-                        >
-
-                        Ausente
-                    </label>
-
-                </div>
-
-            `;
-
-
-            listaAlunosChamada.appendChild(alunoHTML);
-
-        });
-
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao carregar alunos:",
-            erro
-        );
-
-
-        listaAlunosChamada.innerHTML = `
-            <div class="empty-card">
-
-                <span>⚠️</span>
-
-                <strong>
-                    Erro ao carregar alunos
-                </strong>
-
-                <p>
-                    Tente selecionar a turma novamente.
-                </p>
-
-            </div>
-        `;
-
-    }
-
-});
-
-
-// =====================================================
-// SALVAR CHAMADA
-// =====================================================
-
-btnSalvarChamada.addEventListener("click", async function() {
-
-    const turma = selectTurma.value;
-
-    if (!turma) {
-
-        alert("Selecione uma turma primeiro.");
-
-        return;
-    }
-
-
-    const alunos = document.querySelectorAll(
-        ".aluno-chamada"
-    );
-
-
-    if (alunos.length === 0) {
-
-        alert("Nenhum aluno para registrar.");
-
-        return;
-    }
-
-
-    const chamada = [];
-
-
-    alunos.forEach(alunoElement => {
-
-        const radioSelecionado =
-            alunoElement.querySelector(
-                'input[type="radio"]:checked'
-            );
-
-
-        if (radioSelecionado) {
-
-            const nomeAluno =
-                alunoElement
-                    .querySelector(".aluno-info strong")
-                    .textContent
-                    .trim();
-
-
-            const todosRadios =
-                alunoElement.querySelectorAll(
-                    'input[type="radio"]'
-                );
-
-
-            let alunoId = null;
-
-
-            todosRadios.forEach(radio => {
-
-                const nome =
-                    radio.name;
-
-                const id =
-                    nome.replace("aluno-", "");
-
-                alunoId = id;
-
-            });
-
-
-            chamada.push({
-
-                aluno_id: Number(alunoId),
-
-                status: radioSelecionado.value
-
-            });
-
-        }
-
-    });
-
-
-    try {
-
-        const resposta = await fetch(
-            "/registrar-chamada",
-            {
-
-                method: "POST",
-
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body: JSON.stringify({
-
-                    turma: turma,
-
-                    chamada: chamada
-
-                })
-
-            }
-        );
-
-
-        const resultado =
-            await resposta.json();
-
-
-        if (!resposta.ok) {
-
-            alert(
-                resultado.erro ||
-                "Erro ao salvar chamada."
-            );
-
-            return;
-        }
-
-
-        alert(
-            "Chamada registrada com sucesso!"
-        );
-
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao salvar chamada:",
-            erro
-        );
-
-        alert(
-            "Erro de conexão com o servidor."
-        );
-
-    }
-
-});
-
-
-// =====================================================
-// CARREGA AS TURMAS QUANDO ABRIR A PÁGINA
-// =====================================================
-
-carregarTurmas();
-
-    </script>
-
+    <script src="professor.js"></script>
 
 </body>
 
