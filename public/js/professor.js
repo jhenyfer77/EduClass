@@ -1,21 +1,10 @@
 /* =========================================================
    EDUCLASS — PAINEL DO PROFESSOR
-   JAVASCRIPT
-========================================================= */
-
-
-/* =========================================================
-   VARIÁVEIS
+   JAVASCRIPT CORRIGIDO
 ========================================================= */
 
 let currentCalendarDate = new Date();
-
 let eventosEscolares = [];
-
-
-/* =========================================================
-   MESES
-========================================================= */
 
 const meses = [
     "Janeiro",
@@ -32,217 +21,89 @@ const meses = [
     "Dezembro"
 ];
 
-
 /* =========================================================
    CALENDÁRIO
 ========================================================= */
 
 function renderCalendar() {
+    const year = currentCalendarDate.getFullYear();
+    const month = currentCalendarDate.getMonth();
 
-    const year =
-        currentCalendarDate.getFullYear();
-
-    const month =
-        currentCalendarDate.getMonth();
-
-
-    const monthTitle =
-        document.getElementById("calendarMonth");
-
-    const calendarDays =
-        document.getElementById("calendarDays");
-
+    const monthTitle = document.getElementById("calendarMonth");
+    const calendarDays = document.getElementById("calendarDays");
 
     if (!monthTitle || !calendarDays) {
         return;
     }
 
-
-    monthTitle.textContent =
-        `${meses[month]} ${year}`;
-
-
-    /*
-       Primeiro dia do mês
-    */
-
-    const firstDay =
-        new Date(
-            year,
-            month,
-            1
-        ).getDay();
-
-
-    /*
-       Quantidade de dias do mês
-    */
-
-    const daysInMonth =
-        new Date(
-            year,
-            month + 1,
-            0
-        ).getDate();
-
-
+    monthTitle.textContent = `${meses[month]} ${year}`;
     calendarDays.innerHTML = "";
 
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    /*
-       Espaços antes do primeiro dia
-    */
-
-    for (
-        let i = 0;
-        i < firstDay;
-        i++
-    ) {
-
-        const emptyDay =
-            document.createElement("div");
-
-        emptyDay.className =
-            "calendar-day empty";
-
-        calendarDays.appendChild(
-            emptyDay
-        );
+    for (let i = 0; i < firstDay; i++) {
+        const emptyDay = document.createElement("div");
+        emptyDay.className = "calendar-day empty";
+        calendarDays.appendChild(emptyDay);
     }
 
+    const today = new Date();
 
-    /*
-       Criar os dias
-    */
-
-    for (
-        let day = 1;
-        day <= daysInMonth;
-        day++
-    ) {
-
-        const dayElement =
-            document.createElement("div");
-
-
-        dayElement.className =
-            "calendar-day";
-
-
-        /*
-           Verificar se é hoje
-        */
-
-        const today =
-            new Date();
-
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayElement = document.createElement("div");
+        dayElement.className = "calendar-day";
 
         if (
             day === today.getDate() &&
             month === today.getMonth() &&
             year === today.getFullYear()
         ) {
-
-            dayElement.classList.add(
-                "today"
-            );
+            dayElement.classList.add("today");
         }
 
+        const hasEvent = eventosEscolares.some(evento => {
+            const eventDate = parseEventDate(evento.data_evento);
 
-        /*
-           Verificar eventos
-        */
+            if (!eventDate) {
+                return false;
+            }
 
-        const hasEvent =
-            eventosEscolares.some(
-                evento => {
-
-                    const eventDate =
-                        parseEventDate(
-                            evento.data_evento
-                        );
-
-
-                    if (!eventDate) {
-                        return false;
-                    }
-
-
-                    return (
-                        eventDate.getDate() === day &&
-                        eventDate.getMonth() === month &&
-                        eventDate.getFullYear() === year
-                    );
-
-                }
+            return (
+                eventDate.getDate() === day &&
+                eventDate.getMonth() === month &&
+                eventDate.getFullYear() === year
             );
-
+        });
 
         if (hasEvent) {
-
-            dayElement.classList.add(
-                "has-event"
-            );
+            dayElement.classList.add("event");
+            dayElement.classList.add("has-event");
         }
-
-
-        /*
-           Conteúdo do dia
-        */
 
         dayElement.innerHTML = `
             <span>${day}</span>
-            ${
-                hasEvent
-                    ? "<i></i>"
-                    : ""
-            }
+            ${hasEvent ? "<i></i>" : ""}
         `;
 
-
-        calendarDays.appendChild(
-            dayElement
-        );
+        calendarDays.appendChild(dayElement);
     }
-
 }
 
-
-/* =========================================================
-   CONVERTER DATA DO BANCO
-========================================================= */
-
 function parseEventDate(dateValue) {
-
     if (!dateValue) {
         return null;
     }
 
-
-    /*
-       Se já for uma data
-    */
-
-    if (
-        dateValue instanceof Date
-    ) {
-
+    if (dateValue instanceof Date) {
         return dateValue;
     }
-
-
-    /*
-       Formato YYYY-MM-DD
-    */
 
     if (
         typeof dateValue === "string" &&
         /^\d{4}-\d{2}-\d{2}$/.test(dateValue)
     ) {
-
-        const parts =
-            dateValue.split("-");
-
+        const parts = dateValue.split("-");
 
         return new Date(
             Number(parts[0]),
@@ -251,1001 +112,740 @@ function parseEventDate(dateValue) {
         );
     }
 
+    const date = new Date(dateValue);
 
-    const date =
-        new Date(dateValue);
-
-
-    if (
-        isNaN(date.getTime())
-    ) {
-
+    if (isNaN(date.getTime())) {
         return null;
     }
 
-
     return date;
 }
-
-
-/* =========================================================
-   NAVEGAÇÃO DO CALENDÁRIO
-========================================================= */
-
-const previousMonth =
-    document.getElementById(
-        "previousMonth"
-    );
-
-
-if (previousMonth) {
-
-    previousMonth.addEventListener(
-        "click",
-        () => {
-
-            currentCalendarDate.setMonth(
-                currentCalendarDate.getMonth() - 1
-            );
-
-
-            renderCalendar();
-
-        }
-    );
-}
-
-
-const nextMonth =
-    document.getElementById(
-        "nextMonth"
-    );
-
-
-if (nextMonth) {
-
-    nextMonth.addEventListener(
-        "click",
-        () => {
-
-            currentCalendarDate.setMonth(
-                currentCalendarDate.getMonth() + 1
-            );
-
-
-            renderCalendar();
-
-        }
-    );
-}
-
-
-/* =========================================================
-   BOTÃO HOJE
-========================================================= */
-
-const currentMonthButton =
-    document.getElementById(
-        "currentMonthButton"
-    );
-
-
-if (currentMonthButton) {
-
-    currentMonthButton.addEventListener(
-        "click",
-        () => {
-
-            currentCalendarDate =
-                new Date();
-
-
-            renderCalendar();
-
-        }
-    );
-}
-
-
-/* =========================================================
-   CARREGAR EVENTOS
-========================================================= */
-
-async function carregarEventosDaDirecao() {
-
-    try {
-
-        const response =
-            await fetch(
-                "/listar-eventos"
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Erro ao carregar eventos."
-            );
-
-        }
-
-
-        const eventos =
-            await response.json();
-
-
-        eventosEscolares =
-            Array.isArray(eventos)
-                ? eventos
-                : [];
-
-
-        renderCalendar();
-
-
-        mostrarProximoEvento();
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Erro nos eventos:",
-            error
-        );
-
-
-        eventosEscolares = [];
-
-
-        renderCalendar();
-
-
-        const title =
-            document.getElementById(
-                "nextEventTitle"
-            );
-
-
-        const date =
-            document.getElementById(
-                "nextEventDate"
-            );
-
-
-        if (title) {
-
-            title.textContent =
-                "Nenhum evento encontrado";
-        }
-
-
-        if (date) {
-
-            date.textContent =
-                "Não foi possível carregar a agenda.";
-        }
-
-    }
-
-}
-
 
 /* =========================================================
    PRÓXIMO EVENTO
 ========================================================= */
 
 function mostrarProximoEvento() {
+    const title = document.getElementById("nextEventTitle");
+    const dateElement = document.getElementById("nextEventDate");
 
-    const title =
-        document.getElementById(
-            "nextEventTitle"
-        );
-
-
-    const dateElement =
-        document.getElementById(
-            "nextEventDate"
-        );
-
-
-    if (
-        !title ||
-        !dateElement
-    ) {
+    if (!title || !dateElement) {
         return;
     }
 
+    const agora = new Date();
 
-    const agora =
-        new Date();
+    const eventosFuturos = eventosEscolares
+        .map(evento => {
+            const data = parseEventDate(evento.data_evento);
 
-
-    const eventosFuturos =
-        eventosEscolares
-
-            .map(evento => {
-
-                const data =
-                    parseEventDate(
-                        evento.data_evento
-                    );
-
-
-                return {
-                    ...evento,
-                    dataConvertida: data
-                };
-
-            })
-
-            .filter(evento => {
-
-                return (
-                    evento.dataConvertida &&
-                    evento.dataConvertida >= agora
-                );
-
-            })
-
-            .sort(
-                (a, b) =>
-                    a.dataConvertida -
-                    b.dataConvertida
+            return {
+                ...evento,
+                dataConvertida: data
+            };
+        })
+        .filter(evento => {
+            return (
+                evento.dataConvertida &&
+                evento.dataConvertida >= agora
             );
+        })
+        .sort((a, b) => {
+            return a.dataConvertida - b.dataConvertida;
+        });
 
-
-    if (
-        eventosFuturos.length === 0
-    ) {
-
-        title.textContent =
-            "Nenhum próximo evento";
-
-
-        dateElement.textContent =
-            "Sua agenda está livre.";
-
+    if (eventosFuturos.length === 0) {
+        title.textContent = "Nenhum próximo evento";
+        dateElement.textContent = "Sua agenda está livre.";
         return;
     }
 
+    const proximo = eventosFuturos[0];
 
-    const proximo =
-        eventosFuturos[0];
+    title.textContent = proximo.titulo || "Evento escolar";
 
-
-    title.textContent =
-        proximo.titulo ||
-        "Evento escolar";
-
-
-    const data =
-        proximo.dataConvertida;
-
-
-    dateElement.textContent =
-        `📅 ${data.toLocaleDateString(
-            "pt-BR"
-        )}`;
-
+    dateElement.textContent = `📅 ${proximo.dataConvertida.toLocaleDateString(
+        "pt-BR"
+    )}`;
 }
 
+/* =========================================================
+   CARREGAR EVENTOS
+========================================================= */
+
+async function carregarEventosDaDirecao() {
+    try {
+        const response = await fetch("/listar-eventos");
+
+        if (!response.ok) {
+            throw new Error("Erro ao carregar eventos.");
+        }
+
+        const eventos = await response.json();
+
+        eventosEscolares = Array.isArray(eventos) ? eventos : [];
+
+        renderCalendar();
+        mostrarProximoEvento();
+    } catch (error) {
+        console.error("Erro nos eventos:", error);
+
+        eventosEscolares = [];
+
+        renderCalendar();
+
+        const title = document.getElementById("nextEventTitle");
+        const date = document.getElementById("nextEventDate");
+
+        if (title) {
+            title.textContent = "Nenhum evento encontrado";
+        }
+
+        if (date) {
+            date.textContent = "Não foi possível carregar a agenda.";
+        }
+    }
+}
 
 /* =========================================================
    COMUNICADOS
 ========================================================= */
 
 async function carregarRecadosDaDirecao() {
-
-    const mural =
-        document.getElementById(
-            "muralDirecao"
-        );
-
+    const mural = document.getElementById("muralDirecao");
 
     if (!mural) {
         return;
     }
 
-
     try {
-
-        const response =
-            await fetch(
-                "/listar-recados"
-            );
-
+        const response = await fetch("/listar-recados");
 
         if (!response.ok) {
-
-            throw new Error(
-                "Erro ao carregar comunicados."
-            );
-
+            throw new Error("Erro ao carregar comunicados.");
         }
 
+        const recados = await response.json();
 
-        const recados =
-            await response.json();
-
-
-        if (
-            !Array.isArray(recados) ||
-            recados.length === 0
-        ) {
-
+        if (!Array.isArray(recados) || recados.length === 0) {
             mural.innerHTML = `
-
                 <div class="empty-card">
-
                     <span>📭</span>
-
-                    <p>
-                        Nenhum comunicado
-                        oficial recente.
-                    </p>
-
+                    <p>Nenhum comunicado oficial recente.</p>
                 </div>
-
             `;
 
             return;
         }
 
+        mural.innerHTML = recados.map(recado => `
+            <div class="communication-item">
+                <div class="communication-icon">
+                    <i class="fa-solid fa-bullhorn"></i>
+                </div>
 
-        mural.innerHTML =
-            recados.map(
-                recado => `
-
-                <article
-                    class="announcement"
-                >
-
-                    <div
-                        class="announcement-icon"
-                    >
-                        📢
+                <div class="communication-content">
+                    <div class="communication-title">
+                        ${escapeHTML(recado.titulo || "Comunicado")}
                     </div>
 
-
-                    <div
-                        class="announcement-content"
-                    >
-
-                        <span
-                            class="announcement-tag"
-                        >
-                            COMUNICADO
-                        </span>
-
-
-                        <h3>
-                            ${escapeHTML(
-                                recado.titulo
-                            )}
-                        </h3>
-
-
-                        <p>
-                            ${escapeHTML(
-                                recado.conteudo
-                            )}
-                        </p>
-
-
-                        <small>
-                            Enviado por:
-                            <strong>
-                                ${escapeHTML(
-                                    recado.autor ||
-                                    "Coordenação"
-                                )}
-                            </strong>
-                        </small>
-
+                    <div class="communication-text">
+                        ${escapeHTML(recado.conteudo || "")}
                     </div>
 
-                </article>
-
-            `
-            ).join("");
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Erro nos comunicados:",
-            error
-        );
-
+                    <div class="communication-date">
+                        Enviado por:
+                        ${escapeHTML(recado.autor || "Coordenação")}
+                    </div>
+                </div>
+            </div>
+        `).join("");
+    } catch (error) {
+        console.error("Erro nos comunicados:", error);
 
         mural.innerHTML = `
-
             <div class="empty-card">
-
                 <span>⚠️</span>
-
-                <p>
-                    Não foi possível
-                    carregar os comunicados.
-                </p>
-
+                <p>Não foi possível carregar os comunicados.</p>
             </div>
-
         `;
-
     }
-
 }
-
 
 /* =========================================================
    PLANEJAMENTOS
 ========================================================= */
 
 async function carregarPlanejamentos() {
-
-    const lista =
-        document.getElementById(
-            "listaPlanejamentos"
-        );
-
-
-    const contador =
-        document.getElementById(
-            "planningCount"
-        );
-
+    const lista = document.getElementById("listaPlanejamentos");
+    const contador = document.getElementById("planningCount");
 
     if (!lista) {
         return;
     }
 
-
     try {
-
-        const response =
-            await fetch(
-                "/listar-planejamentos"
-            );
-
+        const response = await fetch("/listar-planejamentos");
 
         if (!response.ok) {
-
-            throw new Error(
-                "Erro ao carregar planejamentos."
-            );
-
+            throw new Error("Erro ao carregar planejamentos.");
         }
 
+        const dados = await response.json();
 
-        const dados =
-            await response.json();
-
-
-        const planejamentos =
-            Array.isArray(dados)
-                ? dados
-                : [];
-
+        const planejamentos = Array.isArray(dados) ? dados : [];
 
         if (contador) {
-
-            contador.textContent =
-                planejamentos.length;
-
+            contador.textContent = planejamentos.length;
         }
 
-
-        if (
-            planejamentos.length === 0
-        ) {
-
+        if (planejamentos.length === 0) {
             lista.innerHTML = `
-
                 <div class="empty-card">
-
                     <span>📝</span>
-
-                    <p>
-                        Você ainda não possui
-                        planejamentos salvos.
-                    </p>
-
+                    <p>Você ainda não possui planejamentos salvos.</p>
                 </div>
-
             `;
 
             return;
         }
 
+        lista.innerHTML = planejamentos.map(planejamento => `
+            <article class="saved-planning">
+                <div class="planning-top">
+                    <span class="planning-subject">
+                        ${escapeHTML(planejamento.materia || "Sem matéria")}
+                    </span>
 
-        lista.innerHTML =
-            planejamentos.map(
-                planejamento => `
+                    <span class="planning-date">
+                        📅 ${formatDate(planejamento.data_planejada)}
+                    </span>
+                </div>
 
-                <article
-                    class="saved-planning"
-                >
-
-                    <div
-                        class="planning-top"
-                    >
-
-                        <span
-                            class="planning-subject"
-                        >
-                            ${escapeHTML(
-                                planejamento.materia
-                            )}
-                        </span>
-
-
-                        <span
-                            class="planning-date"
-                        >
-                            📅
-                            ${formatDate(
-                                planejamento.data_planejada
-                            )}
-                        </span>
-
-                    </div>
-
-
-                    <h3>
-                        Planejamento de aula
-                    </h3>
-
-
-                    <p>
-                        ${escapeHTML(
-                            planejamento.conteudo
-                        )}
-                    </p>
-
-
-                    <button
-                        type="button"
-                        onclick="apagarPlanejamento(${Number(
-                            planejamento.id
-                        )})"
-                        class="delete-planning"
-                    >
-                        Excluir planejamento
-                    </button>
-
-                </article>
-
-            `
-            ).join("");
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Erro nos planejamentos:",
-            error
-        );
-
-
-        lista.innerHTML = `
-
-            <div class="empty-card">
-
-                <span>⚠️</span>
+                <h3>Planejamento de aula</h3>
 
                 <p>
-                    Erro ao carregar
-                    planejamentos.
+                    ${escapeHTML(planejamento.conteudo || "")}
                 </p>
 
+                <button
+                    type="button"
+                    onclick="apagarPlanejamento(${Number(planejamento.id)})"
+                    class="delete-planning"
+                >
+                    Excluir planejamento
+                </button>
+            </article>
+        `).join("");
+    } catch (error) {
+        console.error("Erro nos planejamentos:", error);
+
+        lista.innerHTML = `
+            <div class="empty-card">
+                <span>⚠️</span>
+                <p>Erro ao carregar planejamentos.</p>
             </div>
-
         `;
-
     }
-
 }
-
 
 /* =========================================================
    SALVAR PLANEJAMENTO
 ========================================================= */
 
-const formPlanejamento =
-    document.getElementById(
-        "formPlanejamento"
-    );
+async function configurarFormularioPlanejamento() {
+    const formPlanejamento =
+        document.getElementById("formPlanejamento");
 
+    if (!formPlanejamento) {
+        return;
+    }
 
-if (formPlanejamento) {
+    formPlanejamento.addEventListener("submit", async function (event) {
+        event.preventDefault();
 
-    formPlanejamento.addEventListener(
-        "submit",
-        async function(event) {
+        const botao = this.querySelector("button[type='submit']");
 
-            event.preventDefault();
+        const dados = new URLSearchParams(
+            new FormData(this)
+        );
 
-
-            const botao =
-                this.querySelector(
-                    "button[type='submit']"
-                );
-
-
-            const dados =
-                new URLSearchParams(
-                    new FormData(this)
-                );
-
-
-            try {
-
+        try {
+            if (botao) {
                 botao.disabled = true;
-
-
-                botao.innerHTML = `
-                    <span>
-                        SALVANDO...
-                    </span>
-                    <b>
-                        ◌
-                    </b>
-                `;
-
-
-                const response =
-                    await fetch(
-                        "/criar-planejamento",
-                        {
-                            method: "POST",
-                            body: dados
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        "Não foi possível salvar."
-                    );
-
-                }
-
-
-                this.reset();
-
-
-                await carregarPlanejamentos();
-
-
-                botao.disabled = false;
-
-
-                botao.innerHTML = `
-                    <span>
-                        + SALVAR PLANEJAMENTO
-                    </span>
-
-                    <b>
-                        →
-                    </b>
-                `;
-
-
-                mostrarMensagem(
-                    "Planejamento salvo com sucesso!",
-                    "success"
-                );
-
+                botao.textContent = "SALVANDO...";
             }
 
-            catch (error) {
+            const response = await fetch("/criar-planejamento", {
+                method: "POST",
+                body: dados
+            });
 
-                console.error(
-                    error
-                );
-
-
-                botao.disabled = false;
-
-
-                botao.innerHTML = `
-                    <span>
-                        + SALVAR PLANEJAMENTO
-                    </span>
-
-                    <b>
-                        →
-                    </b>
-                `;
-
-
-                mostrarMensagem(
-                    "Erro ao salvar o planejamento.",
-                    "error"
-                );
-
+            if (!response.ok) {
+                throw new Error("Não foi possível salvar.");
             }
 
+            this.reset();
+
+            await carregarPlanejamentos();
+
+            if (botao) {
+                botao.disabled = false;
+                botao.textContent = "+ SALVAR PLANEJAMENTO";
+            }
+
+            mostrarMensagem(
+                "Planejamento salvo com sucesso!",
+                "success"
+            );
+        } catch (error) {
+            console.error(error);
+
+            if (botao) {
+                botao.disabled = false;
+                botao.textContent = "+ SALVAR PLANEJAMENTO";
+            }
+
+            mostrarMensagem(
+                "Erro ao salvar o planejamento.",
+                "error"
+            );
         }
-    );
-
+    });
 }
-
 
 /* =========================================================
    APAGAR PLANEJAMENTO
 ========================================================= */
 
 async function apagarPlanejamento(id) {
-
-    const confirmar =
-        confirm(
-            "Deseja realmente excluir este planejamento?"
-        );
-
+    const confirmar = confirm(
+        "Deseja realmente excluir este planejamento?"
+    );
 
     if (!confirmar) {
         return;
     }
 
-
     try {
-
-        const response =
-            await fetch(
-                `/apagar-planejamento/${id}`,
-                {
-                    method: "DELETE"
-                }
-            );
-
+        const response = await fetch(
+            `/apagar-planejamento/${id}`,
+            {
+                method: "DELETE"
+            }
+        );
 
         if (!response.ok) {
-
-            throw new Error(
-                "Erro ao excluir."
-            );
-
+            throw new Error("Erro ao excluir.");
         }
 
-
         await carregarPlanejamentos();
-
 
         mostrarMensagem(
             "Planejamento excluído.",
             "success"
         );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            error
-        );
-
+    } catch (error) {
+        console.error(error);
 
         mostrarMensagem(
             "Não foi possível excluir o planejamento.",
             "error"
         );
-
     }
-
 }
 
-
 /* =========================================================
-   FORMATAR DATA
+   FORMATAÇÃO E SEGURANÇA
 ========================================================= */
 
 function formatDate(dateValue) {
-
     if (!dateValue) {
         return "—";
     }
-
 
     if (
         typeof dateValue === "string" &&
         /^\d{4}-\d{2}-\d{2}$/.test(dateValue)
     ) {
+        const parts = dateValue.split("-");
 
-        const parts =
-            dateValue.split("-");
-
-
-        return (
-            `${parts[2]}/${parts[1]}/${parts[0]}`
-        );
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
     }
 
+    const date = new Date(dateValue);
 
-    const date =
-        new Date(dateValue);
-
-
-    if (
-        isNaN(date.getTime())
-    ) {
-
+    if (isNaN(date.getTime())) {
         return dateValue;
     }
 
-
-    return date.toLocaleDateString(
-        "pt-BR"
-    );
-
+    return date.toLocaleDateString("pt-BR");
 }
 
-
-/* =========================================================
-   SEGURANÇA
-   Evita inserir HTML vindo do banco
-========================================================= */
-
 function escapeHTML(value) {
-
-    if (
-        value === null ||
-        value === undefined
-    ) {
-
+    if (value === null || value === undefined) {
         return "";
     }
 
-
     return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
-
-/* =========================================================
-   MENSAGEM TEMPORÁRIA
-========================================================= */
-
-function mostrarMensagem(
-    mensagem,
-    tipo
-) {
-
-    const antiga =
-        document.querySelector(
-            ".system-message"
-        );
-
+function mostrarMensagem(mensagem, tipo) {
+    const antiga = document.querySelector(".system-message");
 
     if (antiga) {
         antiga.remove();
     }
 
+    const elemento = document.createElement("div");
 
-    const elemento =
-        document.createElement(
-            "div"
-        );
+    elemento.className = `system-message ${tipo}`;
+    elemento.textContent = mensagem;
 
+    document.body.appendChild(elemento);
 
-    elemento.className =
-        `system-message ${tipo}`;
+    setTimeout(() => {
+        elemento.classList.add("hide");
 
-
-    elemento.textContent =
-        mensagem;
-
-
-    document.body.appendChild(
-        elemento
-    );
-
-
-    setTimeout(
-        () => {
-
-            elemento.classList.add(
-                "hide"
-            );
-
-
-            setTimeout(
-                () => elemento.remove(),
-                300
-            );
-
-        },
-        3000
-    );
-
+        setTimeout(() => {
+            elemento.remove();
+        }, 300);
+    }, 3000);
 }
-
 
 /* =========================================================
-   ANIMAÇÃO DOS CARDS
+   NAVEGAÇÃO DAS PÁGINAS
 ========================================================= */
 
-function animarCards() {
-
-    const cards =
-        document.querySelectorAll(
-            ".dashboard-card"
-        );
-
-
-    cards.forEach(
-        (card, index) => {
-
-            card.style.opacity = "0";
-
-            card.style.transform =
-                "translateY(15px)";
-
-
-            setTimeout(
-                () => {
-
-                    card.style.transition =
-                        "opacity .5s ease, transform .5s ease";
-
-                    card.style.opacity =
-                        "1";
-
-                    card.style.transform =
-                        "translateY(0)";
-
-                },
-                80 * index
-            );
-
-        }
+function configurarNavegacao() {
+    const botoesMenu = document.querySelectorAll(
+        ".menu-item[data-page]"
     );
 
+    const paginas = document.querySelectorAll(
+        ".page-section"
+    );
+
+    const tituloPagina = document.getElementById("pageTitle");
+
+    const titulos = {
+        inicio: "Dashboard",
+        turmas: "Minhas turmas",
+        notas: "Notas",
+        frequencia: "Frequência",
+        planejamento: "Planejamento",
+        calendario: "Calendário",
+        comunicados: "Comunicados",
+        mensagens: "Mensagens",
+        configuracoes: "Configurações"
+    };
+
+    function mostrarPagina(nomePagina) {
+        paginas.forEach(pagina => {
+            pagina.style.display = "none";
+        });
+
+        const paginaSelecionada =
+            document.getElementById(nomePagina);
+
+        if (paginaSelecionada) {
+            paginaSelecionada.style.display = "block";
+        }
+
+        if (tituloPagina) {
+            tituloPagina.textContent =
+                titulos[nomePagina] || "EduClass";
+        }
+
+        botoesMenu.forEach(botao => {
+            botao.classList.remove("active");
+
+            if (
+                botao.getAttribute("data-page") === nomePagina
+            ) {
+                botao.classList.add("active");
+            }
+        });
+
+        fecharMenuMobile();
+    }
+
+    botoesMenu.forEach(botao => {
+        botao.addEventListener("click", event => {
+            event.preventDefault();
+
+            const pagina = botao.getAttribute("data-page");
+
+            mostrarPagina(pagina);
+        });
+    });
+
+    document.querySelectorAll("[data-go-page]").forEach(link => {
+        link.addEventListener("click", event => {
+            event.preventDefault();
+
+            const pagina = link.getAttribute("data-go-page");
+
+            mostrarPagina(pagina);
+        });
+    });
+
+    mostrarPagina("inicio");
 }
 
+/* =========================================================
+   MENU LATERAL
+========================================================= */
+
+function configurarMenuLateral() {
+    const sidebar = document.getElementById("sidebar");
+    const menuToggle = document.getElementById("menuToggle");
+    const overlay = document.getElementById("sidebarOverlay");
+
+    if (!sidebar || !menuToggle) {
+        return;
+    }
+
+    menuToggle.addEventListener("click", () => {
+        if (window.innerWidth <= 768) {
+            sidebar.classList.toggle("mobile-open");
+
+            if (overlay) {
+                overlay.classList.toggle("active");
+            }
+        } else {
+            sidebar.classList.toggle("collapsed");
+        }
+    });
+
+    if (overlay) {
+        overlay.addEventListener("click", fecharMenuMobile);
+    }
+}
+
+function fecharMenuMobile() {
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebarOverlay");
+
+    if (sidebar) {
+        sidebar.classList.remove("mobile-open");
+    }
+
+    if (overlay) {
+        overlay.classList.remove("active");
+    }
+}
+
+/* =========================================================
+   DATA ATUAL
+========================================================= */
+
+function mostrarDataAtual() {
+    const elemento = document.getElementById("currentDate");
+
+    if (!elemento) {
+        return;
+    }
+
+    const dataAtual = new Date();
+
+    elemento.textContent = dataAtual.toLocaleDateString(
+        "pt-BR",
+        {
+            weekday: "long",
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+        }
+    );
+}
+
+/* =========================================================
+   BOTÕES DO CALENDÁRIO
+========================================================= */
+
+function configurarCalendario() {
+    const previousMonth = document.getElementById("prevMonth");
+    const nextMonth = document.getElementById("nextMonth");
+    const currentMonthButton =
+        document.getElementById("currentMonthButton");
+
+    if (previousMonth) {
+        previousMonth.addEventListener("click", () => {
+            currentCalendarDate.setMonth(
+                currentCalendarDate.getMonth() - 1
+            );
+
+            renderCalendar();
+        });
+    }
+
+    if (nextMonth) {
+        nextMonth.addEventListener("click", () => {
+            currentCalendarDate.setMonth(
+                currentCalendarDate.getMonth() + 1
+            );
+
+            renderCalendar();
+        });
+    }
+
+    if (currentMonthButton) {
+        currentMonthButton.addEventListener("click", () => {
+            currentCalendarDate = new Date();
+            renderCalendar();
+        });
+    }
+}
+
+/* =========================================================
+   MINHAS TURMAS — ALUNOS CADASTRADOS PELA GESTÃO
+========================================================= */
+
+let alunosCadastrados = [];
+
+async function carregarAlunosDasTurmas() {
+    try {
+        const response = await fetch("/listar-alunos");
+
+        if (!response.ok) {
+            throw new Error("Erro ao carregar alunos.");
+        }
+
+        const dados = await response.json();
+
+        alunosCadastrados = Array.isArray(dados) ? dados : [];
+
+        organizarTurmas();
+    } catch (error) {
+        console.error("Erro ao carregar alunos das turmas:", error);
+    }
+}
+
+function organizarTurmas() {
+    const listaTurmas = document.getElementById("listaTurmas");
+
+    if (!listaTurmas) {
+        return;
+    }
+
+    const turmas = {};
+
+    alunosCadastrados.forEach(aluno => {
+        const nomeTurma = aluno.turma || "Turma não informada";
+
+        if (!turmas[nomeTurma]) {
+            turmas[nomeTurma] = [];
+        }
+
+        turmas[nomeTurma].push(aluno);
+    });
+
+    const nomesDasTurmas = Object.keys(turmas);
+
+    if (nomesDasTurmas.length === 0) {
+        listaTurmas.innerHTML = `
+            <div class="empty-card">
+                <span>🎓</span>
+                <p>Nenhum aluno foi cadastrado pela Gestão ainda.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    listaTurmas.innerHTML = nomesDasTurmas.map((nomeTurma, index) => {
+        const idTurma = `turma-${index}`;
+
+        return `
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+
+                <h3>${escapeHTML(nomeTurma)}</h3>
+
+                <p>
+                    ${turmas[nomeTurma].length} aluno(s) cadastrado(s)
+                </p>
+
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    onclick="mostrarAlunos('${idTurma}')"
+                >
+                    Ver alunos
+                </button>
+            </div>
+        `;
+    }).join("");
+
+    window.turmasOrganizadas = {};
+
+    nomesDasTurmas.forEach((nomeTurma, index) => {
+        window.turmasOrganizadas[`turma-${index}`] = {
+            nome: nomeTurma,
+            alunos: turmas[nomeTurma]
+        };
+    });
+}
+
+function mostrarAlunos(idTurma) {
+    const turma = window.turmasOrganizadas?.[idTurma];
+
+    const detalhes = document.getElementById("detalhesTurma");
+    const titulo = document.getElementById("tituloDetalhesTurma");
+    const lista = document.getElementById("listaAlunosTurma");
+
+    if (!turma || !detalhes || !titulo || !lista) {
+        return;
+    }
+
+    titulo.textContent = turma.nome;
+
+    lista.innerHTML = turma.alunos.map((aluno, index) => {
+        return `
+            <div class="communication-item">
+                <div class="communication-icon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+                <div class="communication-content">
+                    <div class="communication-title">
+                        ${index + 1}. ${escapeHTML(aluno.nome)}
+                    </div>
+
+                    <div class="communication-text">
+                        Aluno cadastrado pela Gestão
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join("");
+
+    detalhes.style.display = "block";
+}
 
 /* =========================================================
    INICIALIZAÇÃO
 ========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+document.addEventListener("DOMContentLoaded", () => {
+    configurarNavegacao();
+    configurarMenuLateral();
+    configurarCalendario();
+    configurarFormularioPlanejamento();
 
-        renderCalendar();
+    mostrarDataAtual();
+    renderCalendar();
 
-        carregarEventosDaDirecao();
-
-        carregarRecadosDaDirecao();
-
-        carregarPlanejamentos();
-
-        animarCards();
-
-    }
-);
+    carregarEventosDaDirecao();
+    carregarRecadosDaDirecao();
+    carregarPlanejamentos();
+    carregarAlunosDasTurmas();
+});

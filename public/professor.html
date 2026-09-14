@@ -7,7 +7,6 @@
 
     <title>EduClass | Professor</title>
 
-    <!-- Fonte -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -16,37 +15,22 @@
         rel="stylesheet"
     >
 
-    <!-- Font Awesome -->
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     >
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/professor.css">
 </head>
 
 <body>
 
-    <!-- =====================================================
-         OVERLAY MOBILE
-         ===================================================== -->
-
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-
-    <!-- =====================================================
-         SIDEBAR
-         ===================================================== -->
 
     <aside class="sidebar" id="sidebar">
 
-        <!-- LOGO -->
-
         <div class="sidebar-header">
-
             <div class="logo">
-
                 <div class="logo-icon">
                     <i class="fa-solid fa-graduation-cap"></i>
                 </div>
@@ -54,13 +38,8 @@
                 <div class="logo-text">
                     Edu<span>Class</span>
                 </div>
-
             </div>
-
         </div>
-
-
-        <!-- MENU -->
 
         <nav class="sidebar-menu">
 
@@ -68,145 +47,76 @@
                 Menu principal
             </div>
 
-
-            <a href="#" class="menu-item active" data-page="inicio" data-tooltip="Início">
-
+            <a href="#" class="menu-item active" data-page="inicio">
                 <i class="fa-solid fa-house"></i>
-
-                <span class="menu-text">
-                    Início
-                </span>
-
+                <span class="menu-text">Início</span>
             </a>
 
-
-            <a href="#" class="menu-item" data-page="turmas" data-tooltip="Minhas turmas">
-
+            <a href="#" class="menu-item" data-page="turmas">
                 <i class="fa-solid fa-users"></i>
-
-                <span class="menu-text">
-                    Minhas turmas
-                </span>
-
+                <span class="menu-text">Minhas turmas</span>
             </a>
 
-
-            <a href="#" class="menu-item" data-page="notas" data-tooltip="Notas">
-
+            <a href="#" class="menu-item" data-page="notas">
                 <i class="fa-solid fa-clipboard-check"></i>
-
-                <span class="menu-text">
-                    Notas
-                </span>
-
+                <span class="menu-text">Notas</span>
             </a>
 
-
-            <a href="#" class="menu-item" data-page="frequencia" data-tooltip="Frequência">
-
+            <a href="chamada.html" class="menu-item">
                 <i class="fa-solid fa-user-check"></i>
-
-                <span class="menu-text">
-                    Frequência
-                </span>
-
+                <span class="menu-text">Frequência</span>
             </a>
 
-
-            <a href="#" class="menu-item" data-page="planejamento" data-tooltip="Planejamento">
-
+            <a href="#" class="menu-item" data-page="planejamento">
                 <i class="fa-solid fa-book-open"></i>
-
-                <span class="menu-text">
-                    Planejamento
-                </span>
-
+                <span class="menu-text">Planejamento</span>
             </a>
 
-
-            <a href="#" class="menu-item" data-page="calendario" data-tooltip="Calendário">
-
+            <a href="#" class="menu-item" data-page="calendario">
                 <i class="fa-solid fa-calendar-days"></i>
-
-                <span class="menu-text">
-                    Calendário
-                </span>
-
+                <span class="menu-text">Calendário</span>
             </a>
-
 
             <div class="menu-divider"></div>
-
 
             <div class="menu-title">
                 Comunicação
             </div>
 
-
-            <a href="#" class="menu-item" data-page="comunicados" data-tooltip="Comunicados">
-
+            <a href="#" class="menu-item" data-page="comunicados">
                 <i class="fa-solid fa-bullhorn"></i>
-
-                <span class="menu-text">
-                    Comunicados
-                </span>
-
+                <span class="menu-text">Comunicados</span>
             </a>
 
-
-            <a href="#" class="menu-item" data-page="mensagens" data-tooltip="Mensagens">
-
+            <a href="#" class="menu-item" data-page="mensagens">
                 <i class="fa-solid fa-envelope"></i>
-
-                <span class="menu-text">
-                    Mensagens
-                </span>
-
+                <span class="menu-text">Mensagens</span>
             </a>
-
 
             <div class="menu-divider"></div>
-
 
             <div class="menu-title">
                 Sistema
             </div>
 
-
-            <a href="#" class="menu-item" data-page="configuracoes" data-tooltip="Configurações">
-
+            <a href="#" class="menu-item" data-page="configuracoes">
                 <i class="fa-solid fa-gear"></i>
-
-                <span class="menu-text">
-                    Configurações
-                </span>
-
+                <span class="menu-text">Configurações</span>
             </a>
 
-
-            <a href="index.html" class="menu-item" data-tooltip="Sair">
-
+            <a href="index.html" class="menu-item">
                 <i class="fa-solid fa-right-from-bracket"></i>
-
-                <span class="menu-text">
-                    Sair
-                </span>
-
+                <span class="menu-text">Sair</span>
             </a>
 
         </nav>
 
-
-        <!-- PERFIL -->
-
         <div class="sidebar-profile">
-
             <div class="profile-avatar">
                 PR
             </div>
 
             <div class="profile-info">
-
                 <div class="profile-name">
                     Professor
                 </div>
@@ -214,45 +124,26 @@
                 <div class="profile-role">
                     Professor(a)
                 </div>
-
             </div>
-
         </div>
 
     </aside>
 
-
-
-    <!-- =====================================================
-         CONTEÚDO PRINCIPAL
-         ===================================================== -->
-
     <main class="main-content">
-
-
-        <!-- =================================================
-             TOPBAR
-             ================================================= -->
 
         <header class="topbar">
 
             <div class="topbar-left">
-
-                <!-- BOTÃO TRÊS BARRINHAS -->
 
                 <button
                     class="menu-toggle"
                     id="menuToggle"
                     aria-label="Abrir ou fechar menu"
                 >
-
                     <i class="fa-solid fa-bars"></i>
-
                 </button>
 
-
                 <div class="page-title">
-
                     <h1 id="pageTitle">
                         Dashboard
                     </h1>
@@ -260,57 +151,38 @@
                     <p>
                         Painel do professor
                     </p>
-
                 </div>
 
             </div>
 
-
             <div class="topbar-right">
-
-                <!-- NOTIFICAÇÕES -->
-
                 <button
                     class="notification-btn"
                     id="notificationBtn"
                     aria-label="Notificações"
                 >
-
                     <i class="fa-regular fa-bell"></i>
-
                     <span class="notification-dot"></span>
-
                 </button>
-
             </div>
 
         </header>
 
-
-
         <!-- =================================================
-             DASHBOARD
-             ================================================= -->
+             INÍCIO
+        ================================================= -->
 
-        <section class="dashboard" id="dashboard">
-
-
-            <!-- BOAS-VINDAS -->
+        <section class="dashboard page-section" id="inicio">
 
             <div class="welcome-section">
 
                 <div class="welcome-text">
-
-                    <h2>
-                        Olá, Professor!
-                    </h2>
+                    <h2>Olá, Professor!</h2>
 
                     <p>
                         Acompanhe suas aulas, turmas e atividades em um só lugar.
                     </p>
-
                 </div>
-
 
                 <div class="date-badge" id="currentDate">
                     Carregando data...
@@ -318,166 +190,88 @@
 
             </div>
 
-
-
-            <!-- =================================================
-                 CARDS DE RESUMO
-                 ================================================= -->
-
             <div class="stats-grid">
 
-
-                <!-- TURMAS -->
-
                 <div class="stat-card">
-
                     <div class="stat-icon">
                         <i class="fa-solid fa-users"></i>
                     </div>
 
                     <div class="stat-info">
-
-                        <div class="stat-label">
-                            Minhas turmas
-                        </div>
-
-                        <div class="stat-number">
-                            04
-                        </div>
-
+                        <div class="stat-label">Minhas turmas</div>
+                        <div class="stat-number">04</div>
                     </div>
-
                 </div>
 
-
-                <!-- ALUNOS -->
-
                 <div class="stat-card">
-
                     <div class="stat-icon">
                         <i class="fa-solid fa-user-group"></i>
                     </div>
 
                     <div class="stat-info">
-
-                        <div class="stat-label">
-                            Total de alunos
-                        </div>
-
-                        <div class="stat-number">
-                            128
-                        </div>
-
+                        <div class="stat-label">Total de alunos</div>
+                        <div class="stat-number">128</div>
                     </div>
-
                 </div>
 
-
-                <!-- AULAS -->
-
                 <div class="stat-card">
-
                     <div class="stat-icon">
                         <i class="fa-solid fa-chalkboard"></i>
                     </div>
 
                     <div class="stat-info">
-
-                        <div class="stat-label">
-                            Aulas hoje
-                        </div>
-
-                        <div class="stat-number">
-                            03
-                        </div>
-
+                        <div class="stat-label">Aulas hoje</div>
+                        <div class="stat-number">03</div>
                     </div>
-
                 </div>
 
-
-                <!-- PENDÊNCIAS -->
-
                 <div class="stat-card">
-
                     <div class="stat-icon">
                         <i class="fa-solid fa-list-check"></i>
                     </div>
 
                     <div class="stat-info">
-
-                        <div class="stat-label">
-                            Pendências
-                        </div>
-
-                        <div class="stat-number">
-                            07
-                        </div>
-
+                        <div class="stat-label">Pendências</div>
+                        <div class="stat-number">07</div>
                     </div>
-
                 </div>
 
             </div>
 
-
-
-            <!-- =================================================
-                 GRID
-                 ================================================= -->
-
             <div class="dashboard-grid">
 
-
-                <!-- =================================================
-                     CALENDÁRIO
-                     ================================================= -->
+                <!-- CALENDÁRIO -->
 
                 <div class="card">
 
                     <div class="card-header">
 
                         <div class="card-title">
-
                             <i class="fa-solid fa-calendar-days"></i>
-
                             Calendário
-
                         </div>
 
-                        <a href="#" class="card-action">
+                        <a href="#" class="card-action" data-go-page="calendario">
                             Ver calendário
                         </a>
 
                     </div>
 
-
                     <div class="card-body">
 
                         <div class="calendar-header">
 
-                            <div
-                                class="calendar-month"
-                                id="calendarMonth"
-                            >
+                            <div class="calendar-month" id="calendarMonth">
                                 Setembro 2026
                             </div>
 
-
                             <div class="calendar-navigation">
 
-                                <button
-                                    id="prevMonth"
-                                    aria-label="Mês anterior"
-                                >
+                                <button id="prevMonth" aria-label="Mês anterior">
                                     <i class="fa-solid fa-chevron-left"></i>
                                 </button>
 
-
-                                <button
-                                    id="nextMonth"
-                                    aria-label="Próximo mês"
-                                >
+                                <button id="nextMonth" aria-label="Próximo mês">
                                     <i class="fa-solid fa-chevron-right"></i>
                                 </button>
 
@@ -485,9 +279,7 @@
 
                         </div>
 
-
                         <div class="calendar-weekdays">
-
                             <div>Dom</div>
                             <div>Seg</div>
                             <div>Ter</div>
@@ -495,19 +287,9 @@
                             <div>Qui</div>
                             <div>Sex</div>
                             <div>Sáb</div>
-
                         </div>
 
-
-                        <div
-                            class="calendar-days"
-                            id="calendarDays"
-                        >
-                            <!-- JS gera os dias -->
-                        </div>
-
-
-                        <!-- PRÓXIMO EVENTO -->
+                        <div class="calendar-days" id="calendarDays"></div>
 
                         <div class="next-event">
 
@@ -515,16 +297,13 @@
                                 Próximo evento
                             </div>
 
-                            <div class="next-event-title">
-                                Reunião pedagógica
+                            <div class="next-event-title" id="nextEventTitle">
+                                Carregando evento...
                             </div>
 
-                            <div class="next-event-info">
-
+                            <div class="next-event-info" id="nextEventDate">
                                 <i class="fa-regular fa-clock"></i>
-
-                                Amanhã às 14:00
-
+                                Carregando data...
                             </div>
 
                         </div>
@@ -533,46 +312,32 @@
 
                 </div>
 
-
-
-                <!-- =================================================
-                     COMUNICADOS
-                     ================================================= -->
+                <!-- COMUNICADOS -->
 
                 <div class="card">
 
                     <div class="card-header">
 
                         <div class="card-title">
-
                             <i class="fa-solid fa-bullhorn"></i>
-
                             Comunicados
-
                         </div>
 
-                        <a href="#" class="card-action">
+                        <a href="#" class="card-action" data-go-page="comunicados">
                             Ver todos
                         </a>
 
                     </div>
 
-
                     <div class="card-body">
 
-                        <div class="communication-list">
-
-
-                            <!-- COMUNICADO 1 -->
+                        <div class="communication-list" id="muralDirecao">
 
                             <div class="communication-item">
 
                                 <div class="communication-icon">
-
                                     <i class="fa-solid fa-building"></i>
-
                                 </div>
-
 
                                 <div class="communication-content">
 
@@ -581,8 +346,7 @@
                                     </div>
 
                                     <div class="communication-text">
-                                        A reunião pedagógica acontecerá
-                                        amanhã às 14h na sala de reuniões.
+                                        A reunião pedagógica acontecerá amanhã às 14h na sala de reuniões.
                                     </div>
 
                                     <div class="communication-date">
@@ -593,18 +357,11 @@
 
                             </div>
 
-
-
-                            <!-- COMUNICADO 2 -->
-
                             <div class="communication-item">
 
                                 <div class="communication-icon">
-
                                     <i class="fa-solid fa-file-lines"></i>
-
                                 </div>
-
 
                                 <div class="communication-content">
 
@@ -613,8 +370,7 @@
                                     </div>
 
                                     <div class="communication-text">
-                                        Os planejamentos pedagógicos devem
-                                        ser enviados até sexta-feira.
+                                        Os planejamentos pedagógicos devem ser enviados até sexta-feira.
                                     </div>
 
                                     <div class="communication-date">
@@ -625,18 +381,11 @@
 
                             </div>
 
-
-
-                            <!-- COMUNICADO 3 -->
-
                             <div class="communication-item">
 
                                 <div class="communication-icon">
-
                                     <i class="fa-solid fa-circle-info"></i>
-
                                 </div>
-
 
                                 <div class="communication-content">
 
@@ -645,8 +394,7 @@
                                     </div>
 
                                     <div class="communication-text">
-                                        O sistema EduClass recebeu novas
-                                        funcionalidades para professores.
+                                        O sistema EduClass recebeu novas funcionalidades para professores.
                                     </div>
 
                                     <div class="communication-date">
@@ -665,92 +413,53 @@
 
             </div>
 
-
-
-            <!-- =================================================
-                 ACESSO RÁPIDO
-                 ================================================= -->
+            <!-- ACESSO RÁPIDO -->
 
             <div class="card">
 
                 <div class="card-header">
 
                     <div class="card-title">
-
                         <i class="fa-solid fa-bolt"></i>
-
                         Acesso rápido
-
                     </div>
 
                 </div>
-
 
                 <div class="card-body">
 
                     <div class="quick-actions">
 
-
-                        <a href="#" class="quick-action">
-
+                        <a href="#" class="quick-action" data-go-page="notas">
                             <div class="quick-action-icon">
-
                                 <i class="fa-solid fa-pen-to-square"></i>
-
                             </div>
 
-                            <span>
-                                Lançar notas
-                            </span>
-
+                            <span>Lançar notas</span>
                         </a>
 
-
-
-                        <a href="#" class="quick-action">
-
+                        <a href="#" class="quick-action" data-go-page="frequencia">
                             <div class="quick-action-icon">
-
                                 <i class="fa-solid fa-user-check"></i>
-
                             </div>
 
-                            <span>
-                                Registrar frequência
-                            </span>
-
+                            <span>Registrar frequência</span>
                         </a>
 
-
-
-                        <a href="#" class="quick-action">
-
+                        <a href="#" class="quick-action" data-go-page="planejamento">
                             <div class="quick-action-icon">
-
                                 <i class="fa-solid fa-book-open"></i>
-
                             </div>
 
-                            <span>
-                                Planejar aula
-                            </span>
-
+                            <span>Planejar aula</span>
                         </a>
 
-
-
-                        <a href="#" class="quick-action">
-
+                        <a href="#" class="quick-action" data-go-page="comunicados">
                             <div class="quick-action-icon">
-
                                 <i class="fa-solid fa-bullhorn"></i>
-
                             </div>
 
-                            <span>
-                                Novo comunicado
-                            </span>
-
+                            <span>Novo comunicado</span>
                         </a>
 
                     </div>
@@ -759,150 +468,73 @@
 
             </div>
 
-
-
-            <!-- =================================================
-                 PRÓXIMAS AULAS
-                 ================================================= -->
+            <!-- PRÓXIMAS AULAS -->
 
             <div class="card" style="margin-top: 22px;">
 
                 <div class="card-header">
 
                     <div class="card-title">
-
                         <i class="fa-solid fa-chalkboard-user"></i>
-
                         Próximas aulas
-
                     </div>
 
-                    <a href="#" class="card-action">
+                    <a href="#" class="card-action" data-go-page="turmas">
                         Ver todas
                     </a>
 
                 </div>
-
 
                 <div class="table-container">
 
                     <table class="data-table">
 
                         <thead>
-
                             <tr>
-
-                                <th>
-                                    Horário
-                                </th>
-
-                                <th>
-                                    Turma
-                                </th>
-
-                                <th>
-                                    Disciplina
-                                </th>
-
-                                <th>
-                                    Sala
-                                </th>
-
-                                <th>
-                                    Status
-                                </th>
-
+                                <th>Horário</th>
+                                <th>Turma</th>
+                                <th>Disciplina</th>
+                                <th>Sala</th>
+                                <th>Status</th>
                             </tr>
-
                         </thead>
-
 
                         <tbody>
 
                             <tr>
-
+                                <td>08:00</td>
+                                <td>3º A</td>
+                                <td>Biologia</td>
+                                <td>Sala 12</td>
                                 <td>
-                                    08:00
-                                </td>
-
-                                <td>
-                                    3º A
-                                </td>
-
-                                <td>
-                                    Biologia
-                                </td>
-
-                                <td>
-                                    Sala 12
-                                </td>
-
-                                <td>
-
                                     <span class="badge badge-primary">
                                         Próxima
                                     </span>
-
                                 </td>
-
                             </tr>
 
-
                             <tr>
-
+                                <td>10:00</td>
+                                <td>2º B</td>
+                                <td>Microbiologia</td>
+                                <td>Laboratório</td>
                                 <td>
-                                    10:00
-                                </td>
-
-                                <td>
-                                    2º B
-                                </td>
-
-                                <td>
-                                    Microbiologia
-                                </td>
-
-                                <td>
-                                    Laboratório
-                                </td>
-
-                                <td>
-
                                     <span class="badge badge-success">
                                         Confirmada
                                     </span>
-
                                 </td>
-
                             </tr>
 
-
                             <tr>
-
+                                <td>13:30</td>
+                                <td>1º C</td>
+                                <td>Ciências</td>
+                                <td>Sala 08</td>
                                 <td>
-                                    13:30
-                                </td>
-
-                                <td>
-                                    1º C
-                                </td>
-
-                                <td>
-                                    Ciências
-                                </td>
-
-                                <td>
-                                    Sala 08
-                                </td>
-
-                                <td>
-
                                     <span class="badge badge-warning">
                                         Aguardando
                                     </span>
-
                                 </td>
-
                             </tr>
 
                         </tbody>
@@ -915,15 +547,439 @@
 
         </section>
 
+        <!-- =================================================
+             MINHAS TURMAS
+        ================================================= -->
+
+        <section class="dashboard page-section" id="turmas" style="display: none;">
+
+            <div class="section-header">
+                <h2>Minhas turmas</h2>
+                <p>Visualize as turmas que estão sob sua responsabilidade.</p>
+            </div>
+
+            <div class="cards-grid" id="listaTurmas">
+
+                <div class="info-card">
+                    <h3>3º Ano A</h3>
+                    <p>Ensino Médio</p>
+                    <span>6 alunos</span>
+            
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        onclick="mostrarAlunos('3a')"
+                    >
+                        Ver alunos
+                    </button>
+                </div>
+            
+                <div class="info-card">
+                    <h3>2º Ano B</h3>
+                    <p>Ensino Médio</p>
+                    <span>6 alunos</span>
+            
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        onclick="mostrarAlunos('2b')"
+                    >
+                        Ver alunos
+                    </button>
+                </div>
+            
+                <div class="info-card">
+                    <h3>1º Ano C</h3>
+                    <p>Ensino Médio</p>
+                    <span>6 alunos</span>
+            
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        onclick="mostrarAlunos('1c')"
+                    >
+                        Ver alunos
+                    </button>
+                </div>
+            
+            </div>
+            
+            <div
+                class="card"
+                id="detalhesTurma"
+                style="display: none; margin-top: 22px;"
+            >
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-users"></i>
+                        Alunos da turma
+                    </div>
+                </div>
+            
+                <div class="card-body">
+                    <h3 id="tituloDetalhesTurma"></h3>
+                    <div id="listaAlunosTurma"></div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- =================================================
+             NOTAS
+        ================================================= -->
+
+        <section class="dashboard page-section" id="notas" style="display: none;">
+
+            <div class="section-header">
+                <h2>Notas</h2>
+                <p>Consulte e organize as notas dos alunos.</p>
+            </div>
+
+            <div class="card">
+
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                        Lançamento de notas
+                    </div>
+                </div>
+
+                <div class="card-body">
+
+                    <p>Selecione a turma para lançar as notas dos alunos.</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Turma</label>
+
+                        <select class="form-select">
+                            <option>Selecione uma turma</option>
+                            <option>3º Ano A</option>
+                            <option>2º Ano B</option>
+                            <option>1º Ano C</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Nome do aluno</label>
+
+                        <input
+                            type="text"
+                            class="form-input"
+                            placeholder="Nome do aluno"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Nota</label>
+
+                        <input
+                            type="number"
+                            class="form-input"
+                            placeholder="Nota"
+                            min="0"
+                            max="10"
+                            step="0.1"
+                        >
+                    </div>
+
+                    <button type="button" class="btn btn-primary">
+                        Salvar nota
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =================================================
+             FREQUÊNCIA
+        ================================================= -->
+
+        <section class="dashboard page-section" id="frequencia" style="display: none;">
+
+            <div class="section-header">
+                <h2>Frequência</h2>
+                <p>Registre a presença dos alunos.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <p>
+                        A área de registro de frequência estará disponível aqui.
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- =================================================
+             PLANEJAMENTO
+        ================================================= -->
+
+        <section class="dashboard page-section" id="planejamento" style="display: none;">
+
+            <div class="section-header">
+                <h2>Planejamento</h2>
+                <p>Organize seus planejamentos de aula.</p>
+            </div>
+
+            <div class="card">
+
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa-solid fa-book-open"></i>
+                        Novo planejamento
+                    </div>
+                </div>
+
+                <div class="card-body">
+
+                    <form id="formPlanejamento">
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Matéria
+                            </label>
+
+                            <input
+                                type="text"
+                                name="materia"
+                                class="form-input"
+                                placeholder="Digite a matéria"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Data planejada
+                            </label>
+
+                            <input
+                                type="date"
+                                name="data_planejada"
+                                class="form-input"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Conteúdo da aula
+                            </label>
+
+                            <textarea
+                                name="conteudo"
+                                class="form-textarea"
+                                placeholder="Descreva o planejamento da aula"
+                                required
+                            ></textarea>
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            + SALVAR PLANEJAMENTO
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            <div class="card" style="margin-top: 22px;">
+
+                <div class="card-header">
+
+                    <div class="card-title">
+                        <i class="fa-solid fa-list"></i>
+                        Meus planejamentos
+                    </div>
+
+                    <span id="planningCount">0</span>
+
+                </div>
+
+                <div class="card-body">
+                    <div id="listaPlanejamentos"></div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =================================================
+             CALENDÁRIO
+        ================================================= -->
+
+        <section class="dashboard page-section" id="calendario" style="display: none;">
+
+            <div class="section-header">
+                <h2>Calendário escolar</h2>
+                <p>Consulte os eventos e compromissos escolares.</p>
+            </div>
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <div class="calendar-header">
+
+                        <div class="calendar-month" id="calendarMonthFull">
+                            Calendário escolar
+                        </div>
+
+                        <button
+                            type="button"
+                            id="currentMonthButton"
+                            class="btn btn-primary"
+                        >
+                            Hoje
+                        </button>
+
+                    </div>
+
+                    <div class="calendar-weekdays">
+                        <div>Dom</div>
+                        <div>Seg</div>
+                        <div>Ter</div>
+                        <div>Qua</div>
+                        <div>Qui</div>
+                        <div>Sex</div>
+                        <div>Sáb</div>
+                    </div>
+
+                    <div class="calendar-days" id="calendarDaysFull"></div>
+
+                    <p style="margin-top: 20px;">
+                        Os eventos escolares serão destacados no calendário.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =================================================
+             COMUNICADOS
+        ================================================= -->
+
+        <section class="dashboard page-section" id="comunicados" style="display: none;">
+
+            <div class="section-header">
+                <h2>Comunicados</h2>
+                <p>Veja os comunicados enviados pela direção.</p>
+            </div>
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <div class="communication-list" id="muralDirecaoCompleto">
+
+                        <div class="communication-item">
+                            <div class="communication-icon">
+                                <i class="fa-solid fa-bullhorn"></i>
+                            </div>
+
+                            <div class="communication-content">
+                                <div class="communication-title">
+                                    Comunicados da direção
+                                </div>
+
+                                <div class="communication-text">
+                                    Os comunicados oficiais aparecerão nesta área.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =================================================
+             MENSAGENS
+        ================================================= -->
+
+        <section class="dashboard page-section" id="mensagens" style="display: none;">
+
+            <div class="section-header">
+                <h2>Mensagens</h2>
+                <p>Consulte suas mensagens escolares.</p>
+            </div>
+
+            <div class="card">
+
+                <div class="card-body">
+                    <p>
+                        Você ainda não possui novas mensagens.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =================================================
+             CONFIGURAÇÕES
+        ================================================= -->
+
+        <section class="dashboard page-section" id="configuracoes" style="display: none;">
+
+            <div class="section-header">
+                <h2>Configurações</h2>
+                <p>Gerencie as configurações do seu perfil.</p>
+            </div>
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Nome do professor
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-input"
+                            value="Professor"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            E-mail
+                        </label>
+
+                        <input
+                            type="email"
+                            class="form-input"
+                            placeholder="professor@email.com"
+                        >
+                    </div>
+
+                    <button type="button" class="btn btn-primary">
+                        Salvar configurações
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
     </main>
 
-
-
-    <!-- =====================================================
-         JAVASCRIPT
-         ===================================================== -->
-
-    <script src="professor.js"></script>
+    <script src="js/professor.js"></script>
 
 </body>
 
