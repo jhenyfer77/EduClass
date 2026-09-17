@@ -187,6 +187,7 @@ async function carregarEventosDaDirecao() {
 
         renderCalendar();
         mostrarProximoEvento();
+
     } catch (error) {
         console.error("Erro nos eventos:", error);
 
@@ -260,6 +261,7 @@ async function carregarRecadosDaDirecao() {
                 </div>
             </div>
         `).join("");
+
     } catch (error) {
         console.error("Erro nos comunicados:", error);
 
@@ -337,6 +339,7 @@ async function carregarPlanejamentos() {
                 </button>
             </article>
         `).join("");
+
     } catch (error) {
         console.error("Erro nos planejamentos:", error);
 
@@ -398,6 +401,7 @@ async function configurarFormularioPlanejamento() {
                 "Planejamento salvo com sucesso!",
                 "success"
             );
+
         } catch (error) {
             console.error(error);
 
@@ -445,6 +449,7 @@ async function apagarPlanejamento(id) {
             "Planejamento excluído.",
             "success"
         );
+
     } catch (error) {
         console.error(error);
 
@@ -579,7 +584,8 @@ function configurarNavegacao() {
         botao.addEventListener("click", event => {
             event.preventDefault();
 
-            const pagina = botao.getAttribute("data-page");
+            const pagina =
+                botao.getAttribute("data-page");
 
             mostrarPagina(pagina);
         });
@@ -589,7 +595,8 @@ function configurarNavegacao() {
         link.addEventListener("click", event => {
             event.preventDefault();
 
-            const pagina = link.getAttribute("data-go-page");
+            const pagina =
+                link.getAttribute("data-go-page");
 
             mostrarPagina(pagina);
         });
@@ -618,6 +625,7 @@ function configurarMenuLateral() {
             if (overlay) {
                 overlay.classList.toggle("active");
             }
+
         } else {
             sidebar.classList.toggle("collapsed");
         }
@@ -670,8 +678,12 @@ function mostrarDataAtual() {
 ========================================================= */
 
 function configurarCalendario() {
-    const previousMonth = document.getElementById("prevMonth");
-    const nextMonth = document.getElementById("nextMonth");
+    const previousMonth =
+        document.getElementById("prevMonth");
+
+    const nextMonth =
+        document.getElementById("nextMonth");
+
     const currentMonthButton =
         document.getElementById("currentMonthButton");
 
@@ -698,6 +710,7 @@ function configurarCalendario() {
     if (currentMonthButton) {
         currentMonthButton.addEventListener("click", () => {
             currentCalendarDate = new Date();
+
             renderCalendar();
         });
     }
@@ -719,16 +732,24 @@ async function carregarAlunosDasTurmas() {
 
         const dados = await response.json();
 
-        alunosCadastrados = Array.isArray(dados) ? dados : [];
+        alunosCadastrados =
+            Array.isArray(dados) ? dados : [];
 
         organizarTurmas();
+
+        carregarTurmasNotas();
+
     } catch (error) {
-        console.error("Erro ao carregar alunos das turmas:", error);
+        console.error(
+            "Erro ao carregar alunos das turmas:",
+            error
+        );
     }
 }
 
 function organizarTurmas() {
-    const listaTurmas = document.getElementById("listaTurmas");
+    const listaTurmas =
+        document.getElementById("listaTurmas");
 
     if (!listaTurmas) {
         return;
@@ -737,7 +758,8 @@ function organizarTurmas() {
     const turmas = {};
 
     alunosCadastrados.forEach(aluno => {
-        const nomeTurma = aluno.turma || "Turma não informada";
+        const nomeTurma =
+            aluno.turma || "Turma não informada";
 
         if (!turmas[nomeTurma]) {
             turmas[nomeTurma] = [];
@@ -746,89 +768,173 @@ function organizarTurmas() {
         turmas[nomeTurma].push(aluno);
     });
 
-    const nomesDasTurmas = Object.keys(turmas);
+    const nomesDasTurmas =
+        Object.keys(turmas);
 
     if (nomesDasTurmas.length === 0) {
         listaTurmas.innerHTML = `
             <div class="empty-card">
                 <span>🎓</span>
-                <p>Nenhum aluno foi cadastrado pela Gestão ainda.</p>
+                <p>
+                    Nenhum aluno foi cadastrado
+                    pela Gestão ainda.
+                </p>
             </div>
         `;
 
         return;
     }
 
-    listaTurmas.innerHTML = nomesDasTurmas.map((nomeTurma, index) => {
-        const idTurma = `turma-${index}`;
+    listaTurmas.innerHTML =
+        nomesDasTurmas.map((nomeTurma, index) => {
 
-        return `
-            <div class="card">
-                <div class="card-icon">
-                    <i class="fa-solid fa-users"></i>
+            const idTurma =
+                `turma-${index}`;
+
+            return `
+                <div class="card">
+
+                    <div class="card-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+
+                    <h3>
+                        ${escapeHTML(nomeTurma)}
+                    </h3>
+
+                    <p>
+                        ${turmas[nomeTurma].length}
+                        aluno(s) cadastrado(s)
+                    </p>
+
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        onclick="mostrarAlunos('${idTurma}')"
+                    >
+                        Ver alunos
+                    </button>
+
                 </div>
+            `;
 
-                <h3>${escapeHTML(nomeTurma)}</h3>
-
-                <p>
-                    ${turmas[nomeTurma].length} aluno(s) cadastrado(s)
-                </p>
-
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                    onclick="mostrarAlunos('${idTurma}')"
-                >
-                    Ver alunos
-                </button>
-            </div>
-        `;
-    }).join("");
+        }).join("");
 
     window.turmasOrganizadas = {};
 
     nomesDasTurmas.forEach((nomeTurma, index) => {
-        window.turmasOrganizadas[`turma-${index}`] = {
+
+        window.turmasOrganizadas[
+            `turma-${index}`
+        ] = {
             nome: nomeTurma,
             alunos: turmas[nomeTurma]
         };
+
     });
 }
 
-function mostrarAlunos(idTurma) {
-    const turma = window.turmasOrganizadas?.[idTurma];
+/* =========================================================
+   TURMAS DA ÁREA DE NOTAS
+========================================================= */
 
-    const detalhes = document.getElementById("detalhesTurma");
-    const titulo = document.getElementById("tituloDetalhesTurma");
-    const lista = document.getElementById("listaAlunosTurma");
+function carregarTurmasNotas() {
 
-    if (!turma || !detalhes || !titulo || !lista) {
+    const select =
+        document.getElementById("turmaNotas");
+
+    if (!select) {
         return;
     }
 
-    titulo.textContent = turma.nome;
+    const turmas = [
+        ...new Set(
+            alunosCadastrados
+                .map(aluno => aluno.turma)
+                .filter(turma => turma)
+        )
+    ];
 
-    lista.innerHTML = turma.alunos.map((aluno, index) => {
-        return `
-            <div class="communication-item">
-                <div class="communication-icon">
-                    <i class="fa-solid fa-user"></i>
-                </div>
+    select.innerHTML = `
+        <option value="">
+            Selecione uma turma
+        </option>
+    `;
 
-                <div class="communication-content">
-                    <div class="communication-title">
-                        ${index + 1}. ${escapeHTML(aluno.nome)}
+    turmas.forEach(turma => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = turma;
+
+        option.textContent = turma;
+
+        select.appendChild(option);
+
+    });
+}
+
+/* =========================================================
+   MOSTRAR ALUNOS DA TURMA
+========================================================= */
+
+function mostrarAlunos(idTurma) {
+
+    const turma =
+        window.turmasOrganizadas?.[idTurma];
+
+    const detalhes =
+        document.getElementById("detalhesTurma");
+
+    const titulo =
+        document.getElementById("tituloDetalhesTurma");
+
+    const lista =
+        document.getElementById("listaAlunosTurma");
+
+    if (
+        !turma ||
+        !detalhes ||
+        !titulo ||
+        !lista
+    ) {
+        return;
+    }
+
+    titulo.textContent =
+        turma.nome;
+
+    lista.innerHTML =
+        turma.alunos.map((aluno, index) => {
+
+            return `
+                <div class="communication-item">
+
+                    <div class="communication-icon">
+                        <i class="fa-solid fa-user"></i>
                     </div>
 
-                    <div class="communication-text">
-                        Aluno cadastrado pela Gestão
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join("");
+                    <div class="communication-content">
 
-    detalhes.style.display = "block";
+                        <div class="communication-title">
+                            ${index + 1}.
+                            ${escapeHTML(aluno.nome)}
+                        </div>
+
+                        <div class="communication-text">
+                            Aluno cadastrado pela Gestão
+                        </div>
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+    detalhes.style.display =
+        "block";
 }
 
 /* =========================================================
@@ -836,16 +942,25 @@ function mostrarAlunos(idTurma) {
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
+
     configurarNavegacao();
+
     configurarMenuLateral();
+
     configurarCalendario();
+
     configurarFormularioPlanejamento();
 
     mostrarDataAtual();
+
     renderCalendar();
 
     carregarEventosDaDirecao();
+
     carregarRecadosDaDirecao();
+
     carregarPlanejamentos();
+
     carregarAlunosDasTurmas();
+
 });
