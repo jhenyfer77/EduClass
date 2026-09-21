@@ -742,3 +742,193 @@ body {
     }
 
 }
+
+/* =====================================================
+
+   RELATÓRIOS
+
+   ===================================================== */
+
+   #relatorios #listaRelatorios {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+
+}
+
+#relatorios .report-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e5eaf1;
+
+    border-radius: 14px;
+
+    padding: 24px;
+
+    box-shadow: 0 4px 14px rgba(19, 43, 82, 0.06);
+
+}
+
+#relatorios .report-card h3 {
+
+    color: #172033;
+
+    font-size: 19px;
+
+    margin-bottom: 16px;
+
+}
+
+#relatorios .report-card p {
+
+    color: #68768c;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    margin: 8px 0;
+
+}
+
+#relatorios .report-card strong {
+
+    color: #26344c;
+
+}
+
+#relatorios .report-card hr {
+
+    border: none;
+
+    border-top: 1px solid #edf0f5;
+
+    margin: 22px 0;
+
+}
+
+#relatorios .report-card h4 {
+
+    color: #1769d2;
+
+    font-size: 16px;
+
+    margin-bottom: 16px;
+
+}
+
+#relatorios .report-card label {
+
+    display: block;
+
+    color: #46546b;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    margin: 14px 0 7px;
+
+}
+
+#relatorios .report-card select,
+
+#relatorios .report-card textarea {
+
+    width: 100%;
+
+    border: 1px solid #dce2eb;
+
+    border-radius: 9px;
+
+    padding: 12px 14px;
+
+    background: #fbfcfe;
+
+    color: #172033;
+
+    font-family: 'Inter', sans-serif;
+
+    font-size: 13px;
+
+    outline: none;
+
+}
+
+#relatorios .report-card select:focus,
+
+#relatorios .report-card textarea:focus {
+
+    border-color: #1769d2;
+
+    background: #ffffff;
+
+    box-shadow: 0 0 0 3px rgba(23, 105, 210, 0.08);
+
+}
+
+#relatorios .report-card textarea {
+
+    min-height: 100px;
+
+    resize: vertical;
+
+}
+
+#relatorios .report-card button {
+
+    margin-top: 18px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 11px 17px;
+
+    background: #1769d2;
+
+    color: #ffffff;
+
+    font-family: 'Inter', sans-serif;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+#relatorios .report-card button:hover {
+
+    background: #0e57b5;
+
+}
+
+#relatorios .retorno-gestao {
+
+    margin-top: 20px;
+
+    padding: 16px;
+
+    background: #e9f2ff;
+
+    border-left: 4px solid #1769d2;
+
+    border-radius: 8px;
+
+    color: #52617a;
+
+    line-height: 1.6;
+
+}
+
+#relatorios .retorno-gestao strong {
+
+    color: #1769d2;
+
+}

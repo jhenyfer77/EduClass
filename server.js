@@ -138,6 +138,96 @@ db.serialize(() => {
 
 });
 
+// CAMPOS DA AVALIAÇÃO DA GESTÃO
+
+
+app.post('/avaliar-relatorio', (req, res) => {
+
+    const {
+
+        id,
+
+        status,
+
+        providencia,
+
+        observacao_gestao
+
+    } = req.body;
+
+    if (!id || !providencia) {
+
+        return res.status(400).json({
+
+            erro: 'Informe a providência da gestão.'
+
+        });
+
+    }
+
+    db.run(
+
+        `
+
+        UPDATE relatorios
+
+        SET
+
+            status = ?,
+
+            providencia = ?,
+
+            observacao_gestao = ?,
+
+            lido_gestao = 1
+
+        WHERE id = ?
+
+        `,
+
+        [
+
+            status || 'Em acompanhamento',
+
+            providencia,
+
+            observacao_gestao || '',
+
+            id
+
+        ],
+
+        function (err) {
+
+            if (err) {
+
+                console.error(
+
+                    'ERRO AO AVALIAR RELATÓRIO:',
+
+                    err.message
+
+                );
+
+                return res.status(500).json({
+
+                    erro: 'Erro ao registrar a avaliação.'
+
+                });
+
+            }
+
+            res.json({
+
+                mensagem: 'Providência da gestão registrada com sucesso!'
+
+            });
+
+        }
+
+    );
+
+});
 
 // =====================================================
 // LOGIN
@@ -986,6 +1076,49 @@ app.post('/criar-relatorio', (req, res) => {
 
 });
 
+app.get('/listar-relatorios', (req, res) => {
+
+    db.all(
+
+        `
+
+        SELECT *
+
+        FROM relatorios
+
+        ORDER BY id DESC
+
+        `,
+
+        [],
+
+        (err, rows) => {
+
+            if (err) {
+
+                console.error(
+
+                    'ERRO AO LISTAR RELATÓRIOS:',
+
+                    err.message
+
+                );
+
+                return res.status(500).json({
+
+                    erro: 'Erro ao carregar relatórios.'
+
+                });
+
+            }
+
+            res.json(rows);
+
+        }
+
+    );
+
+});
 
 // =====================================================
 // GESTOR - CONTADORES

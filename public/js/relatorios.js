@@ -56,6 +56,114 @@ function carregarAlunos() {
 
 }
 
+//CARREGAR RETORNO DA GESTÃO //
+
+function carregarRetornosGestao() {
+
+    fetch("/listar-relatorios")
+
+        .then(response => {
+
+            if (!response.ok) {
+
+                throw new Error("Erro ao carregar retornos.");
+
+            }
+
+            return response.json();
+
+        })
+
+        .then(relatorios => {
+
+            const alunoSelecionado = alunoSelect.value;
+
+            if (!alunoSelecionado) {
+
+                return;
+
+            }
+
+            const relatorio = relatorios.find(
+
+                item => String(item.aluno_id) === String(alunoSelecionado)
+
+            );
+
+            if (!relatorio || !relatorio.lido_gestao) {
+
+                return;
+
+            }
+
+            let retorno = document.getElementById("retornoGestao");
+
+            if (!retorno) {
+
+                retorno = document.createElement("div");
+
+                retorno.id = "retornoGestao";
+
+                conteudo.parentElement.after(retorno);
+
+            }
+
+            retorno.innerHTML = `
+
+                <div class="retorno-gestao">
+
+                    <h3>Retorno da Gestão</h3>
+
+                    <p>
+
+                        <strong>Status:</strong>
+
+                        ${relatorio.status}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Providência:</strong>
+
+                        ${relatorio.providencia}
+
+                    </p>
+
+                    ${
+
+                        relatorio.observacao_gestao
+
+                        ? `
+
+                            <p>
+
+                                <strong>Observação da Gestão:</strong><br>
+
+                                ${relatorio.observacao_gestao}
+
+                            </p>
+
+                        `
+
+                        : ""
+
+                    }
+
+                </div>
+
+            `;
+
+        })
+
+        .catch(error => {
+
+            console.error(error);
+
+        });
+
+}
+
 // =====================================================
 
 // CARREGAR TURMAS
@@ -110,6 +218,7 @@ function carregarTurmas() {
 
 turmaSelect.addEventListener("change", function() {
 
+
     const turmaSelecionada = turmaSelect.value;
 
     alunoSelect.innerHTML = `
@@ -160,7 +269,13 @@ turmaSelect.addEventListener("change", function() {
 
     alunoSelect.disabled = false;
 
+    carregarRetornosGestao();
+
 });
+
+alunoSelect.addEventListener("change", function(){
+    carregarRetornosGestao();
+})
 
 // =====================================================
 

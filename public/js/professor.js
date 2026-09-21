@@ -840,31 +840,41 @@ function organizarTurmas() {
 
 function carregarTurmasNotas() {
 
-    const select =
-        document.getElementById("turmaNotas");
+    const select = document.getElementById("turmaNotas");
 
     if (!select) {
+
         return;
+
     }
 
     const turmas = [
+
         ...new Set(
+
             alunosCadastrados
+
                 .map(aluno => aluno.turma)
+
                 .filter(turma => turma)
+
         )
+
     ];
 
     select.innerHTML = `
+
         <option value="">
+
             Selecione uma turma
+
         </option>
+
     `;
 
     turmas.forEach(turma => {
 
-        const option =
-            document.createElement("option");
+        const option = document.createElement("option");
 
         option.value = turma;
 
@@ -873,6 +883,207 @@ function carregarTurmasNotas() {
         select.appendChild(option);
 
     });
+
+    /* Quando selecionar uma turma, mostrar os alunos */
+
+    select.addEventListener("change", function () {
+
+        const turmaSelecionada = this.value;
+
+        const lista =
+
+            document.getElementById("listaNotas");
+
+        if (!lista) {
+
+            return;
+
+        }
+
+        if (!turmaSelecionada) {
+
+            lista.innerHTML = `
+
+                <div class="empty-card">
+
+                    <span>🎓</span>
+
+                    <p>
+
+                        Selecione uma turma para visualizar os alunos.
+
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+        const alunosDaTurma =
+
+            alunosCadastrados.filter(aluno =>
+
+                aluno.turma === turmaSelecionada
+
+            );
+
+        if (alunosDaTurma.length === 0) {
+
+            lista.innerHTML = `
+
+                <div class="empty-card">
+
+                    <span>👥</span>
+
+                    <p>
+
+                        Nenhum aluno encontrado nessa turma.
+
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+        lista.innerHTML = alunosDaTurma.map(aluno => `
+
+            <div class="nota-aluno">
+
+                <div class="aluno-info">
+
+                    <strong>
+
+                        ${escapeHTML(aluno.nome)}
+
+                    </strong>
+
+                    <span>
+
+                        ${escapeHTML(aluno.turma)}
+
+                    </span>
+
+                </div>
+
+                <div class="nota-input">
+
+                    <label>
+
+                        Nota
+
+                    </label>
+
+                    <input
+
+                        type="number"
+
+                        min="0"
+
+                        max="10"
+
+                        step="0.1"
+
+                        class="campo-nota"
+
+                        data-aluno-id="${aluno.id}"
+
+                        data-aluno-nome="${escapeHTML(aluno.nome)}"
+
+                        placeholder="0,0"
+
+                    >
+
+                </div>
+
+            </div>
+
+       `).join("");
+
+        // Botão para salvar as notas
+
+        const botaoSalvar = document.createElement("button");
+
+        botaoSalvar.type = "button";
+
+        botaoSalvar.className = "btn btn-primary";
+
+        botaoSalvar.textContent = "Salvar notas";
+
+        botaoSalvar.style.marginTop = "20px";
+
+        botaoSalvar.style.padding = "12px 20px";
+
+        botaoSalvar.style.border = "none";
+
+        botaoSalvar.style.borderRadius = "8px";
+
+        botaoSalvar.style.cursor = "pointer";
+
+        lista.appendChild(botaoSalvar);
+
+        botaoSalvar.addEventListener("click", async () => {
+
+            const campos =
+
+                lista.querySelectorAll(".campo-nota");
+
+            const notas = [];
+
+            campos.forEach(campo => {
+
+                if (campo.value !== "") {
+
+                    notas.push({
+
+                        aluno_id: campo.dataset.alunoId,
+
+                        aluno_nome: campo.dataset.alunoNome,
+
+                        turma: turmaSelecionada,
+
+                        nota: Number(campo.value)
+
+                    });
+
+                }
+
+            });
+
+            if (notas.length === 0) {
+
+                mostrarMensagem(
+
+                    "Digite pelo menos uma nota.",
+
+                    "error"
+
+                );
+
+                return;
+
+            }
+
+            console.log("Notas para salvar:", notas);
+
+            mostrarMensagem(
+
+                "Notas preparadas para salvar!",
+
+                "success"
+
+            );
+
+        });
+
+    });
+
 }
 
 /* =========================================================

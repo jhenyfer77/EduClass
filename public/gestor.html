@@ -1,32 +1,45 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>EduClass | Gestor</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
+
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link
+
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+
         rel="stylesheet"
+
     >
 
     <link
+
         rel="stylesheet"
+
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+
     >
 
     <link rel="stylesheet" href="css/gestor.css">
+
 </head>
 
 <body>
 
     <!-- =================================================
+
          MENU LATERAL
+
     ================================================= -->
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -38,11 +51,15 @@
             <div class="logo">
 
                 <div class="logo-icon">
+
                     <i class="fa-solid fa-graduation-cap"></i>
+
                 </div>
 
                 <div class="logo-text">
+
                     Edu<span>Class</span>
+
                 </div>
 
             </div>
@@ -52,48 +69,81 @@
         <nav class="sidebar-menu">
 
             <div class="menu-title">
+
                 Menu principal
+
             </div>
 
             <a href="#" class="menu-item active" data-page="inicio">
+
                 <i class="fa-solid fa-house"></i>
+
                 <span class="menu-text">Início</span>
+
             </a>
 
             <a href="#" class="menu-item" data-page="professores">
+
                 <i class="fa-solid fa-chalkboard-user"></i>
+
                 <span class="menu-text">Professores</span>
+
+            </a>
+
+            <a href="#" class="menu-item" data-page="relatorios">
+
+                <i class="fa-solid fa-file-lines"></i>
+
+                <span class="menu-text">Relatórios</span>
+
             </a>
 
             <a href="#" class="menu-item" data-page="alunos">
+
                 <i class="fa-solid fa-user-graduate"></i>
+
                 <span class="menu-text">Alunos</span>
+
             </a>
 
             <a href="#" class="menu-item" data-page="recados">
+
                 <i class="fa-solid fa-bullhorn"></i>
+
                 <span class="menu-text">Recados</span>
+
             </a>
 
             <a href="#" class="menu-item" data-page="calendario">
+
                 <i class="fa-solid fa-calendar-days"></i>
+
                 <span class="menu-text">Calendário</span>
+
             </a>
 
             <div class="menu-divider"></div>
 
             <div class="menu-title">
+
                 Sistema
+
             </div>
 
             <a href="#" class="menu-item" data-page="configuracoes">
+
                 <i class="fa-solid fa-gear"></i>
+
                 <span class="menu-text">Configurações</span>
+
             </a>
 
             <a href="index.html" class="menu-item">
+
                 <i class="fa-solid fa-right-from-bracket"></i>
+
                 <span class="menu-text">Sair</span>
+
             </a>
 
         </nav>
@@ -101,17 +151,23 @@
         <div class="sidebar-profile">
 
             <div class="profile-avatar">
+
                 GE
+
             </div>
 
             <div class="profile-info">
 
                 <div class="profile-name">
+
                     Gestor
+
                 </div>
 
                 <div class="profile-role">
+
                     Gestão Escolar
+
                 </div>
 
             </div>
@@ -120,37 +176,46 @@
 
     </aside>
 
-
     <!-- =================================================
+
          CONTEÚDO PRINCIPAL
+
     ================================================= -->
 
     <main class="main-content">
 
-        <!-- =================================================
-             TOPBAR
-        ================================================= -->
+        <!-- TOPBAR -->
 
         <header class="topbar">
 
             <div class="topbar-left">
 
                 <button
+
                     class="menu-toggle"
+
                     id="menuToggle"
+
                     aria-label="Abrir ou fechar menu"
+
                 >
+
                     <i class="fa-solid fa-bars"></i>
+
                 </button>
 
                 <div class="page-title">
 
                     <h1 id="pageTitle">
+
                         Dashboard
+
                     </h1>
 
                     <p>
+
                         Painel do gestor
+
                     </p>
 
                 </div>
@@ -160,21 +225,29 @@
             <div class="topbar-right">
 
                 <button
+
                     class="notification-btn"
+
                     id="notificationBtn"
+
                     aria-label="Notificações"
+
                 >
+
                     <i class="fa-regular fa-bell"></i>
+
                     <span class="notification-dot"></span>
+
                 </button>
 
             </div>
 
         </header>
 
-
         <!-- =================================================
+
              INÍCIO
+
         ================================================= -->
 
         <section class="dashboard page-section" id="inicio">
@@ -184,131 +257,159 @@
                 <div class="welcome-text">
 
                     <h2>
+
                         Olá, Gestor!
+
                     </h2>
 
                     <p>
+
                         Acompanhe e gerencie as principais informações da escola em um só lugar.
+
                     </p>
 
                 </div>
 
                 <div class="date-badge" id="currentDate">
+
                     Carregando data...
+
                 </div>
 
             </div>
-
-
-            <!-- CONTADORES -->
 
             <div class="stats-grid">
 
                 <div
+
                     class="stat-card"
+
                     onclick="irParaPagina('professores')"
-                    style="cursor: pointer;"
+
+                    style="cursor:pointer;"
+
                 >
 
                     <div class="stat-icon">
+
                         <i class="fa-solid fa-chalkboard-user"></i>
+
                     </div>
 
                     <div class="stat-info">
 
                         <div class="stat-label">
+
                             Professores
+
                         </div>
 
-                        <div
-                            class="stat-number"
-                            id="qtdProfessores"
-                        >
+                        <div class="stat-number" id="qtdProfessores">
+
                             0
+
                         </div>
 
                     </div>
 
                 </div>
 
-
                 <div
+
                     class="stat-card"
+
                     onclick="irParaPagina('alunos')"
-                    style="cursor: pointer;"
+
+                    style="cursor:pointer;"
+
                 >
 
                     <div class="stat-icon">
+
                         <i class="fa-solid fa-user-graduate"></i>
+
                     </div>
 
                     <div class="stat-info">
 
                         <div class="stat-label">
+
                             Alunos
+
                         </div>
 
-                        <div
-                            class="stat-number"
-                            id="qtdAlunos"
-                        >
+                        <div class="stat-number" id="qtdAlunos">
+
                             0
+
                         </div>
 
                     </div>
 
                 </div>
 
-
                 <div
+
                     class="stat-card"
+
                     onclick="irParaPagina('recados')"
-                    style="cursor: pointer;"
+
+                    style="cursor:pointer;"
+
                 >
 
                     <div class="stat-icon">
+
                         <i class="fa-solid fa-bullhorn"></i>
+
                     </div>
 
                     <div class="stat-info">
 
                         <div class="stat-label">
+
                             Recados ativos
+
                         </div>
 
-                        <div
-                            class="stat-number"
-                            id="qtdRecados"
-                        >
+                        <div class="stat-number" id="qtdRecados">
+
                             0
+
                         </div>
 
                     </div>
 
                 </div>
 
-
                 <div
+
                     class="stat-card"
+
                     onclick="irParaPagina('calendario')"
-                    style="cursor: pointer;"
+
+                    style="cursor:pointer;"
+
                 >
 
                     <div class="stat-icon">
+
                         <i class="fa-solid fa-calendar-days"></i>
+
                     </div>
 
                     <div class="stat-info">
 
                         <div class="stat-label">
+
                             Eventos
+
                         </div>
 
-                        <div
-                            class="stat-number"
-                            id="qtdEventos"
-                        >
+                        <div class="stat-number" id="qtdEventos">
+
                             0
+
                         </div>
 
                     </div>
@@ -316,7 +417,6 @@
                 </div>
 
             </div>
-
 
             <!-- ACESSO RÁPIDO -->
 
@@ -338,69 +438,66 @@
 
                     <div class="quick-actions">
 
-                        <a
-                            href="#"
-                            class="quick-action"
-                            data-go-page="professores"
-                        >
+                        <a href="#" class="quick-action" data-go-page="professores">
 
                             <div class="quick-action-icon">
+
                                 <i class="fa-solid fa-user-plus"></i>
+
                             </div>
 
                             <span>
+
                                 Gerenciar professores
+
                             </span>
 
                         </a>
 
-
-                        <a
-                            href="#"
-                            class="quick-action"
-                            data-go-page="alunos"
-                        >
+                        <a href="#" class="quick-action" data-go-page="alunos">
 
                             <div class="quick-action-icon">
+
                                 <i class="fa-solid fa-user-graduate"></i>
+
                             </div>
 
                             <span>
+
                                 Cadastrar aluno
+
                             </span>
 
                         </a>
 
-
-                        <a
-                            href="#"
-                            class="quick-action"
-                            data-go-page="recados"
-                        >
+                        <a href="#" class="quick-action" data-go-page="recados">
 
                             <div class="quick-action-icon">
+
                                 <i class="fa-solid fa-bullhorn"></i>
+
                             </div>
 
                             <span>
+
                                 Novo recado
+
                             </span>
 
                         </a>
 
-
-                        <a
-                            href="#"
-                            class="quick-action"
-                            data-go-page="calendario"
-                        >
+                        <a href="#" class="quick-action" data-go-page="calendario">
 
                             <div class="quick-action-icon">
+
                                 <i class="fa-solid fa-calendar-plus"></i>
+
                             </div>
 
                             <span>
+
                                 Adicionar evento
+
                             </span>
 
                         </a>
@@ -410,7 +507,6 @@
                 </div>
 
             </div>
-
 
             <!-- RESUMO -->
 
@@ -433,14 +529,16 @@
                     <div class="card-body">
 
                         <p>
+
                             Utilize o menu lateral para administrar professores,
+
                             alunos, comunicados e eventos da escola.
+
                         </p>
 
                     </div>
 
                 </div>
-
 
                 <div class="card">
 
@@ -459,8 +557,11 @@
                     <div class="card-body">
 
                         <p>
+
                             O EduClass reúne as principais ferramentas de gestão
+
                             escolar em um único ambiente.
+
                         </p>
 
                     </div>
@@ -471,31 +572,37 @@
 
         </section>
 
-
         <!-- =================================================
+
              PROFESSORES
+
         ================================================= -->
 
         <section
+
             class="dashboard page-section"
+
             id="professores"
-            style="display: none;"
+
+            style="display:none;"
+
         >
 
             <div class="section-header">
 
                 <h2>
+
                     Professores
+
                 </h2>
 
                 <p>
+
                     Cadastre e gerencie os professores da escola.
+
                 </p>
 
             </div>
-
-
-            <!-- CADASTRO -->
 
             <div class="card">
 
@@ -514,69 +621,101 @@
                 <div class="card-body">
 
                     <form
+
                         action="/cadastrar-professor"
+
                         method="POST"
+
                     >
 
                         <div class="form-group">
 
                             <label class="form-label">
+
                                 Nome completo
+
                             </label>
 
                             <input
+
                                 type="text"
+
                                 id="nome_prof"
+
                                 name="nome"
+
                                 class="form-input"
+
                                 placeholder="Ex: Professor Carlos"
+
                                 required
+
                             >
 
                         </div>
 
-
                         <div class="form-group">
 
                             <label class="form-label">
+
                                 E-mail de acesso
+
                             </label>
 
                             <input
+
                                 type="email"
+
                                 id="email_prof"
+
                                 name="email"
+
                                 class="form-input"
+
                                 placeholder="Ex: carlos@escola.com"
+
                                 required
+
                             >
 
                         </div>
-
 
                         <div class="form-group">
 
                             <label class="form-label">
+
                                 Senha inicial
+
                             </label>
 
                             <input
+
                                 type="password"
+
                                 id="senha_prof"
+
                                 name="senha"
+
                                 class="form-input"
+
                                 placeholder="Mínimo 6 caracteres"
+
                                 required
+
                             >
 
                         </div>
-
 
                         <button
+
                             type="submit"
+
                             class="btn btn-primary"
+
                         >
+
                             Cadastrar professor
+
                         </button>
 
                     </form>
@@ -584,9 +723,6 @@
                 </div>
 
             </div>
-
-
-            <!-- LISTA -->
 
             <div class="card">
 
@@ -604,23 +740,21 @@
 
                 <div class="card-body">
 
-                    <div
-                        id="areaProfessores"
-                        style="display: block;"
+                    <ul
+
+                        id="listaProfessores"
+
+                        class="data-list"
+
                     >
 
-                        <ul
-                            id="listaProfessores"
-                            class="data-list"
-                        >
+                        <li>
 
-                            <li>
-                                Carregando professores...
-                            </li>
+                            Carregando professores...
 
-                        </ul>
+                        </li>
 
-                    </div>
+                    </ul>
 
                 </div>
 
@@ -628,31 +762,37 @@
 
         </section>
 
-
         <!-- =================================================
+
              ALUNOS
+
         ================================================= -->
 
         <section
+
             class="dashboard page-section"
+
             id="alunos"
-            style="display: none;"
+
+            style="display:none;"
+
         >
 
             <div class="section-header">
 
                 <h2>
+
                     Alunos
+
                 </h2>
 
                 <p>
+
                     Cadastre os alunos e organize suas turmas.
+
                 </p>
 
             </div>
-
-
-            <!-- CADASTRO DE ALUNO -->
 
             <div class="card">
 
@@ -671,57 +811,87 @@
                 <div class="card-body">
 
                     <form
+
                         id="formAluno"
+
                         onsubmit="cadastrarAluno(event)"
+
                     >
 
                         <div class="form-group">
 
                             <label
+
                                 class="form-label"
+
                                 for="nome_aluno"
+
                             >
+
                                 Nome do aluno
+
                             </label>
 
                             <input
+
                                 type="text"
+
                                 id="nome_aluno"
+
                                 name="nome"
+
                                 class="form-input"
+
                                 placeholder="Ex: João Silva"
+
                                 required
+
                             >
 
                         </div>
-
 
                         <div class="form-group">
 
                             <label
+
                                 class="form-label"
+
                                 for="turma_aluno"
+
                             >
+
                                 Turma
+
                             </label>
 
                             <input
+
                                 type="text"
+
                                 id="turma_aluno"
+
                                 name="turma"
+
                                 class="form-input"
+
                                 placeholder="Ex: 2ºC"
+
                                 required
+
                             >
 
                         </div>
 
-
                         <button
+
                             type="submit"
+
                             class="btn btn-primary"
+
                         >
+
                             Cadastrar aluno
+
                         </button>
 
                     </form>
@@ -729,9 +899,6 @@
                 </div>
 
             </div>
-
-
-            <!-- INFORMAÇÃO -->
 
             <div class="card">
 
@@ -750,8 +917,11 @@
                 <div class="card-body">
 
                     <p>
-                        Os alunos cadastrados aqui poderão aparecer
-                        posteriormente nas áreas de turmas, notas e frequência.
+
+                        Os alunos cadastrados aqui poderão aparecer posteriormente
+
+                        nas áreas de turmas, notas e frequência.
+
                     </p>
 
                 </div>
@@ -760,31 +930,37 @@
 
         </section>
 
-
         <!-- =================================================
+
              RECADOS
+
         ================================================= -->
 
         <section
+
             class="dashboard page-section"
+
             id="recados"
-            style="display: none;"
+
+            style="display:none;"
+
         >
 
             <div class="section-header">
 
                 <h2>
+
                     Recados
+
                 </h2>
 
                 <p>
+
                     Publique e gerencie os comunicados da escola.
+
                 </p>
 
             </div>
-
-
-            <!-- NOVO RECADO -->
 
             <div class="card">
 
@@ -807,67 +983,101 @@
                         <div class="form-group">
 
                             <label
+
                                 class="form-label"
+
                                 for="titulo"
+
                             >
+
                                 Título do recado
+
                             </label>
 
                             <input
+
                                 type="text"
+
                                 id="titulo"
+
                                 name="titulo"
+
                                 class="form-input"
+
                                 required
+
                             >
 
                         </div>
 
-
                         <div class="form-group">
 
                             <label
+
                                 class="form-label"
-                                for="conteudo"
+
+                                for="conteudoRecado"
+
                             >
+
                                 Conteúdo do aviso
+
                             </label>
 
                             <textarea
-                                id="conteudo"
+
+                                id="conteudoRecado"
+
                                 name="conteudo"
+
                                 class="form-textarea"
+
                                 required
+
                             ></textarea>
 
                         </div>
 
-
                         <div class="form-group">
 
                             <label
+
                                 class="form-label"
+
                                 for="autor"
+
                             >
+
                                 Autor do recado
+
                             </label>
 
                             <input
+
                                 type="text"
+
                                 id="autor"
+
                                 name="autor"
+
                                 class="form-input"
+
                                 required
+
                             >
 
                         </div>
 
-
                         <button
+
                             type="submit"
+
                             class="btn btn-primary"
+
                         >
+
                             Postar no mural
+
                         </button>
 
                     </form>
@@ -875,9 +1085,6 @@
                 </div>
 
             </div>
-
-
-            <!-- MURAL -->
 
             <div class="card">
 
@@ -896,7 +1103,9 @@
                 <div class="card-body">
 
                     <div id="mural">
+
                         Carregando recados...
+
                     </div>
 
                 </div>
@@ -905,31 +1114,87 @@
 
         </section>
 
-
         <!-- =================================================
-             CALENDÁRIO
+
+             RELATÓRIOS
+
         ================================================= -->
 
         <section
+
             class="dashboard page-section"
+
+            id="relatorios"
+
+            style="display:none;"
+
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+
+                        Relatórios dos alunos
+
+                    </h2>
+
+                    <p>
+
+                        Analise os relatos enviados pelos professores
+
+                        e registre a providência da gestão.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div id="listaRelatorios">
+
+                <p>
+
+                    Carregando relatórios...
+
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =================================================
+
+             CALENDÁRIO
+
+        ================================================= -->
+
+        <section
+
+            class="dashboard page-section"
+
             id="calendario"
-            style="display: none;"
+
+            style="display:none;"
+
         >
 
             <div class="section-header">
 
                 <h2>
+
                     Calendário escolar
+
                 </h2>
 
                 <p>
+
                     Adicione e consulte os eventos da escola.
+
                 </p>
 
             </div>
-
-
-            <!-- ADICIONAR EVENTO -->
 
             <div class="card">
 
@@ -952,67 +1217,101 @@
                         <div class="form-group">
 
                             <label
+
                                 class="form-label"
+
                                 for="titulo_evento"
+
                             >
+
                                 Nome do evento
+
                             </label>
 
                             <input
+
                                 type="text"
+
                                 id="titulo_evento"
+
                                 name="titulo"
+
                                 class="form-input"
+
                                 required
+
                             >
 
                         </div>
 
-
                         <div class="form-group">
 
                             <label
+
                                 class="form-label"
+
                                 for="data_evento"
+
                             >
+
                                 Data de realização
+
                             </label>
 
                             <input
+
                                 type="date"
+
                                 id="data_evento"
+
                                 name="data_evento"
+
                                 class="form-input"
+
                                 required
+
                             >
 
                         </div>
-
 
                         <div class="form-group">
 
                             <label
+
                                 class="form-label"
+
                                 for="descricao"
+
                             >
+
                                 Descrição adicional
+
                             </label>
 
                             <input
+
                                 type="text"
+
                                 id="descricao"
+
                                 name="descricao"
+
                                 class="form-input"
+
                             >
 
                         </div>
-
 
                         <button
+
                             type="submit"
+
                             class="btn btn-primary"
+
                         >
+
                             Salvar evento
+
                         </button>
 
                     </form>
@@ -1020,9 +1319,6 @@
                 </div>
 
             </div>
-
-
-            <!-- AGENDA -->
 
             <div class="card">
 
@@ -1040,8 +1336,10 @@
 
                 <div class="card-body">
 
-                    <div id="calendario">
+                    <div id="listaEventos">
+
                         Carregando eventos...
+
                     </div>
 
                 </div>
@@ -1050,29 +1348,37 @@
 
         </section>
 
-
         <!-- =================================================
+
              CONFIGURAÇÕES
+
         ================================================= -->
 
         <section
+
             class="dashboard page-section"
+
             id="configuracoes"
-            style="display: none;"
+
+            style="display:none;"
+
         >
 
             <div class="section-header">
 
                 <h2>
+
                     Configurações
+
                 </h2>
 
                 <p>
+
                     Configurações do painel de gestão.
+
                 </p>
 
             </div>
-
 
             <div class="card">
 
@@ -1091,7 +1397,9 @@
                 <div class="card-body">
 
                     <p>
+
                         Área de configurações do sistema EduClass.
+
                     </p>
 
                 </div>
@@ -1100,701 +1408,9 @@
 
         </section>
 
-
     </main>
 
-
-    <!-- =================================================
-         JAVASCRIPT
-    ================================================= -->
-
-    <script>
-
-        /* =========================================
-           NAVEGAÇÃO DO GESTOR
-        ========================================= */
-
-        function mostrarPagina(pagina) {
-
-            const secoes = document.querySelectorAll('.page-section');
-
-            secoes.forEach(secao => {
-                secao.style.display = 'none';
-            });
-
-            const paginaSelecionada = document.getElementById(pagina);
-
-            if (paginaSelecionada) {
-                paginaSelecionada.style.display = 'block';
-            }
-
-            const menus = document.querySelectorAll('.menu-item[data-page]');
-
-            menus.forEach(menu => {
-                menu.classList.remove('active');
-
-                if (menu.dataset.page === pagina) {
-                    menu.classList.add('active');
-                }
-            });
-
-            atualizarTitulo(pagina);
-        }
-
-
-        function irParaPagina(pagina) {
-            mostrarPagina(pagina);
-        }
-
-
-        function atualizarTitulo(pagina) {
-
-            const titulo = document.getElementById('pageTitle');
-
-            const titulos = {
-                inicio: 'Dashboard',
-                professores: 'Professores',
-                alunos: 'Alunos',
-                recados: 'Recados',
-                calendario: 'Calendário',
-                configuracoes: 'Configurações'
-            };
-
-            titulo.textContent = titulos[pagina] || 'Dashboard';
-        }
-
-
-        /* =========================================
-           CLIQUES DO MENU
-        ========================================= */
-
-        document.querySelectorAll('.menu-item[data-page]').forEach(menu => {
-
-            menu.addEventListener('click', function(event) {
-
-                event.preventDefault();
-
-                const pagina = this.dataset.page;
-
-                mostrarPagina(pagina);
-
-            });
-
-        });
-
-
-        /* =========================================
-           ACESSO RÁPIDO
-        ========================================= */
-
-        document.querySelectorAll('[data-go-page]').forEach(botao => {
-
-            botao.addEventListener('click', function(event) {
-
-                event.preventDefault();
-
-                const pagina = this.dataset.goPage;
-
-                mostrarPagina(pagina);
-
-            });
-
-        });
-
-
-        /* =========================================
-           MENU MOBILE
-        ========================================= */
-
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-
-        if (menuToggle) {
-
-            menuToggle.addEventListener('click', function() {
-
-                sidebar.classList.toggle('open');
-
-                if (sidebarOverlay) {
-                    sidebarOverlay.classList.toggle('active');
-                }
-
-            });
-
-        }
-
-
-        if (sidebarOverlay) {
-
-            sidebarOverlay.addEventListener('click', function() {
-
-                sidebar.classList.remove('open');
-
-                sidebarOverlay.classList.remove('active');
-
-            });
-
-        }
-
-
-        /* =========================================
-           DATA ATUAL
-        ========================================= */
-
-        function mostrarDataAtual() {
-
-            const elemento = document.getElementById('currentDate');
-
-            if (!elemento) {
-                return;
-            }
-
-            const agora = new Date();
-
-            const opcoes = {
-                weekday: 'long',
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-            };
-
-            elemento.textContent = agora.toLocaleDateString(
-                'pt-BR',
-                opcoes
-            );
-
-        }
-
-
-        /* =========================================
-           PROFESSORES
-        ========================================= */
-
-        function carregarListaProfessores() {
-
-            fetch('/listar-professores')
-
-                .then(res => res.json())
-
-                .then(professores => {
-
-                    const lista =
-                        document.getElementById('listaProfessores');
-
-                    if (!professores || professores.length === 0) {
-
-                        lista.innerHTML =
-                            '<li>Nenhum professor cadastrado ainda.</li>';
-
-                        return;
-
-                    }
-
-                    lista.innerHTML = professores.map(p => `
-
-                        <li class="data-list-item">
-
-                            <div>
-
-                                <strong>
-                                    ${p.nome}
-                                </strong>
-
-                                <span>
-                                    ${p.email}
-                                </span>
-
-                            </div>
-
-                            <button
-                                onclick="apagarProfessor(${p.id})"
-                                class="btn btn-danger"
-                            >
-                                Excluir
-                            </button>
-
-                        </li>
-
-                    `).join('');
-
-                })
-
-                .catch(() => {
-
-                    document.getElementById('listaProfessores').innerHTML =
-                        '<li>Erro ao carregar professores.</li>';
-
-                });
-
-        }
-
-
-        function apagarProfessor(id) {
-
-            if (
-                confirm(
-                    'Tem certeza que deseja remover este professor do sistema?'
-                )
-            ) {
-
-                fetch(
-                    `/apagar-professor/${id}`,
-                    {
-                        method: 'DELETE'
-                    }
-                )
-
-                .then(res => res.json())
-
-                .then(() => {
-
-                    carregarListaProfessores();
-
-                    atualizarContadores();
-
-                });
-
-            }
-
-        }
-
-
-        /* =========================================
-           CONTADORES
-        ========================================= */
-
-        function atualizarContadores() {
-
-            fetch('/contadores-gestor')
-
-                .then(res => res.json())
-
-                .then(dados => {
-
-                    document.getElementById('qtdProfessores').innerText =
-                        dados.professores || 0;
-
-                    document.getElementById('qtdRecados').innerText =
-                        dados.recados || 0;
-
-                    document.getElementById('qtdEventos').innerText =
-                        dados.eventos || 0;
-
-                });
-
-        }
-
-
-        /* =========================================
-           ALUNOS
-        ========================================= */
-
-        async function atualizarQuantidadeAlunos() {
-
-            const elemento =
-                document.getElementById('qtdAlunos');
-
-            if (!elemento) {
-                return;
-            }
-
-            try {
-
-                const response =
-                    await fetch('/listar-alunos');
-
-                const alunos =
-                    await response.json();
-
-                elemento.innerText =
-                    Array.isArray(alunos)
-                        ? alunos.length
-                        : 0;
-
-            } catch (error) {
-
-                elemento.innerText = '0';
-
-            }
-
-        }
-
-
-        async function cadastrarAluno(event) {
-
-            event.preventDefault();
-
-            const form =
-                document.getElementById('formAluno');
-
-            const dados =
-                new URLSearchParams(
-                    new FormData(form)
-                );
-
-            try {
-
-                const response =
-                    await fetch(
-                        '/cadastrar-aluno',
-                        {
-                            method: 'POST',
-                            body: dados
-                        }
-                    );
-
-                const resultado =
-                    await response.json();
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        resultado.erro ||
-                        'Erro ao cadastrar aluno.'
-                    );
-
-                }
-
-                alert(
-                    'Aluno cadastrado com sucesso!'
-                );
-
-                form.reset();
-
-                atualizarQuantidadeAlunos();
-
-            } catch (error) {
-
-                alert(
-                    error.message
-                );
-
-            }
-
-        }
-
-
-        /* =========================================
-           RECADOS
-        ========================================= */
-
-        function carregarRecados() {
-
-            fetch('/listar-recados')
-
-                .then(res => res.json())
-
-                .then(recados => {
-
-                    const muralDiv =
-                        document.getElementById('mural');
-
-                    if (!recados || recados.length === 0) {
-
-                        muralDiv.innerHTML =
-                            '<p>Nenhum recado postado até o momento.</p>';
-
-                        return;
-
-                    }
-
-                    muralDiv.innerHTML = recados.map(r => `
-
-                        <div class="communication-item">
-
-                            <div class="communication-icon">
-                                <i class="fa-solid fa-bullhorn"></i>
-                            </div>
-
-                            <div class="communication-content">
-
-                                <div class="communication-title">
-                                    ${r.titulo}
-                                </div>
-
-                                <div class="communication-text">
-                                    ${r.conteudo}
-                                </div>
-
-                                <div class="communication-date">
-                                    Por: <strong>${r.autor}</strong>
-                                </div>
-
-                                <button
-                                    onclick="apagarItem('/apagar-recado/${r.id}', 'recado')"
-                                    class="btn btn-danger"
-                                >
-                                    Apagar recado
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    `).join('');
-
-                });
-
-        }
-
-
-        /* =========================================
-           EVENTOS
-        ========================================= */
-
-        function carregarEventos() {
-
-            fetch('/listar-eventos')
-
-                .then(res => res.json())
-
-                .then(eventos => {
-
-                    const calendarioDiv =
-                        document.getElementById('calendario');
-
-                    if (!eventos || eventos.length === 0) {
-
-                        calendarioDiv.innerHTML =
-                            '<p>Nenhum evento agendado.</p>';
-
-                        return;
-
-                    }
-
-                    calendarioDiv.innerHTML = eventos.map(e => `
-
-                        <div class="communication-item">
-
-                            <div class="communication-icon">
-                                <i class="fa-solid fa-calendar-days"></i>
-                            </div>
-
-                            <div class="communication-content">
-
-                                <div class="communication-title">
-                                    ${e.titulo}
-                                </div>
-
-                                <div class="communication-text">
-                                    Data: ${e.data_evento}
-                                </div>
-
-                                <div class="communication-date">
-                                    ${e.descricao || ''}
-                                </div>
-
-                                <button
-                                    onclick="apagarItem('/apagar-evento/${e.id}', 'evento')"
-                                    class="btn btn-danger"
-                                >
-                                    Apagar evento
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    `).join('');
-
-                });
-
-        }
-
-
-        /* =========================================
-           APAGAR RECADOS / EVENTOS
-        ========================================= */
-
-        function apagarItem(url, tipo) {
-
-            if (
-                confirm(
-                    `Tem certeza que deseja apagar este ${tipo}?`
-                )
-            ) {
-
-                fetch(
-                    url,
-                    {
-                        method: 'DELETE'
-                    }
-                )
-
-                .then(res => res.json())
-
-                .then(() => {
-
-                    carregarRecados();
-
-                    carregarEventos();
-
-                    atualizarContadores();
-
-                });
-
-            }
-
-        }
-
-
-        /* =========================================
-           FORMULÁRIO DE RECADO
-        ========================================= */
-
-        const formRecado =
-            document.getElementById('formRecado');
-
-        if (formRecado) {
-
-            formRecado.addEventListener(
-                'submit',
-                function(event) {
-
-                    event.preventDefault();
-
-                    const dados =
-                        new URLSearchParams(
-                            new FormData(formRecado)
-                        );
-
-                    fetch(
-                        '/cadastrar-recado',
-                        {
-                            method: 'POST',
-                            body: dados
-                        }
-                    )
-
-                    .then(res => res.json())
-
-                    .then(resultado => {
-
-                        if (resultado.erro) {
-
-                            alert(resultado.erro);
-
-                            return;
-
-                        }
-
-                        alert(
-                            'Recado publicado com sucesso!'
-                        );
-
-                        formRecado.reset();
-
-                        carregarRecados();
-
-                        atualizarContadores();
-
-                    })
-
-                    .catch(() => {
-
-                        alert(
-                            'Erro ao publicar o recado.'
-                        );
-
-                    });
-
-                }
-            );
-
-        }
-
-
-        /* =========================================
-           FORMULÁRIO DE EVENTO
-        ========================================= */
-
-        const formEvento =
-            document.getElementById('formEvento');
-
-        if (formEvento) {
-
-            formEvento.addEventListener(
-                'submit',
-                function(event) {
-
-                    event.preventDefault();
-
-                    const dados =
-                        new URLSearchParams(
-                            new FormData(formEvento)
-                        );
-
-                    fetch(
-                        '/cadastrar-evento',
-                        {
-                            method: 'POST',
-                            body: dados
-                        }
-                    )
-
-                    .then(res => res.json())
-
-                    .then(resultado => {
-
-                        if (resultado.erro) {
-
-                            alert(resultado.erro);
-
-                            return;
-
-                        }
-
-                        alert(
-                            'Evento salvo com sucesso!'
-                        );
-
-                        formEvento.reset();
-
-                        carregarEventos();
-
-                        atualizarContadores();
-
-                    })
-
-                    .catch(() => {
-
-                        alert(
-                            'Erro ao salvar o evento.'
-                        );
-
-                    });
-
-                }
-            );
-
-        }
-
-
-        /* =========================================
-           INICIALIZAÇÃO
-        ========================================= */
-
-        document.addEventListener(
-            'DOMContentLoaded',
-            function() {
-
-                mostrarDataAtual();
-
-                atualizarContadores();
-
-                atualizarQuantidadeAlunos();
-
-                carregarListaProfessores();
-
-                carregarRecados();
-
-                carregarEventos();
-
-            }
-        );
-
-    </script>
+    <script src="js/gestor.js"></script>
 
 </body>
 

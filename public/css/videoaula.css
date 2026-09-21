@@ -1,0 +1,231 @@
+/* ================================
+
+   EDUCLASS - ESPAÇO DE FORMAÇÃO
+
+   ================================ */
+
+   :root {
+
+    --primary: #1769d2;
+
+    --primary-dark: #0e57b5;
+
+    --primary-light: #e9f2ff;
+
+    --background: #f4f7fb;
+
+    --surface: #ffffff;
+
+    --text: #172033;
+
+    --text-light: #748198;
+
+    --border: #e4e9f1;
+
+}
+
+* {
+
+    box-sizing: border-box;
+
+}
+
+body {
+
+    font-family: Arial, sans-serif !important;
+
+    background: var(--background) !important;
+
+    color: var(--text) !important;
+
+    margin: 0;
+
+    padding: 20px;
+
+}
+
+/* CABEÇALHO */
+
+body > div:first-of-type {
+
+    background: linear-gradient(135deg, #071a3d, #0b2858) !important;
+
+    border: none !important;
+
+    border-radius: 12px !important;
+
+    padding: 20px !important;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12) !important;
+
+}
+
+body > div:first-of-type h1 {
+
+    color: white !important;
+
+    font-size: 26px !important;
+
+}
+
+body > div:first-of-type a {
+
+    background-color: #1769d2 !important;
+
+    color: white !important;
+
+    border-radius: 8px !important;
+
+    padding: 10px 16px !important;
+
+    transition: 0.2s;
+
+}
+
+body > div:first-of-type a:hover {
+
+    background-color: #0e57b5 !important;
+
+}
+
+/* TEXTO DE INTRODUÇÃO */
+
+body > p {
+
+    color: #748198 !important;
+
+    font-size: 16px !important;
+
+    line-height: 1.6;
+
+    max-width: 900px;
+
+    margin-bottom: 30px !important;
+
+}
+
+/* ÁREA DOS VÍDEOS */
+
+body > div:nth-of-type(2) {
+
+    gap: 22px !important;
+
+}
+
+/* CARDS */
+
+body > div:nth-of-type(2) > div {
+
+    background: white !important;
+
+    border: 1px solid var(--border) !important;
+
+    border-radius: 14px !important;
+
+    width: 320px !important;
+
+    min-height: 250px !important;
+
+    padding: 22px !important;
+
+    box-shadow: 0 4px 14px rgba(23, 32, 51, 0.06) !important;
+
+    transition: 0.25s;
+
+}
+
+body > div:nth-of-type(2) > div:hover {
+
+    transform: translateY(-5px);
+
+    box-shadow: 0 10px 25px rgba(23, 32, 51, 0.12) !important;
+
+    border-color: #c8daf5 !important;
+
+}
+
+/* TÍTULO DOS CARDS */
+
+body > div:nth-of-type(2) h3 {
+
+    color: #172033 !important;
+
+    border-bottom: 2px solid #1769d2 !important;
+
+    font-size: 18px !important;
+
+    line-height: 1.4;
+
+}
+
+/* DESCRIÇÃO */
+
+body > div:nth-of-type(2) p {
+
+    color: #748198 !important;
+
+    line-height: 1.5 !important;
+
+}
+
+/* BOTÃO YOUTUBE */
+
+body > div:nth-of-type(2) a {
+
+    background-color: #1769d2 !important;
+
+    color: white !important;
+
+    border-radius: 8px !important;
+
+    padding: 12px !important;
+
+    transition: 0.2s;
+
+}
+
+body > div:nth-of-type(2) a:hover {
+
+    background-color: #0e57b5 !important;
+
+    transform: translateY(-1px);
+
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 1000px) {
+
+    body > div:nth-of-type(2) {
+
+        justify-content: center !important;
+
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    body {
+
+        padding: 12px;
+
+    }
+
+    body > div:first-of-type {
+
+        flex-direction: column !important;
+
+        align-items: flex-start !important;
+
+        gap: 15px;
+
+    }
+
+    body > div:nth-of-type(2) > div {
+
+        width: 100% !important;
+
+    }
+
+}

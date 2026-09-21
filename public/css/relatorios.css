@@ -1,0 +1,427 @@
+/* ================================
+
+   EDUCLASS - RELATÓRIOS
+
+   ================================ */
+
+   :root {
+
+    --primary: #1769d2;
+
+    --primary-dark: #0e57b5;
+
+    --primary-light: #e9f2ff;
+
+    --background: #f4f7fb;
+
+    --surface: #ffffff;
+
+    --text: #172033;
+
+    --text-light: #748198;
+
+    --border: #e4e9f1;
+
+}
+
+* {
+
+    box-sizing: border-box;
+
+}
+
+body {
+
+    margin: 0;
+
+    font-family: Arial, sans-serif;
+
+    background: var(--background);
+
+    color: var(--text);
+
+}
+
+/* CONTAINER PRINCIPAL */
+
+.dashboard {
+
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    padding: 30px 20px;
+
+}
+
+/* CABEÇALHO */
+
+.dashboard-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    background: linear-gradient(135deg, #071a3d, #0b2858);
+
+    color: white;
+
+    padding: 20px 25px;
+
+    border-radius: 12px;
+
+    margin-bottom: 25px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+
+}
+
+.header-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+}
+
+.edu-logo {
+
+    width: 48px;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: white;
+
+    color: #0b3d91;
+
+    border-radius: 10px;
+
+    font-weight: bold;
+
+    font-size: 18px;
+
+}
+
+.header-left h1 {
+
+    margin: 0;
+
+    font-size: 24px;
+
+}
+
+.header-left span {
+
+    font-size: 12px;
+
+    color: #b8c8df;
+
+}
+
+/* BOTÕES DO CABEÇALHO */
+
+.header-right {
+
+    display: flex;
+
+    gap: 10px;
+
+}
+
+.header-button {
+
+    text-decoration: none;
+
+    color: white;
+
+    background: #1769d2;
+
+    padding: 10px 16px;
+
+    border-radius: 8px;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+
+}
+
+.header-button:hover {
+
+    background: #0e57b5;
+
+}
+
+.logout-button {
+
+    background: rgba(255, 255, 255, 0.12);
+
+}
+
+.logout-button:hover {
+
+    background: rgba(255, 255, 255, 0.2);
+
+}
+
+/* CARD */
+
+.dashboard-card {
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    padding: 30px;
+
+    box-shadow: 0 4px 14px rgba(23, 32, 51, 0.06);
+
+}
+
+.card-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 10px;
+
+}
+
+.card-label {
+
+    color: var(--primary);
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    letter-spacing: 0.5px;
+
+}
+
+.card-header h2 {
+
+    margin: 5px 0 0;
+
+    font-size: 25px;
+
+}
+
+.card-icon {
+
+    width: 52px;
+
+    height: 52px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: var(--primary-light);
+
+    border-radius: 12px;
+
+    font-size: 24px;
+
+}
+
+.dashboard-card > p {
+
+    color: var(--text-light);
+
+    margin-bottom: 28px;
+
+}
+
+/* CAMPOS */
+
+.input-group {
+
+    margin-bottom: 20px;
+
+}
+
+.input-group label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    color: var(--text);
+
+}
+
+.input-group select,
+
+.input-group textarea {
+
+    width: 100%;
+
+    padding: 13px 14px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+
+    background: #fff;
+
+    color: var(--text);
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition: 0.2s;
+
+}
+
+.input-group select:focus,
+
+.input-group textarea:focus {
+
+    border-color: var(--primary);
+
+    box-shadow: 0 0 0 3px rgba(23, 105, 210, 0.1);
+
+}
+
+.input-group select:disabled {
+
+    background: #f1f4f8;
+
+    cursor: not-allowed;
+
+}
+
+.input-group textarea {
+
+    resize: vertical;
+
+    min-height: 180px;
+
+    font-family: Arial, sans-serif;
+
+}
+
+/* BOTÃO ENVIAR */
+
+.save-planning {
+
+    border: none;
+
+    background: var(--primary);
+
+    color: white;
+
+    padding: 13px 22px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+}
+
+.save-planning:hover {
+
+    background: var(--primary-dark);
+
+    transform: translateY(-1px);
+
+}
+
+/* RODAPÉ */
+
+.dashboard-footer {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 25px;
+
+    padding: 15px 5px;
+
+    color: var(--text-light);
+
+    font-size: 12px;
+
+}
+
+/* RESPONSIVO */
+
+@media (max-width: 700px) {
+
+    .dashboard {
+
+        padding: 15px;
+
+    }
+
+    .dashboard-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+
+    }
+
+    .header-right {
+
+        width: 100%;
+
+    }
+
+    .header-button {
+
+        flex: 1;
+
+        text-align: center;
+
+    }
+
+    .dashboard-card {
+
+        padding: 20px;
+
+    }
+
+    .dashboard-footer {
+
+        flex-direction: column;
+
+        gap: 8px;
+
+        text-align: center;
+
+    }
+
+}
