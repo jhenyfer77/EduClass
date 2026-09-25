@@ -1121,6 +1121,58 @@ app.get('/listar-relatorios', (req, res) => {
 });
 
 // =====================================================
+
+// PROFESSOR - LISTAR PROFESSORES
+
+// =====================================================
+
+app.get('/listar-professores', (req, res) => {
+
+    db.all(
+
+        `
+
+        SELECT id, nome, email
+
+        FROM usuarios
+
+        WHERE tipo = 'professor'
+
+        ORDER BY nome ASC
+
+        `,
+
+        [],
+
+        (err, professores) => {
+
+            if (err) {
+
+                console.error(
+
+                    'Erro ao listar professores:',
+
+                    err.message
+
+                );
+
+                return res.status(500).json({
+
+                    erro: 'Erro ao carregar professores.'
+
+                });
+
+            }
+
+            res.json(professores);
+
+        }
+
+    );
+
+});
+
+// =====================================================
 // GESTOR - CONTADORES
 // =====================================================
 
