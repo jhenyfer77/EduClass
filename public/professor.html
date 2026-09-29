@@ -454,7 +454,7 @@
                             <span>Lançar notas</span>
                         </a>
 
-                        <a href="#" class="quick-action" data-go-page="frequencia">
+                        <a href="chamada.html" class="quick-action" data-go-page="frequencia">
                             <div class="quick-action-icon">
                                 <i class="fa-solid fa-user-check"></i>
                             </div>
@@ -932,54 +932,207 @@
 
         </section>
 
-        <!-- =================================================
-             CONFIGURAÇÕES
-        ================================================= -->
+       <!-- =================================================
 
-        <section class="dashboard page-section" id="configuracoes" style="display: none;">
+     CONFIGURAÇÕES
 
-            <div class="section-header">
-                <h2>Configurações</h2>
-                <p>Gerencie as configurações do seu perfil.</p>
-            </div>
+================================================= -->
 
-            <div class="card">
+<section class="dashboard page-section" id="configuracoes" style="display: none;">
 
-                <div class="card-body">
+    <div class="section-header">
 
-                    <div class="form-group">
-                        <label class="form-label">
-                            Nome do professor
-                        </label>
+        <h2>Configurações</h2>
 
-                        <input
-                            type="text"
-                            class="form-input"
-                            value="Professor"
-                        >
-                    </div>
+        <p>Gerencie as configurações do seu perfil.</p>
 
-                    <div class="form-group">
-                        <label class="form-label">
-                            E-mail
-                        </label>
+    </div>
 
-                        <input
-                            type="email"
-                            class="form-input"
-                            placeholder="professor@email.com"
-                        >
-                    </div>
+    <!-- DADOS DO PERFIL -->
 
-                    <button type="button" class="btn btn-primary">
-                        Salvar configurações
-                    </button>
+    <div class="card">
 
-                </div>
+        <div class="card-body">
+
+            <div class="form-group">
+
+                <label class="form-label">
+
+                    Nome do professor
+
+                </label>
+
+                <input
+
+                    type="text"
+
+                    class="form-input"
+
+                    value="Professor"
+
+                >
 
             </div>
 
-        </section>
+            <div class="form-group">
+
+                <label class="form-label">
+
+                    E-mail
+
+                </label>
+
+                <input
+
+                    type="email"
+
+                    class="form-input"
+
+                    placeholder="professor@email.com"
+
+                >
+
+            </div>
+
+            <button type="button" class="btn btn-primary">
+
+                Salvar configurações
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- =================================================
+
+     MINHAS ESCOLAS
+
+================================================= -->
+
+<div class="card" style="margin-top: 22px;">
+
+    <div class="card-header">
+
+        <div class="card-title">
+
+            <i class="fa-solid fa-school"></i>
+
+            Minhas escolas
+
+        </div>
+
+    </div>
+
+    <div class="card-body">
+
+        <p>
+
+            Escolha qual escola você deseja acessar.
+
+        </p>
+
+        <div
+
+            id="listaMinhasEscolas"
+
+            style="margin-top: 20px;"
+
+        >
+
+            <p>Carregando escolas...</p>
+
+        </div>
+
+        <!-- ENTRAR EM OUTRA ESCOLA -->
+
+        <div
+
+            style="
+
+                margin-top: 25px;
+
+                padding-top: 20px;
+
+                border-top: 1px solid #ddd;
+
+            "
+
+        >
+
+            <h3 style="margin-bottom: 10px;">
+
+                Entrar em outra escola
+
+            </h3>
+
+            <p>
+
+                Digite o código fornecido pela direção.
+
+            </p>
+
+            <div
+
+                class="form-group"
+
+                style="margin-top: 15px;"
+
+            >
+
+                <label class="form-label">
+
+                    Código da escola
+
+                </label>
+
+                <input
+
+                    type="text"
+
+                    id="codigoNovaEscola"
+
+                    class="form-input"
+
+                    placeholder="Ex.: EDU-002"
+
+                    style="text-transform: uppercase;"
+
+                >
+
+            </div>
+
+            <button
+
+                type="button"
+
+                class="btn btn-primary"
+
+                id="btnEntrarEscola"
+
+            >
+
+                <i class="fa-solid fa-plus"></i>
+
+                Entrar em outra escola
+
+            </button>
+
+            <div
+
+                id="resultadoEscola"
+
+                style="margin-top: 15px;"
+
+            ></div>
+
+        </div>
+
+    </div>
+
+    </div>
+
+    </section>
 
     </main>
 

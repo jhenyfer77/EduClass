@@ -1464,6 +1464,325 @@
 
         }
 
+   /* =========================================================
+
+   MINHAS ESCOLAS
+
+========================================================= */
+
+async function carregarMinhasEscolas() {
+
+    const lista = document.getElementById("listaMinhasEscolas");
+
+    if (!lista) return;
+
+    try {
+
+        // Descobre qual escola está sendo acessada agora
+
+        const respostaAtual = await fetch("/escola-atual");
+
+        let escolaAtualId = null;
+
+        if (respostaAtual.ok) {
+
+            const escolaAtual = await respostaAtual.json();
+
+            escolaAtualId =
+
+                escolaAtual.id ||
+
+                escolaAtual.escola_id ||
+
+                null;
+
+        }
+
+        // Busca todas as escolas do gestor
+
+        const response = await fetch("/minhas-escolas");
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                "Não foi possível carregar as escolas."
+
+            );
+
+        }
+
+        const escolas = await response.json();
+
+        if (!Array.isArray(escolas) || escolas.length === 0) {
+
+            lista.innerHTML = `
+
+                <div class="empty-card">
+
+                    <p>
+
+                        Você ainda não está vinculado
+
+                        a nenhuma escola.
+
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+        lista.innerHTML = "";
+
+        escolas.forEach(escola => {
+
+            const card = document.createElement("div");
+
+            card.style.cssText = `
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: space-between;
+
+                gap: 15px;
+
+                padding: 16px;
+
+                margin-bottom: 12px;
+
+                border: 1px solid #dce6ef;
+
+                border-radius: 12px;
+
+                background: #f8fbff;
+
+            `;
+
+            const estaAtual =
+
+                String(escola.id) === String(escolaAtualId);
+
+            card.innerHTML = `
+
+                <div>
+
+                    <strong>
+
+                        ${escapeHTML(escola.nome)}
+
+                    </strong>
+
+                    <div style="
+
+                        margin-top: 5px;
+
+                        font-size: 13px;
+
+                        color: #718096;
+
+                    ">
+
+                        Código:
+
+                        ${escapeHTML(escola.codigo)}
+
+                    </div>
+
+                </div>
+
+                ${
+
+                    estaAtual
+
+                    ?
+
+                    `<span style="
+
+                        padding: 7px 12px;
+
+                        border-radius: 20px;
+
+                        background: #dff7e8;
+
+                        color: #198754;
+
+                        font-size: 13px;
+
+                        font-weight: 600;
+
+                    ">
+
+                        ✓ Acessando agora
+
+                    </span>`
+
+                    :
+
+                    `<button
+
+                        type="button"
+
+                        class="btn btn-primary btn-trocar-escola"
+
+                        data-escola-id="${escola.id}"
+
+                    >
+
+                        <i class="fa-solid fa-right-to-bracket"></i>
+
+                        Entrar
+
+                    </button>`
+
+                }
+
+            `;
+
+            lista.appendChild(card);
+
+        });
+
+        // Botões para trocar de escola
+
+        document
+
+            .querySelectorAll(".btn-trocar-escola")
+
+            .forEach(botao => {
+
+                botao.addEventListener(
+
+                    "click",
+
+                    async () => {
+
+                        botao.disabled = true;
+
+                        botao.innerHTML = `
+
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+
+                            Entrando...
+
+                        `;
+
+                        try {
+
+                            const response =
+
+                                await fetch(
+
+                                    "/selecionar-escola",
+
+                                    {
+
+                                        method: "POST",
+
+                                        headers: {
+
+                                            "Content-Type":
+
+                                                "application/json"
+
+                                        },
+
+                                        body: JSON.stringify({
+
+                                            escola_id:
+
+                                                botao.dataset.escolaId
+
+                                        })
+
+                                    }
+
+                                );
+
+                            const dados =
+
+                                await response.json();
+
+                            if (!response.ok) {
+
+                                throw new Error(
+
+                                    dados.erro ||
+
+                                    "Erro ao trocar de escola."
+
+                                );
+
+                            }
+
+                            // Recarrega o painel com a nova escola
+
+                            window.location.reload();
+
+                        } catch (error) {
+
+                            console.error(
+
+                                "Erro ao trocar de escola:",
+
+                                error
+
+                            );
+
+                            alert(error.message);
+
+                            botao.disabled = false;
+
+                            botao.innerHTML = `
+
+                                <i class="fa-solid fa-right-to-bracket"></i>
+
+                                Entrar
+
+                            `;
+
+                        }
+
+                    }
+
+                );
+
+            });
+
+    } catch (error) {
+
+        console.error(
+
+            "Erro ao carregar escolas:",
+
+            error
+
+        );
+
+        lista.innerHTML = `
+
+            <div class="empty-card">
+
+                <p>
+
+                    ❌ Erro ao carregar escolas.
+
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
         /* =========================================
 
            INICIALIZAÇÃO
@@ -1489,7 +1808,8 @@
                 carregarEventos();
 
                 carregarRelatorios();
-
+                 
+                carregarMinhasEscolas();
             }
 
         );

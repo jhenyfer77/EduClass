@@ -1149,6 +1149,404 @@ function mostrarAlunos(idTurma) {
 }
 
 /* =========================================================
+
+   ENTRAR EM OUTRA ESCOLA
+
+========================================================= */
+
+function configurarEntradaEmOutraEscola() {
+
+    const botao = document.getElementById("btnEntrarEscola");
+
+    const campo = document.getElementById("codigoNovaEscola");
+
+    const resultado = document.getElementById("resultadoEscola");
+
+    if (!botao || !campo || !resultado) {
+
+        return;
+
+    }
+
+    botao.addEventListener("click", async () => {
+
+        const codigo = campo.value.trim().toUpperCase();
+
+        if (!codigo) {
+
+            resultado.innerHTML = `
+
+                <div class="empty-card">
+
+                    <p>Digite o código da escola.</p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+        botao.disabled = true;
+
+        botao.innerHTML = `
+
+            <i class="fa-solid fa-spinner fa-spin"></i>
+
+            Verificando...
+
+        `;
+
+        try {
+
+            const response = await fetch("/vincular-escola", {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                body: JSON.stringify({
+
+                    codigo_escola: codigo
+
+                })
+
+            });
+
+            const dados = await response.json();
+
+            if (!response.ok) {
+
+                throw new Error(
+
+                    dados.erro || "Não foi possível entrar na escola."
+
+                );
+
+            }
+
+            resultado.innerHTML = `
+
+                <div class="empty-card">
+
+                    <p>
+
+                        ✅ Você entrou na escola
+
+                        <strong>${escapeHTML(dados.escola.nome)}</strong>
+
+                        com sucesso!
+
+                    </p>
+
+                </div>
+
+            `;
+
+            campo.value = "";
+
+        } catch (error) {
+
+            console.error(
+
+                "Erro ao entrar na escola:",
+
+                error
+
+            );
+
+            resultado.innerHTML = `
+
+                <div class="empty-card">
+
+                    <p>
+
+                        ❌ ${escapeHTML(error.message)}
+
+                    </p>
+
+                </div>
+
+            `;
+
+        } finally {
+
+            botao.disabled = false;
+
+            botao.innerHTML = `
+
+                <i class="fa-solid fa-plus"></i>
+
+                Entrar em outra escola
+
+            `;
+
+        }
+
+    });
+
+}
+
+/* =========================================================
+
+   MINHAS ESCOLAS
+
+========================================================= */
+
+async function carregarMinhasEscolas() {
+
+    const lista = document.getElementById("listaMinhasEscolas");
+
+    if (!lista) return;
+
+    try {
+
+        const response = await fetch("/minhas-escolas");
+
+        if (!response.ok) {
+
+            throw new Error("Não foi possível carregar as escolas.");
+
+        }
+
+        const escolas = await response.json();
+
+        if (!escolas.length) {
+
+            lista.innerHTML = `
+
+                <div class="empty-card">
+
+                    <p>Você ainda não está vinculado a nenhuma escola.</p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+        lista.innerHTML = "";
+
+        const escolaAtual =
+
+            window.escolaAtualId || null;
+
+        escolas.forEach(escola => {
+
+            const card = document.createElement("div");
+
+            card.style.cssText = `
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: space-between;
+
+                gap: 15px;
+
+                padding: 16px;
+
+                margin-bottom: 12px;
+
+                border: 1px solid #dce6ef;
+
+                border-radius: 12px;
+
+                background: #f8fbff;
+
+            `;
+
+            const estaAtual =
+
+                String(escola.id) === String(escolaAtual);
+
+            card.innerHTML = `
+
+                <div>
+
+                    <strong>${escapeHTML(escola.nome)}</strong>
+
+                    <div style="
+
+                        margin-top: 5px;
+
+                        font-size: 13px;
+
+                        color: #718096;
+
+                    ">
+
+                        Código: ${escapeHTML(escola.codigo)}
+
+                    </div>
+
+                </div>
+
+                ${
+
+                    estaAtual
+
+                    ?
+
+                    `<span style="
+
+                        padding: 7px 12px;
+
+                        border-radius: 20px;
+
+                        background: #dff7e8;
+
+                        color: #198754;
+
+                        font-size: 13px;
+
+                        font-weight: 600;
+
+                    ">
+
+                        ✓ Acessando agora
+
+                    </span>`
+
+                    :
+
+                    `<button
+
+                        type="button"
+
+                        class="btn btn-primary btn-trocar-escola"
+
+                        data-escola-id="${escola.id}"
+
+                    >
+
+                        Entrar
+
+                    </button>`
+
+                }
+
+            `;
+
+            lista.appendChild(card);
+
+        });
+
+        document
+
+            .querySelectorAll(".btn-trocar-escola")
+
+            .forEach(botao => {
+
+                botao.addEventListener("click", () => {
+
+                    selecionarEscola(
+
+                        botao.dataset.escolaId
+
+                    );
+
+                });
+
+            });
+
+    } catch (error) {
+
+        console.error(error);
+
+        lista.innerHTML = `
+
+            <div class="empty-card">
+
+                <p>
+
+                    ❌ Não foi possível carregar suas escolas.
+
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+/* =========================================================
+
+   TROCAR DE ESCOLA
+
+========================================================= */
+
+async function selecionarEscola(escolaId) {
+
+    try {
+
+        const response = await fetch(
+
+            "/selecionar-escola",
+
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                body: JSON.stringify({
+
+                    escola_id: escolaId
+
+                })
+
+            }
+
+        );
+
+        const dados = await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                dados.erro ||
+
+                "Não foi possível trocar de escola."
+
+            );
+
+        }
+
+        window.location.reload();
+
+    } catch (error) {
+
+        alert(error.message);
+
+        console.error(
+
+            "Erro ao trocar de escola:",
+
+            error
+
+        );
+
+    }
+
+}
+
+/* =========================================================
    INICIALIZAÇÃO
 ========================================================= */
 
@@ -1173,5 +1571,9 @@ document.addEventListener("DOMContentLoaded", () => {
     carregarPlanejamentos();
 
     carregarAlunosDasTurmas();
+
+    configurarEntradaEmOutraEscola();
+
+    carregarMinhasEscolas();
 
 });
