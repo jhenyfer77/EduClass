@@ -1,394 +1,1851 @@
 const express = require('express');
+
 const sqlite3 = require('sqlite3').verbose();
+
 const path = require('path');
+
 const session = require('express-session');
 
 const app = express();
+
 const PORT = 3000;
 
 // =====================================================
+
 // CONFIGURAÇÕES
+
 // =====================================================
 
 app.use(session({
+
     secret: 'chave-secreta-educlass',
+
     resave: false,
-    saveUninitialized: true,
+
+    saveUninitialized: false,
+
     cookie: {
+
         secure: false
+
     }
+
 }));
 
 app.use(express.urlencoded({ extended: true }));
+
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 // =====================================================
+
 // BANCO DE DADOS
+
 // =====================================================
 
 const db = new sqlite3.Database('./database.db', (err) => {
 
     if (err) {
 
-        console.error(
-            'Erro ao conectar ao banco:',
-            err.message
-        );
+        console.error('Erro ao conectar ao banco:', err.message);
 
     } else {
 
-        console.log(
-            'Conectado com sucesso ao Banco de Dados SQLite.'
+        console.log('Conectado com sucesso ao Banco de Dados SQLite.');
+
+    }
+
+});
+
+// =====================================================
+
+// FUNÇÃO PARA FINALIZAR O SERVIDOR
+
+// =====================================================
+
+function iniciarServidor() {
+
+    app.listen(PORT, () => {
+
+        console.log(`Servidor rodando em http://localhost:${PORT}`);
+
+    });
+
+}
+
+// =====================================================
+
+// MIGRAÇÕES
+
+// =====================================================
+
+const migrations = [
+
+    ['recados', 'escola_id', 'INTEGER'],
+
+    ['eventos', 'escola_id', 'INTEGER'],
+
+    ['planejamentos', 'escola_id', 'INTEGER'],
+
+    ['alunos', 'escola_id', 'INTEGER'],
+
+    ['frequencias', 'escola_id', 'INTEGER'],
+
+    ['relatorios', 'escola_id', 'INTEGER'],
+
+    ['relatorios', 'status', "TEXT DEFAULT 'Pendente'"],
+
+    ['relatorios', 'providencia', 'TEXT'],
+
+    ['relatorios', 'observacao_gestao', 'TEXT'],
+
+    ['relatorios', 'lido_gestao', 'INTEGER DEFAULT 0']
+
+];
+
+function executarMigracoes(callback) {
+
+    let indice = 0;
+
+    function proximaMigracao() {
+
+        if (indice >= migrations.length) {
+
+            return callback(null);
+
+        }
+
+        const [table, column, definition] = migrations[indice];
+
+        indice++;
+
+        db.all(
+
+            `PRAGMA table_info(${table})`,
+
+            (err, columns) => {
+
+                if (err) {
+
+                    return callback(err);
+
+                }
+
+                const existe = columns.some(
+
+                    coluna => coluna.name === column
+
+                );
+
+                if (existe) {
+
+                    return proximaMigracao();
+
+                }
+
+                console.log(
+
+                    `Criando coluna ${table}.${column}...`
+
+                );
+
+                db.run(
+
+                    `ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`,
+
+                    (alterErr) => {
+
+                        if (alterErr) {
+
+                            return callback(alterErr);
+
+                        }
+
+                        proximaMigracao();
+
+                    }
+
+                );
+
+            }
+
         );
 
     }
 
-});
+    proximaMigracao();
 
+}
 
 // =====================================================
-// CRIAÇÃO DAS TABELAS
+
+// MIGRAR DADOS ANTIGOS PARA ESCOLA A
+
 // =====================================================
 
-db.serialize(() => {
+function migrarDadosAntigos(callback) {
 
-    // USUÁRIOS
-    db.run(`
-        CREATE TABLE IF NOT EXISTS usuarios (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT NOT NULL,
-            email TEXT UNIQUE NOT NULL,
-            senha TEXT NOT NULL,
-            tipo TEXT CHECK(tipo IN ('gestor', 'professor')) NOT NULL
-        )
-    `);
+    db.get(
 
+        `
 
-    // RECADOS
-    db.run(`
-        CREATE TABLE IF NOT EXISTS recados (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            titulo TEXT NOT NULL,
-            conteudo TEXT NOT NULL,
-            autor TEXT NOT NULL,
-            data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    `);
+        SELECT id, nome, codigo
 
+        FROM escolas
 
-    // EVENTOS
-    db.run(`
-        CREATE TABLE IF NOT EXISTS eventos (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            titulo TEXT NOT NULL,
-            data_evento TEXT NOT NULL,
-            descricao TEXT
-        )
-    `);
+        WHERE codigo = 'EDU-001'
 
+        `,
 
-    // PLANEJAMENTOS
-    db.run(`
-        CREATE TABLE IF NOT EXISTS planejamentos (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            materia TEXT NOT NULL,
-            conteudo TEXT NOT NULL,
-            data_planejada TEXT NOT NULL
-        )
-    `);
+        (err, escolaA) => {
 
+            if (err) {
 
-    // ALUNOS
-    db.run(`
-        CREATE TABLE IF NOT EXISTS alunos (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT NOT NULL,
-            turma TEXT NOT NULL
-        )
-    `);
+                return callback(err);
 
+            }
 
-    // FREQUÊNCIAS
-    db.run(`
-        CREATE TABLE IF NOT EXISTS frequencias (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            aluno_id INTEGER NOT NULL,
-            turma TEXT NOT NULL,
-            status TEXT NOT NULL,
-            data_chamada DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    `);
+            if (!escolaA) {
 
+                return callback(
 
-    // RELATÓRIOS
-    db.run(`
-        CREATE TABLE IF NOT EXISTS relatorios (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            aluno_id INTEGER NOT NULL,
-            aluno_nome TEXT NOT NULL,
-            turma TEXT NOT NULL,
-            professor TEXT,
-            conteudo TEXT NOT NULL,
-            data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    `);
+                    new Error('Escola A (EDU-001) não foi encontrada.')
 
-});
+                );
 
-// CAMPOS DA AVALIAÇÃO DA GESTÃO
+            }
 
+            const tabelas = [
 
-app.post('/avaliar-relatorio', (req, res) => {
+                'alunos',
 
-    const {
+                'recados',
 
-        id,
+                'eventos',
 
-        status,
+                'planejamentos',
 
-        providencia,
+                'frequencias',
 
-        observacao_gestao
+                'relatorios'
 
-    } = req.body;
+            ];
 
-    if (!id || !providencia) {
+            let indice = 0;
 
-        return res.status(400).json({
+            function migrarProximaTabela() {
 
-            erro: 'Informe a providência da gestão.'
+                if (indice >= tabelas.length) {
 
-        });
+                    return callback(null);
 
-    }
+                }
+
+                const tabela = tabelas[indice];
+
+                indice++;
+
+                db.run(
+
+                    `
+
+                    UPDATE ${tabela}
+
+                    SET escola_id = ?
+
+                    WHERE escola_id IS NULL
+
+                    `,
+
+                    [escolaA.id],
+
+                    function(updateErr) {
+
+                        if (updateErr) {
+
+                            return callback(updateErr);
+
+                        }
+
+                        if (this.changes > 0) {
+
+                            console.log(
+
+                                `${this.changes} registro(s) antigo(s) de ${tabela} foram vinculados à Escola A.`
+
+                            );
+
+                        }
+
+                        migrarProximaTabela();
+
+                    }
+
+                );
+
+            }
+
+            migrarProximaTabela();
+
+        }
+
+    );
+
+}
+
+// =====================================================
+
+// PREPARAR BANCO
+
+// =====================================================
+
+function prepararBanco() {
+
+    // =================================================
+
+    // GARANTIR ESCOLA A
+
+    // =================================================
 
     db.run(
 
         `
 
-        UPDATE relatorios
+        INSERT OR IGNORE INTO escolas
 
-        SET
+        (nome, codigo)
 
-            status = ?,
-
-            providencia = ?,
-
-            observacao_gestao = ?,
-
-            lido_gestao = 1
-
-        WHERE id = ?
+        VALUES ('Escola A', 'EDU-001')
 
         `,
 
-        [
-
-            status || 'Em acompanhamento',
-
-            providencia,
-
-            observacao_gestao || '',
-
-            id
-
-        ],
-
-        function (err) {
+        (err) => {
 
             if (err) {
 
                 console.error(
 
-                    'ERRO AO AVALIAR RELATÓRIO:',
+                    'Erro criando Escola A:',
 
                     err.message
 
                 );
 
-                return res.status(500).json({
-
-                    erro: 'Erro ao registrar a avaliação.'
-
-                });
+                process.exit(1);
 
             }
 
-            res.json({
+            // =================================================
 
-                mensagem: 'Providência da gestão registrada com sucesso!'
+            // GARANTIR ESCOLA B
 
-            });
+            // =================================================
+
+            db.run(
+
+                `
+
+                INSERT OR IGNORE INTO escolas
+
+                (nome, codigo)
+
+                VALUES ('Escola B', 'EDU-002')
+
+                `,
+
+                (err) => {
+
+                    if (err) {
+
+                        console.error(
+
+                            'Erro criando Escola B:',
+
+                            err.message
+
+                        );
+
+                        process.exit(1);
+
+                    }
+
+                    // =================================================
+
+                    // CORRIGIR NOMES DAS ESCOLAS
+
+                    // =================================================
+
+                    db.run(
+
+                        `
+
+                        UPDATE escolas
+
+                        SET nome = 'Escola A'
+
+                        WHERE codigo = 'EDU-001'
+
+                        `,
+
+                        (err) => {
+
+                            if (err) {
+
+                                console.error(err.message);
+
+                                process.exit(1);
+
+                            }
+
+                            db.run(
+
+                                `
+
+                                UPDATE escolas
+
+                                SET nome = 'Escola B'
+
+                                WHERE codigo = 'EDU-002'
+
+                                `,
+
+                                (err) => {
+
+                                    if (err) {
+
+                                        console.error(err.message);
+
+                                        process.exit(1);
+
+                                    }
+
+                                    // =================================================
+
+                                    // MIGRAÇÕES
+
+                                    // =================================================
+
+                                    executarMigracoes(
+
+                                        (migrationErr) => {
+
+                                            if (migrationErr) {
+
+                                                console.error(
+
+                                                    'Erro nas migrações:',
+
+                                                    migrationErr.message
+
+                                                );
+
+                                                process.exit(1);
+
+                                            }
+
+                                            // =================================================
+
+                                            // USUÁRIOS ANTIGOS SEM ESCOLA
+
+                                            // VÃO PARA A ESCOLA A
+
+                                            // =================================================
+
+                                            db.get(
+
+                                                `
+
+                                                SELECT id
+
+                                                FROM escolas
+
+                                                WHERE codigo = 'EDU-001'
+
+                                                `,
+
+                                                (err, escolaA) => {
+
+                                                    if (err || !escolaA) {
+
+                                                        console.error(
+
+                                                            'Não foi possível encontrar a Escola A.'
+
+                                                        );
+
+                                                        process.exit(1);
+
+                                                    }
+
+                                                    db.run(
+
+                                                        `
+
+                                                        INSERT OR IGNORE INTO usuario_escolas
+
+                                                        (usuario_id, escola_id)
+
+                                                        SELECT
+
+                                                            usuarios.id,
+
+                                                            ?
+
+                                                        FROM usuarios
+
+                                                        WHERE NOT EXISTS (
+
+                                                            SELECT 1
+
+                                                            FROM usuario_escolas
+
+                                                            WHERE usuario_escolas.usuario_id = usuarios.id
+
+                                                        )
+
+                                                        `,
+
+                                                        [escolaA.id],
+
+                                                        (err) => {
+
+                                                            if (err) {
+
+                                                                console.error(
+
+                                                                    'Erro vinculando usuários antigos:',
+
+                                                                    err.message
+
+                                                                );
+
+                                                                process.exit(1);
+
+                                                            }
+
+                                                            // =================================================
+
+                                                            // DADOS ANTIGOS
+
+                                                            // =================================================
+
+                                                            migrarDadosAntigos(
+
+                                                                (dataErr) => {
+
+                                                                    if (dataErr) {
+
+                                                                        console.error(
+
+                                                                            'Erro migrando dados antigos:',
+
+                                                                            dataErr.message
+
+                                                                        );
+
+                                                                        process.exit(1);
+
+                                                                    }
+
+                                                                    console.log(
+
+                                                                        'Banco de dados preparado com sucesso.'
+
+                                                                    );
+
+                                                                    console.log(
+
+                                                                        'Dados antigos sem escola foram vinculados à Escola A.'
+
+                                                                    );
+
+                                                                    iniciarServidor();
+
+                                                                }
+
+                                                            );
+
+                                                        }
+
+                                                    );
+
+                                                }
+
+                                            );
+
+                                        }
+
+                                    );
+
+                                }
+
+                            );
+
+                        }
+
+                    );
+
+                }
+
+            );
 
         }
 
     );
 
+}
+
+// =====================================================
+
+// CRIAÇÃO DAS TABELAS
+
+// =====================================================
+
+db.serialize(() => {
+
+    // =====================================================
+
+    // USUÁRIOS
+
+    // =====================================================
+
+    db.run(`
+
+        CREATE TABLE IF NOT EXISTS usuarios (
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            nome TEXT NOT NULL,
+
+            email TEXT UNIQUE NOT NULL,
+
+            senha TEXT NOT NULL,
+
+            tipo TEXT CHECK(tipo IN ('gestor', 'professor')) NOT NULL
+
+        )
+
+    `);
+
+    // =====================================================
+
+    // ESCOLAS
+
+    // =====================================================
+
+    db.run(`
+
+        CREATE TABLE IF NOT EXISTS escolas (
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            nome TEXT NOT NULL,
+
+            codigo TEXT UNIQUE NOT NULL
+
+        )
+
+    `);
+
+    // =====================================================
+
+    // USUÁRIOS ↔ ESCOLAS
+
+    // =====================================================
+
+    db.run(`
+
+        CREATE TABLE IF NOT EXISTS usuario_escolas (
+
+            usuario_id INTEGER NOT NULL,
+
+            escola_id INTEGER NOT NULL,
+
+            PRIMARY KEY (usuario_id, escola_id),
+
+            FOREIGN KEY (usuario_id)
+
+                REFERENCES usuarios(id),
+
+            FOREIGN KEY (escola_id)
+
+                REFERENCES escolas(id)
+
+        )
+
+    `);
+
+    // =====================================================
+
+    // RECADOS
+
+    // =====================================================
+
+    db.run(`
+
+        CREATE TABLE IF NOT EXISTS recados (
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            titulo TEXT NOT NULL,
+
+            conteudo TEXT NOT NULL,
+
+            autor TEXT NOT NULL,
+
+            escola_id INTEGER,
+
+            data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP
+
+        )
+
+    `);
+
+    // =====================================================
+
+    // EVENTOS
+
+    // =====================================================
+
+    db.run(`
+
+        CREATE TABLE IF NOT EXISTS eventos (
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            titulo TEXT NOT NULL,
+
+            data_evento TEXT NOT NULL,
+
+            descricao TEXT,
+
+            escola_id INTEGER
+
+        )
+
+    `);
+
+    // =====================================================
+
+    // PLANEJAMENTOS
+
+    // =====================================================
+
+    db.run(`
+
+        CREATE TABLE IF NOT EXISTS planejamentos (
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            materia TEXT NOT NULL,
+
+            conteudo TEXT NOT NULL,
+
+            data_planejada TEXT NOT NULL,
+
+            escola_id INTEGER
+
+        )
+
+    `);
+
+    // =====================================================
+
+    // ALUNOS
+
+    // =====================================================
+
+    db.run(`
+
+        CREATE TABLE IF NOT EXISTS alunos (
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            nome TEXT NOT NULL,
+
+            turma TEXT NOT NULL,
+
+            escola_id INTEGER
+
+        )
+
+    `);
+
+    // =====================================================
+
+    // FREQUÊNCIAS
+
+    // =====================================================
+
+    db.run(`
+
+        CREATE TABLE IF NOT EXISTS frequencias (
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            aluno_id INTEGER NOT NULL,
+
+            turma TEXT NOT NULL,
+
+            status TEXT NOT NULL,
+
+            escola_id INTEGER,
+
+            data_chamada DATETIME DEFAULT CURRENT_TIMESTAMP
+
+        )
+
+    `);
+
+    // =====================================================
+
+    // RELATÓRIOS
+
+    // =====================================================
+
+    db.run(`
+
+        CREATE TABLE IF NOT EXISTS relatorios (
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            aluno_id INTEGER NOT NULL,
+
+            aluno_nome TEXT NOT NULL,
+
+            turma TEXT NOT NULL,
+
+            professor TEXT,
+
+            conteudo TEXT NOT NULL,
+
+            escola_id INTEGER,
+
+            status TEXT DEFAULT 'Pendente',
+
+            providencia TEXT,
+
+            observacao_gestao TEXT,
+
+            lido_gestao INTEGER DEFAULT 0,
+
+            data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP
+
+        )
+
+    `, (err) => {
+
+        if (err) {
+
+            console.error(
+
+                'Erro criando tabelas:',
+
+                err.message
+
+            );
+
+            process.exit(1);
+
+        }
+
+        prepararBanco();
+
+    });
+
 });
 
 // =====================================================
+
+// FUNÇÕES DE SEGURANÇA
+
+// =====================================================
+
+function exigirLogin(req, res, next) {
+
+    if (!req.session.usuarioLogado) {
+
+        return res.status(401).json({
+
+            erro: 'Usuário não está logado.'
+
+        });
+
+    }
+
+    next();
+
+}
+
+function exigirEscola(req, res, next) {
+
+    if (!req.session.usuarioLogado) {
+
+        return res.status(401).json({
+
+            erro: 'Usuário não está logado.'
+
+        });
+
+    }
+
+    if (!req.session.escolaSelecionada) {
+
+        return res.status(403).json({
+
+            erro: 'Nenhuma escola foi selecionada.'
+
+        });
+
+    }
+
+    next();
+
+}
+
+function escolaAtual(req) {
+
+    if (req.session.escolaSelecionada) {
+
+        return req.session.escolaSelecionada.id;
+
+    }
+
+    return null;
+
+}
+
+// =====================================================
+
 // LOGIN
+
 // =====================================================
 
 app.get('/', (req, res) => {
 
     res.sendFile(
-        path.join(__dirname, 'public', 'index.html')
+
+        path.join(
+
+            __dirname,
+
+            'public',
+
+            'index.html'
+
+        )
+
     );
 
 });
 
-
 app.post('/login', (req, res) => {
 
-    const {
-        email,
-        senha
-    } = req.body;
-
+    const { email, senha } = req.body;
 
     db.get(
-        `SELECT * FROM usuarios WHERE email = ?`,
-        [email],
+
+        `
+
+        SELECT *
+
+        FROM usuarios
+
+        WHERE email = ?
+
+        AND senha = ?
+
+        `,
+
+        [email, senha],
+
         (err, usuario) => {
 
             if (err) {
 
+                console.error(
+
+                    'ERRO NO LOGIN:',
+
+                    err.message
+
+                );
+
                 return res.status(500).send(
+
                     'Erro no servidor.'
+
                 );
 
             }
 
-
-            if (
-                !usuario ||
-                String(usuario.senha).trim() !==
-                String(senha).trim()
-            ) {
+            if (!usuario) {
 
                 return res.send(`
-                    <h2>
-                        E-mail ou senha incorretos!
-                    </h2>
 
-                    <a href="/">
-                        Tentar novamente
-                    </a>
+                    <h2>Usuário ou senha incorretos.</h2>
+
+                    <a href="/">Voltar para o login</a>
+
                 `);
 
             }
 
+            db.all(
 
-            req.session.usuarioLogado = {
+                `
 
-                id: usuario.id,
-                nome: usuario.nome,
-                tipo: usuario.tipo
+                SELECT
 
-            };
+                    escolas.id,
 
+                    escolas.nome,
 
-            if (usuario.tipo === 'gestor') {
+                    escolas.codigo
 
-                res.redirect('/gestor.html');
+                FROM usuario_escolas
 
-            } else {
+                INNER JOIN escolas
 
-                res.redirect('/professor.html');
+                    ON escolas.id = usuario_escolas.escola_id
 
-            }
+                WHERE usuario_escolas.usuario_id = ?
+
+                ORDER BY escolas.nome ASC
+
+                `,
+
+                [usuario.id],
+
+                (err, escolas) => {
+
+                    if (err) {
+
+                        console.error(
+
+                            'ERRO AO CARREGAR ESCOLAS:',
+
+                            err.message
+
+                        );
+
+                        return res.status(500).send(
+
+                            'Erro ao carregar escolas.'
+
+                        );
+
+                    }
+
+                    req.session.usuarioLogado = {
+
+                        id: usuario.id,
+
+                        nome: usuario.nome,
+
+                        tipo: usuario.tipo,
+
+                        escolas: escolas
+
+                    };
+
+                    req.session.escolaSelecionada = null;
+
+                    if (escolas.length === 0) {
+
+                        return res.send(`
+
+                            <h2>
+
+                                Você ainda não está vinculado a nenhuma escola.
+
+                            </h2>
+
+                            <a href="/">Voltar para o login</a>
+
+                        `);
+
+                    }
+
+                    if (escolas.length === 1) {
+
+                        req.session.escolaSelecionada =
+
+                            escolas[0];
+
+                        req.session.usuarioLogado.escola_id =
+
+                            escolas[0].id;
+
+                        if (usuario.tipo === 'gestor') {
+
+                            return res.redirect('/gestor.html');
+
+                        }
+
+                        return res.redirect('/professor.html');
+
+                    }
+
+                    return res.redirect(
+
+                        '/escolher-escola.html'
+
+                    );
+
+                }
+
+            );
 
         }
+
     );
 
 });
 
-
-// =====================================================
-// CADASTRO DE USUÁRIO
 // =====================================================
 
-app.post('/cadastro', (req, res) => {
+// CADASTRAR PROFESSOR
 
-    const {
-        name,
-        email,
-        password,
-        userType
-    } = req.body;
+// =====================================================
 
+app.post(
 
-    if (
-        !name ||
-        !email ||
-        !password ||
-        !userType
-    ) {
+    '/cadastrar-professor',
 
-        return res.send(`
-            <h2>
-                Erro: Preencha todos os campos!
-            </h2>
+    exigirEscola,
 
-            <a href="/">
-                Voltar
-            </a>
-        `);
+    (req, res) => {
+
+        if (
+
+            req.session.usuarioLogado.tipo !== 'gestor'
+
+        ) {
+
+            return res.status(403).send(
+
+                'Apenas a gestão pode cadastrar professores.'
+
+            );
+
+        }
+
+        const {
+
+            nome,
+
+            email,
+
+            senha
+
+        } = req.body;
+
+        if (!nome || !email || !senha) {
+
+            return res.status(400).send(
+
+                'Preencha todos os campos.'
+
+            );
+
+        }
+
+        db.run(
+
+            `
+
+            INSERT INTO usuarios
+
+            (
+
+                nome,
+
+                email,
+
+                senha,
+
+                tipo
+
+            )
+
+            VALUES (?, ?, ?, 'professor')
+
+            `,
+
+            [nome, email, senha],
+
+            function(err) {
+
+                if (err) {
+
+                    return res.send(`
+
+                        <h2>Erro: E-mail já cadastrado!</h2>
+
+                        <a href="/gestor.html">Voltar</a>
+
+                    `);
+
+                }
+
+                const usuarioId = this.lastID;
+
+                db.run(
+
+                    `
+
+                    INSERT OR IGNORE INTO usuario_escolas
+
+                    (
+
+                        usuario_id,
+
+                        escola_id
+
+                    )
+
+                    VALUES (?, ?)
+
+                    `,
+
+                    [
+
+                        usuarioId,
+
+                        escolaAtual(req)
+
+                    ],
+
+                    (linkErr) => {
+
+                        if (linkErr) {
+
+                            return res.status(500).send(
+
+                                'Professor criado, mas não foi possível vinculá-lo à escola.'
+
+                            );
+
+                        }
+
+                        res.redirect('/gestor.html');
+
+                    }
+
+                );
+
+            }
+
+        );
 
     }
 
+);
 
-    db.run(
-        `
-        INSERT INTO usuarios
-        (nome, email, senha, tipo)
-        VALUES (?, ?, ?, ?)
-        `,
-        [
-            name,
-            email,
-            password,
-            userType
-        ],
-        (err) => {
+// =====================================================
 
-            if (err) {
+// VINCULAR ESCOLA
 
-                return res.send(`
-                    <h2>
-                        Erro: Este e-mail já está cadastrado!
-                    </h2>
+// =====================================================
 
-                    <a href="/">
-                        Voltar
-                    </a>
-                `);
+app.post(
+
+    '/vincular-escola',
+
+    exigirLogin,
+
+    (req, res) => {
+
+        const {
+
+            codigo_escola,
+
+            usuario_id
+
+        } = req.body;
+
+        // =================================================
+
+        // PROFESSOR ENTRA EM OUTRA ESCOLA
+
+        // =================================================
+
+        if (
+
+            req.session.usuarioLogado.tipo === 'professor'
+
+        ) {
+
+            if (!codigo_escola) {
+
+                return res.status(400).json({
+
+                    erro: 'Digite o código da escola.'
+
+                });
 
             }
 
+            db.get(
 
-            res.send(`
-                <h2>
-                    Cadastro realizado com sucesso!
-                </h2>
+                `
 
-                <a href="/">
-                    Fazer login
-                </a>
-            `);
+                SELECT id, nome, codigo
+
+                FROM escolas
+
+                WHERE codigo = ?
+
+                `,
+
+                [
+
+                    codigo_escola
+
+                        .trim()
+
+                        .toUpperCase()
+
+                ],
+
+                (err, escola) => {
+
+                    if (err) {
+
+                        return res.status(500).json({
+
+                            erro: err.message
+
+                        });
+
+                    }
+
+                    if (!escola) {
+
+                        return res.status(404).json({
+
+                            erro: 'Código da escola inválido.'
+
+                        });
+
+                    }
+
+                    const usuarioId =
+
+                        req.session.usuarioLogado.id;
+
+                    db.run(
+
+                        `
+
+                        INSERT OR IGNORE INTO usuario_escolas
+
+                        (
+
+                            usuario_id,
+
+                            escola_id
+
+                        )
+
+                        VALUES (?, ?)
+
+                        `,
+
+                        [
+
+                            usuarioId,
+
+                            escola.id
+
+                        ],
+
+                        (err) => {
+
+                            if (err) {
+
+                                return res.status(500).json({
+
+                                    erro: err.message
+
+                                });
+
+                            }
+
+                            res.json({
+
+                                mensagem:
+
+                                    'Você entrou na escola com sucesso!',
+
+                                escola: escola
+
+                            });
+
+                        }
+
+                    );
+
+                }
+
+            );
+
+            return;
 
         }
-    );
 
-});
+        // =================================================
 
+        // GESTOR VINCULA PROFESSOR
+
+        // =================================================
+
+        if (
+
+            req.session.usuarioLogado.tipo === 'gestor'
+
+        ) {
+
+            if (!req.session.escolaSelecionada) {
+
+                return res.status(403).json({
+
+                    erro:
+
+                        'Selecione uma escola antes de vincular um professor.'
+
+                });
+
+            }
+
+            if (!usuario_id || !codigo_escola) {
+
+                return res.status(400).json({
+
+                    erro:
+
+                        'Usuário e código da escola são obrigatórios.'
+
+                });
+
+            }
+
+            db.get(
+
+                `
+
+                SELECT id, nome, codigo
+
+                FROM escolas
+
+                WHERE codigo = ?
+
+                `,
+
+                [
+
+                    codigo_escola
+
+                        .trim()
+
+                        .toUpperCase()
+
+                ],
+
+                (err, escola) => {
+
+                    if (err) {
+
+                        return res.status(500).json({
+
+                            erro: err.message
+
+                        });
+
+                    }
+
+                    if (!escola) {
+
+                        return res.status(404).json({
+
+                            erro:
+
+                                'Código da escola inválido.'
+
+                        });
+
+                    }
+
+                    db.get(
+
+                        `
+
+                        SELECT id, nome, tipo
+
+                        FROM usuarios
+
+                        WHERE id = ?
+
+                        `,
+
+                        [usuario_id],
+
+                        (err, usuario) => {
+
+                            if (err) {
+
+                                return res.status(500).json({
+
+                                    erro: err.message
+
+                                });
+
+                            }
+
+                            if (!usuario) {
+
+                                return res.status(404).json({
+
+                                    erro:
+
+                                        'Professor não encontrado.'
+
+                                });
+
+                            }
+
+                            if (
+
+                                usuario.tipo !== 'professor'
+
+                            ) {
+
+                                return res.status(400).json({
+
+                                    erro:
+
+                                        'Somente professores podem ser vinculados.'
+
+                                });
+
+                            }
+
+                            db.run(
+
+                                `
+
+                                INSERT OR IGNORE INTO usuario_escolas
+
+                                (
+
+                                    usuario_id,
+
+                                    escola_id
+
+                                )
+
+                                VALUES (?, ?)
+
+                                `,
+
+                                [
+
+                                    usuario_id,
+
+                                    escola.id
+
+                                ],
+
+                                (err) => {
+
+                                    if (err) {
+
+                                        return res.status(500).json({
+
+                                            erro: err.message
+
+                                        });
+
+                                    }
+
+                                    res.json({
+
+                                        mensagem:
+
+                                            'Professor vinculado à escola com sucesso!',
+
+                                        escola: escola
+
+                                    });
+
+                                }
+
+                            );
+
+                        }
+
+                    );
+
+                }
+
+            );
+
+            return;
+
+        }
+
+        return res.status(403).json({
+
+            erro: 'Usuário não autorizado.'
+
+        });
+
+    }
+
+);
 
 // =====================================================
+
+// MINHAS ESCOLAS
+
+// =====================================================
+
+app.get(
+
+    '/minhas-escolas',
+
+    exigirLogin,
+
+    (req, res) => {
+
+        db.all(
+
+            `
+
+            SELECT
+
+                escolas.id,
+
+                escolas.nome,
+
+                escolas.codigo
+
+            FROM usuario_escolas
+
+            INNER JOIN escolas
+
+                ON escolas.id = usuario_escolas.escola_id
+
+            WHERE usuario_escolas.usuario_id = ?
+
+            ORDER BY escolas.nome ASC
+
+            `,
+
+            [
+
+                req.session.usuarioLogado.id
+
+            ],
+
+            (err, escolas) => {
+
+                if (err) {
+
+                    return res.status(500).json({
+
+                        erro:
+
+                            'Erro ao carregar escolas.'
+
+                    });
+
+                }
+
+                res.json(escolas);
+
+            }
+
+        );
+
+    }
+
+);
+
+// =====================================================
+
+// SELECIONAR ESCOLA
+
+// =====================================================
+
+app.post(
+
+    '/selecionar-escola',
+
+    exigirLogin,
+
+    (req, res) => {
+
+        const usuarioId =
+
+            req.session.usuarioLogado.id;
+
+        const escolaId =
+
+            req.body.escola_id;
+
+        if (!escolaId) {
+
+            return res.status(400).json({
+
+                erro: 'Escola não informada.'
+
+            });
+
+        }
+
+        db.get(
+
+            `
+
+            SELECT
+
+                escolas.id,
+
+                escolas.nome,
+
+                escolas.codigo
+
+            FROM escolas
+
+            INNER JOIN usuario_escolas
+
+                ON usuario_escolas.escola_id = escolas.id
+
+            WHERE escolas.id = ?
+
+            AND usuario_escolas.usuario_id = ?
+
+            `,
+
+            [
+
+                escolaId,
+
+                usuarioId
+
+            ],
+
+            (err, escola) => {
+
+                if (err) {
+
+                    return res.status(500).json({
+
+                        erro: err.message
+
+                    });
+
+                }
+
+                if (!escola) {
+
+                    return res.status(403).json({
+
+                        erro:
+
+                            'Você não possui acesso a esta escola.'
+
+                    });
+
+                }
+
+                // =================================================
+
+                // CORREÇÃO PRINCIPAL
+
+                // =================================================
+
+                req.session.escolaSelecionada = escola;
+
+                req.session.usuarioLogado.escola_id =
+
+                    escola.id;
+
+                res.json({
+
+                    mensagem:
+
+                        'Escola selecionada com sucesso!',
+
+                    escola: escola,
+
+                    tipo:
+
+                        req.session.usuarioLogado.tipo
+
+                });
+
+            }
+
+        );
+
+    }
+
+);
+
+// =====================================================
+
+// ESCOLA ATUAL
+
+// =====================================================
+
+app.get(
+
+    '/escola-atual',
+
+    exigirLogin,
+
+    (req, res) => {
+
+        const escola =
+
+            req.session.escolaSelecionada;
+
+        if (!escola) {
+
+            return res.json({
+
+                escola_id: null,
+
+                nome: null,
+
+                codigo: null
+
+            });
+
+        }
+
+        res.json({
+
+            escola_id: escola.id,
+
+            nome: escola.nome,
+
+            codigo: escola.codigo
+
+        });
+
+    }
+
+);
+
+// =====================================================
+
 // LOGOUT
+
 // =====================================================
 
 app.get('/logout', (req, res) => {
@@ -398,7 +1855,9 @@ app.get('/logout', (req, res) => {
         if (err) {
 
             return res.send(
+
                 'Erro ao sair do sistema.'
+
             );
 
         }
@@ -409,931 +1868,1906 @@ app.get('/logout', (req, res) => {
 
 });
 
-
-// =====================================================
-// PROFESSOR - CADASTRAR PROFESSOR
 // =====================================================
 
-app.post('/cadastrar-professor', (req, res) => {
-
-    const {
-        nome,
-        email,
-        senha
-    } = req.body;
-
-
-    db.run(
-        `
-        INSERT INTO usuarios
-        (nome, email, senha, tipo)
-        VALUES (?, ?, ?, 'professor')
-        `,
-        [
-            nome,
-            email,
-            senha
-        ],
-        (err) => {
-
-            if (err) {
-
-                return res.send(`
-                    <h2>
-                        Erro: E-mail já cadastrado!
-                    </h2>
-
-                    <a href="/gestor.html">
-                        Voltar
-                    </a>
-                `);
-
-            }
-
-
-            res.redirect('/gestor.html');
-
-        }
-    );
-
-});
-
-
-// =====================================================
 // RECADOS
+
 // =====================================================
 
-app.post('/criar-recado', (req, res) => {
+app.post(
 
-    const {
-        titulo,
-        conteudo,
-        autor
-    } = req.body;
+    '/criar-recado',
 
+    exigirEscola,
 
-    db.run(
-        `
-        INSERT INTO recados
-        (titulo, conteudo, autor)
-        VALUES (?, ?, ?)
-        `,
-        [
+    (req, res) => {
+
+        const {
+
             titulo,
+
             conteudo,
+
             autor
-        ],
-        (err) => {
 
-            if (err) {
+        } = req.body;
 
-                return res.status(500).json({
-                    erro: 'Erro ao salvar recado.'
-                });
+        if (!titulo || !conteudo) {
 
-            }
+            return res.status(400).json({
 
+                erro:
 
-            res.json({
-                mensagem: 'Recado salvo com sucesso!'
+                    'Título e conteúdo são obrigatórios.'
+
             });
 
         }
-    );
 
-});
+        db.run(
 
+            `
 
-app.get('/listar-recados', (req, res) => {
+            INSERT INTO recados
 
-    db.all(
-        `
-        SELECT *
-        FROM recados
-        ORDER BY data_criacao DESC
-        `,
-        [],
-        (err, rows) => {
+            (
 
-            if (err) {
+                titulo,
 
-                return res.status(500).json({
-                    erro: err.message
+                conteudo,
+
+                autor,
+
+                escola_id
+
+            )
+
+            VALUES (?, ?, ?, ?)
+
+            `,
+
+            [
+
+                titulo,
+
+                conteudo,
+
+                autor ||
+
+                    req.session.usuarioLogado.nome,
+
+                escolaAtual(req)
+
+            ],
+
+            (err) => {
+
+                if (err) {
+
+                    console.error(
+
+                        'ERRO AO CRIAR RECADO:',
+
+                        err.message
+
+                    );
+
+                    return res.status(500).json({
+
+                        erro:
+
+                            'Erro ao salvar recado.'
+
+                    });
+
+                }
+
+                res.json({
+
+                    mensagem:
+
+                        'Recado salvo com sucesso!'
+
                 });
 
             }
 
+        );
 
-            res.json(rows);
+    }
 
-        }
-    );
+);
 
-});
+app.get(
 
+    '/listar-recados',
 
-app.delete('/apagar-recado/:id', (req, res) => {
+    exigirEscola,
 
-    const {
-        id
-    } = req.params;
+    (req, res) => {
 
+        db.all(
 
-    db.run(
-        `DELETE FROM recados WHERE id = ?`,
-        [id],
-        (err) => {
+            `
 
-            if (err) {
+            SELECT *
 
-                return res.status(500).json({
-                    erro: err.message
+            FROM recados
+
+            WHERE escola_id = ?
+
+            ORDER BY data_criacao DESC
+
+            `,
+
+            [
+
+                escolaAtual(req)
+
+            ],
+
+            (err, rows) => {
+
+                if (err) {
+
+                    return res.status(500).json({
+
+                        erro: err.message
+
+                    });
+
+                }
+
+                res.json(rows);
+
+            }
+
+        );
+
+    }
+
+);
+
+app.delete(
+
+    '/apagar-recado/:id',
+
+    exigirEscola,
+
+    (req, res) => {
+
+        db.run(
+
+            `
+
+            DELETE FROM recados
+
+            WHERE id = ?
+
+            AND escola_id = ?
+
+            `,
+
+            [
+
+                req.params.id,
+
+                escolaAtual(req)
+
+            ],
+
+            (err) => {
+
+                if (err) {
+
+                    return res.status(500).json({
+
+                        erro: err.message
+
+                    });
+
+                }
+
+                res.json({
+
+                    mensagem:
+
+                        'Recado apagado com sucesso!'
+
                 });
 
             }
 
+        );
 
-            res.json({
-                mensagem: 'Recado apagado com sucesso!'
-            });
+    }
 
-        }
-    );
-
-});
-
+);
 
 // =====================================================
+
 // EVENTOS
+
 // =====================================================
 
-app.post('/criar-evento', (req, res) => {
+app.post(
 
-    const {
-        titulo,
-        data_evento,
-        descricao
-    } = req.body;
+    '/criar-evento',
 
+    exigirEscola,
 
-    db.run(
-        `
-        INSERT INTO eventos
-        (titulo, data_evento, descricao)
-        VALUES (?, ?, ?)
-        `,
-        [
+    (req, res) => {
+
+        const {
+
             titulo,
+
             data_evento,
+
             descricao
-        ],
-        (err) => {
 
-            if (err) {
+        } = req.body;
 
-                return res.status(500).json({
-                    erro: 'Erro ao salvar evento.'
-                });
+        if (!titulo || !data_evento) {
 
-            }
+            return res.status(400).json({
 
+                erro:
 
-            res.json({
-                mensagem: 'Evento salvo com sucesso!'
+                    'Título e data são obrigatórios.'
+
             });
 
         }
-    );
 
-});
+        db.run(
 
+            `
 
-app.get('/listar-eventos', (req, res) => {
+            INSERT INTO eventos
 
-    db.all(
-        `
-        SELECT *
-        FROM eventos
-        ORDER BY data_evento ASC
-        `,
-        [],
-        (err, rows) => {
+            (
 
-            if (err) {
+                titulo,
 
-                return res.status(500).json({
-                    erro: err.message
+                data_evento,
+
+                descricao,
+
+                escola_id
+
+            )
+
+            VALUES (?, ?, ?, ?)
+
+            `,
+
+            [
+
+                titulo,
+
+                data_evento,
+
+                descricao || '',
+
+                escolaAtual(req)
+
+            ],
+
+            (err) => {
+
+                if (err) {
+
+                    return res.status(500).json({
+
+                        erro:
+
+                            'Erro ao salvar evento.'
+
+                    });
+
+                }
+
+                res.json({
+
+                    mensagem:
+
+                        'Evento salvo com sucesso!'
+
                 });
 
             }
 
+        );
 
-            res.json(rows);
+    }
 
-        }
-    );
+);
 
-});
+app.get(
 
+    '/listar-eventos',
 
-app.delete('/apagar-evento/:id', (req, res) => {
+    exigirEscola,
 
-    const {
-        id
-    } = req.params;
+    (req, res) => {
 
+        db.all(
 
-    db.run(
-        `DELETE FROM eventos WHERE id = ?`,
-        [id],
-        (err) => {
+            `
 
-            if (err) {
+            SELECT *
 
-                return res.status(500).json({
-                    erro: err.message
+            FROM eventos
+
+            WHERE escola_id = ?
+
+            ORDER BY data_evento ASC
+
+            `,
+
+            [
+
+                escolaAtual(req)
+
+            ],
+
+            (err, rows) => {
+
+                if (err) {
+
+                    return res.status(500).json({
+
+                        erro: err.message
+
+                    });
+
+                }
+
+                res.json(rows);
+
+            }
+
+        );
+
+    }
+
+);
+
+app.delete(
+
+    '/apagar-evento/:id',
+
+    exigirEscola,
+
+    (req, res) => {
+
+        db.run(
+
+            `
+
+            DELETE FROM eventos
+
+            WHERE id = ?
+
+            AND escola_id = ?
+
+            `,
+
+            [
+
+                req.params.id,
+
+                escolaAtual(req)
+
+            ],
+
+            (err) => {
+
+                if (err) {
+
+                    return res.status(500).json({
+
+                        erro: err.message
+
+                    });
+
+                }
+
+                res.json({
+
+                    mensagem:
+
+                        'Evento apagado com sucesso!'
+
                 });
 
             }
 
+        );
 
-            res.json({
-                mensagem: 'Evento apagado com sucesso!'
-            });
+    }
 
-        }
-    );
-
-});
-
+);
 
 // =====================================================
+
 // PLANEJAMENTOS
+
 // =====================================================
 
-app.post('/criar-planejamento', (req, res) => {
+app.post(
 
-    const {
-        materia,
-        conteudo,
-        data_planejada
-    } = req.body;
+    '/criar-planejamento',
 
+    exigirEscola,
 
-    db.run(
-        `
-        INSERT INTO planejamentos
-        (materia, conteudo, data_planejada)
-        VALUES (?, ?, ?)
-        `,
-        [
+    (req, res) => {
+
+        const {
+
             materia,
+
             conteudo,
+
             data_planejada
-        ],
-        (err) => {
 
-            if (err) {
+        } = req.body;
 
-                return res.status(500).json({
-                    erro: 'Erro ao salvar planejamento.'
+        db.run(
+
+            `
+
+            INSERT INTO planejamentos
+
+            (
+
+                materia,
+
+                conteudo,
+
+                data_planejada,
+
+                escola_id
+
+            )
+
+            VALUES (?, ?, ?, ?)
+
+            `,
+
+            [
+
+                materia,
+
+                conteudo,
+
+                data_planejada,
+
+                escolaAtual(req)
+
+            ],
+
+            (err) => {
+
+                if (err) {
+
+                    return res.status(500).json({
+
+                        erro:
+
+                            'Erro ao salvar planejamento.'
+
+                    });
+
+                }
+
+                res.json({
+
+                    mensagem:
+
+                        'Planejamento salvo com sucesso!'
+
                 });
 
             }
 
+        );
 
-            res.json({
-                mensagem: 'Planejamento salvo com sucesso!'
-            });
+    }
 
-        }
-    );
+);
 
-});
+app.get(
 
+    '/listar-planejamentos',
 
-app.get('/listar-planejamentos', (req, res) => {
+    exigirEscola,
 
-    db.all(
-        `
-        SELECT *
-        FROM planejamentos
-        ORDER BY data_planejada ASC
-        `,
-        [],
-        (err, rows) => {
+    (req, res) => {
 
-            if (err) {
+        db.all(
 
-                return res.status(500).json({
-                    erro: err.message
+            `
+
+            SELECT *
+
+            FROM planejamentos
+
+            WHERE escola_id = ?
+
+            ORDER BY data_planejada ASC
+
+            `,
+
+            [
+
+                escolaAtual(req)
+
+            ],
+
+            (err, rows) => {
+
+                if (err) {
+
+                    return res.status(500).json({
+
+                        erro: err.message
+
+                    });
+
+                }
+
+                res.json(rows);
+
+            }
+
+        );
+
+    }
+
+);
+
+app.delete(
+
+    '/apagar-planejamento/:id',
+
+    exigirEscola,
+
+    (req, res) => {
+
+        db.run(
+
+            `
+
+            DELETE FROM planejamentos
+
+            WHERE id = ?
+
+            AND escola_id = ?
+
+            `,
+
+            [
+
+                req.params.id,
+
+                escolaAtual(req)
+
+            ],
+
+            (err) => {
+
+                if (err) {
+
+                    return res.status(500).json({
+
+                        erro: err.message
+
+                    });
+
+                }
+
+                res.json({
+
+                    mensagem:
+
+                        'Planejamento apagado com sucesso!'
+
                 });
 
             }
 
+        );
 
-            res.json(rows);
+    }
 
-        }
-    );
-
-});
-
-
-app.delete('/apagar-planejamento/:id', (req, res) => {
-
-    const {
-        id
-    } = req.params;
-
-
-    db.run(
-        `DELETE FROM planejamentos WHERE id = ?`,
-        [id],
-        (err) => {
-
-            if (err) {
-
-                return res.status(500).json({
-                    erro: err.message
-                });
-
-            }
-
-
-            res.json({
-                mensagem: 'Planejamento apagado com sucesso!'
-            });
-
-        }
-    );
-
-});
-
+);
 
 // =====================================================
+
 // ALUNOS
+
 // =====================================================
 
-// CADASTRAR ALUNO
-app.post('/cadastrar-aluno', (req, res) => {
+app.post(
 
-    const {
-        nome,
-        turma
-    } = req.body;
+    '/cadastrar-aluno',
 
+    exigirEscola,
 
-    if (!nome || !turma) {
+    (req, res) => {
 
-        return res.status(400).json({
-            erro: 'Nome e turma são obrigatórios.'
-        });
+        const {
 
-    }
-
-
-    db.run(
-        `
-        INSERT INTO alunos
-        (nome, turma)
-        VALUES (?, ?)
-        `,
-        [
             nome,
+
             turma
-        ],
-        function(err) {
 
-            if (err) {
+        } = req.body;
 
-                console.error(
-                    'ERRO AO CADASTRAR ALUNO:',
-                    err.message
-                );
+        if (!nome || !turma) {
 
-                return res.status(500).json({
-                    erro: err.message
+            return res.status(400).json({
+
+                erro:
+
+                    'Nome e turma são obrigatórios.'
+
+            });
+
+        }
+
+        db.run(
+
+            `
+
+            INSERT INTO alunos
+
+            (
+
+                nome,
+
+                turma,
+
+                escola_id
+
+            )
+
+            VALUES (?, ?, ?)
+
+            `,
+
+            [
+
+                nome,
+
+                turma,
+
+                escolaAtual(req)
+
+            ],
+
+            function(err) {
+
+                if (err) {
+
+                    console.error(
+
+                        'ERRO AO CADASTRAR ALUNO:',
+
+                        err.message
+
+                    );
+
+                    return res.status(500).json({
+
+                        erro: err.message
+
+                    });
+
+                }
+
+                res.json({
+
+                    mensagem:
+
+                        'Aluno cadastrado com sucesso!',
+
+                    id: this.lastID
+
                 });
 
             }
 
+        );
 
-            res.json({
-                mensagem: 'Aluno cadastrado com sucesso!',
-                id: this.lastID
-            });
+    }
 
-        }
-    );
-
-});
-
+);
 
 // =====================================================
+
 // LISTAR ALUNOS
-// =====================================================
-//
-// AQUI ESTÁ A CORREÇÃO PRINCIPAL.
-//
-// Se a chamada mandar:
-// /listar-alunos?turma=3C
-//
-// serão mostrados SOMENTE os alunos da 3C.
-//
-// Se não mandar turma,
-// mostra todos os alunos.
-// =====================================================
-
-app.get('/listar-alunos', (req, res) => {
-
-    const turma = req.query.turma;
-
-
-    console.log(
-        'TURMA SELECIONADA:',
-        turma
-    );
-
-
-    if (turma) {
-
-        db.all(
-            `
-            SELECT id, nome, turma
-            FROM alunos
-            WHERE TRIM(turma) = TRIM(?)
-            ORDER BY nome ASC
-            `,
-            [turma],
-            (err, rows) => {
-
-                if (err) {
-
-                    console.error(
-                        'ERRO AO LISTAR ALUNOS:',
-                        err.message
-                    );
-
-                    return res.status(500).json({
-                        erro: err.message
-                    });
-
-                }
-
-
-                console.log(
-                    'ALUNOS DA TURMA:',
-                    rows
-                );
-
-
-                res.json(rows);
-
-            }
-        );
-
-    } else {
-
-        db.all(
-            `
-            SELECT id, nome, turma
-            FROM alunos
-            ORDER BY turma ASC, nome ASC
-            `,
-            [],
-            (err, rows) => {
-
-                if (err) {
-
-                    console.error(
-                        'ERRO AO LISTAR ALUNOS:',
-                        err.message
-                    );
-
-                    return res.status(500).json({
-                        erro: err.message
-                    });
-
-                }
-
-
-                console.log(
-                    'TODOS OS ALUNOS:',
-                    rows
-                );
-
-
-                res.json(rows);
-
-            }
-        );
-
-    }
-
-});
-
 
 // =====================================================
-// CHAMADA
-// =====================================================
 
-app.post('/registrar-chamada', (req, res) => {
+app.get(
 
-    const {
-        turma,
-        chamada
-    } = req.body;
+    '/listar-alunos',
 
+    exigirEscola,
 
-    if (
-        !turma ||
-        !Array.isArray(chamada) ||
-        chamada.length === 0
-    ) {
+    (req, res) => {
 
-        return res.status(400).json({
-            erro: 'Turma e chamada são obrigatórios.'
-        });
+        const turma = req.query.turma;
 
-    }
+        if (turma) {
 
+            db.all(
 
-    const stmt = db.prepare(`
-        INSERT INTO frequencias
-        (aluno_id, turma, status)
-        VALUES (?, ?, ?)
-    `);
-
-
-    chamada.forEach(item => {
-
-        stmt.run(
-            item.aluno_id,
-            turma,
-            item.status
-        );
-
-    });
-
-
-    stmt.finalize(err => {
-
-        if (err) {
-
-            console.error(
-                'ERRO AO REGISTRAR CHAMADA:',
-                err.message
-            );
-
-            return res.status(500).json({
-                erro: err.message
-            });
-
-        }
-
-
-        res.json({
-            mensagem: 'Chamada registrada com sucesso!'
-        });
-
-    });
-
-});
-
-
-// =====================================================
-// RELATÓRIOS
-// =====================================================
-
-app.post('/criar-relatorio', (req, res) => {
-
-    const {
-        aluno_id,
-        aluno_nome,
-        turma,
-        professor,
-        conteudo
-    } = req.body;
-
-
-    if (
-        !aluno_id ||
-        !aluno_nome ||
-        !turma ||
-        !conteudo
-    ) {
-
-        return res.status(400).json({
-            erro: 'Preencha todos os campos obrigatórios.'
-        });
-
-    }
-
-
-    db.run(
-        `
-        INSERT INTO relatorios
-        (
-            aluno_id,
-            aluno_nome,
-            turma,
-            professor,
-            conteudo
-        )
-        VALUES (?, ?, ?, ?, ?)
-        `,
-        [
-            aluno_id,
-            aluno_nome,
-            turma,
-            professor || '',
-            conteudo
-        ],
-        (err) => {
-
-            if (err) {
-
-                console.error(
-                    'ERRO AO CRIAR RELATÓRIO:',
-                    err.message
-                );
-
-                return res.status(500).json({
-                    erro: 'Erro ao criar relatório.'
-                });
-
-            }
-
-
-            res.json({
-                mensagem:
-                    'Relatório enviado para a gestão com sucesso!'
-            });
-
-        }
-    );
-
-});
-
-app.get('/listar-relatorios', (req, res) => {
-
-    db.all(
-
-        `
-
-        SELECT *
-
-        FROM relatorios
-
-        ORDER BY id DESC
-
-        `,
-
-        [],
-
-        (err, rows) => {
-
-            if (err) {
-
-                console.error(
-
-                    'ERRO AO LISTAR RELATÓRIOS:',
-
-                    err.message
-
-                );
-
-                return res.status(500).json({
-
-                    erro: 'Erro ao carregar relatórios.'
-
-                });
-
-            }
-
-            res.json(rows);
-
-        }
-
-    );
-
-});
-
-// =====================================================
-
-// PROFESSOR - LISTAR PROFESSORES
-
-// =====================================================
-
-app.get('/listar-professores', (req, res) => {
-
-    db.all(
-
-        `
-
-        SELECT id, nome, email
-
-        FROM usuarios
-
-        WHERE tipo = 'professor'
-
-        ORDER BY nome ASC
-
-        `,
-
-        [],
-
-        (err, professores) => {
-
-            if (err) {
-
-                console.error(
-
-                    'Erro ao listar professores:',
-
-                    err.message
-
-                );
-
-                return res.status(500).json({
-
-                    erro: 'Erro ao carregar professores.'
-
-                });
-
-            }
-
-            res.json(professores);
-
-        }
-
-    );
-
-});
-
-// =====================================================
-// GESTOR - CONTADORES
-// =====================================================
-
-app.get('/contadores-gestor', (req, res) => {
-
-    db.get(
-        `
-        SELECT COUNT(*) AS total
-        FROM usuarios
-        WHERE tipo = 'professor'
-        `,
-        [],
-        (err, professores) => {
-
-            if (err) {
-
-                return res.status(500).json({
-                    erro: err.message
-                });
-
-            }
-
-
-            db.get(
                 `
-                SELECT COUNT(*) AS total
-                FROM recados
+
+                SELECT
+
+                    id,
+
+                    nome,
+
+                    turma
+
+                FROM alunos
+
+                WHERE TRIM(turma) = TRIM(?)
+
+                AND escola_id = ?
+
+                ORDER BY nome ASC
+
                 `,
-                [],
-                (err, recados) => {
+
+                [
+
+                    turma,
+
+                    escolaAtual(req)
+
+                ],
+
+                (err, rows) => {
 
                     if (err) {
 
                         return res.status(500).json({
+
                             erro: err.message
+
                         });
 
                     }
 
-
-                    db.get(
-                        `
-                        SELECT COUNT(*) AS total
-                        FROM eventos
-                        `,
-                        [],
-                        (err, eventos) => {
-
-                            if (err) {
-
-                                return res.status(500).json({
-                                    erro: err.message
-                                });
-
-                            }
-
-
-                            res.json({
-
-                                professores:
-                                    professores.total,
-
-                                recados:
-                                    recados.total,
-
-                                eventos:
-                                    eventos.total
-
-                            });
-
-                        }
-                    );
+                    res.json(rows);
 
                 }
+
+            );
+
+        } else {
+
+            db.all(
+
+                `
+
+                SELECT
+
+                    id,
+
+                    nome,
+
+                    turma
+
+                FROM alunos
+
+                WHERE escola_id = ?
+
+                ORDER BY turma ASC, nome ASC
+
+                `,
+
+                [
+
+                    escolaAtual(req)
+
+                ],
+
+                (err, rows) => {
+
+                    if (err) {
+
+                        return res.status(500).json({
+
+                            erro: err.message
+
+                        });
+
+                    }
+
+                    res.json(rows);
+
+                }
+
             );
 
         }
-    );
 
-});
+    }
 
+);
 
 // =====================================================
-// APAGAR PROFESSOR
+
+// CHAMADA
+
 // =====================================================
 
-app.delete('/apagar-professor/:id', (req, res) => {
+app.post(
 
-    const {
-        id
-    } = req.params;
+    '/registrar-chamada',
 
+    exigirEscola,
 
-    db.run(
-        `
-        DELETE FROM usuarios
-        WHERE id = ?
-        `,
-        [id],
-        (err) => {
+    (req, res) => {
+
+        const {
+
+            turma,
+
+            chamada
+
+        } = req.body;
+
+        if (
+
+            !turma ||
+
+            !Array.isArray(chamada) ||
+
+            chamada.length === 0
+
+        ) {
+
+            return res.status(400).json({
+
+                erro:
+
+                    'Turma e chamada são obrigatórios.'
+
+            });
+
+        }
+
+        const stmt = db.prepare(`
+
+            INSERT INTO frequencias
+
+            (
+
+                aluno_id,
+
+                turma,
+
+                status,
+
+                escola_id
+
+            )
+
+            VALUES (?, ?, ?, ?)
+
+        `);
+
+        chamada.forEach(item => {
+
+            stmt.run(
+
+                item.aluno_id,
+
+                turma,
+
+                item.status,
+
+                escolaAtual(req)
+
+            );
+
+        });
+
+        stmt.finalize(err => {
 
             if (err) {
 
+                console.error(
+
+                    'ERRO AO REGISTRAR CHAMADA:',
+
+                    err.message
+
+                );
+
                 return res.status(500).json({
+
                     erro: err.message
+
                 });
 
             }
 
-
             res.json({
+
                 mensagem:
-                    'Professor removido com sucesso!'
+
+                    'Chamada registrada com sucesso!'
+
+            });
+
+        });
+
+    }
+
+);
+
+// =====================================================
+
+// RELATÓRIOS
+
+// =====================================================
+
+app.post(
+
+    '/criar-relatorio',
+
+    exigirEscola,
+
+    (req, res) => {
+
+        const {
+
+            aluno_id,
+
+            aluno_nome,
+
+            turma,
+
+            professor,
+
+            conteudo
+
+        } = req.body;
+
+        if (
+
+            !aluno_id ||
+
+            !aluno_nome ||
+
+            !turma ||
+
+            !conteudo
+
+        ) {
+
+            return res.status(400).json({
+
+                erro:
+
+                    'Preencha todos os campos obrigatórios.'
+
             });
 
         }
-    );
 
-});
+        db.run(
 
+            `
+
+            INSERT INTO relatorios
+
+            (
+
+                aluno_id,
+
+                aluno_nome,
+
+                turma,
+
+                professor,
+
+                conteudo,
+
+                escola_id
+
+            )
+
+            VALUES (?, ?, ?, ?, ?, ?)
+
+            `,
+
+            [
+
+                aluno_id,
+
+                aluno_nome,
+
+                turma,
+
+                professor ||
+
+                    req.session.usuarioLogado.nome,
+
+                conteudo,
+
+                escolaAtual(req)
+
+            ],
+
+            (err) => {
+
+                if (err) {
+
+                    console.error(
+
+                        'ERRO AO CRIAR RELATÓRIO:',
+
+                        err.message
+
+                    );
+
+                    return res.status(500).json({
+
+                        erro:
+
+                            'Erro ao criar relatório.'
+
+                    });
+
+                }
+
+                res.json({
+
+                    mensagem:
+
+                        'Relatório enviado para a gestão com sucesso!'
+
+                });
+
+            }
+
+        );
+
+    }
+
+);
+
+app.get(
+
+    '/listar-relatorios',
+
+    exigirEscola,
+
+    (req, res) => {
+
+        db.all(
+
+            `
+
+            SELECT *
+
+            FROM relatorios
+
+            WHERE escola_id = ?
+
+            ORDER BY id DESC
+
+            `,
+
+            [
+
+                escolaAtual(req)
+
+            ],
+
+            (err, rows) => {
+
+                if (err) {
+
+                    console.error(
+
+                        'ERRO AO LISTAR RELATÓRIOS:',
+
+                        err.message
+
+                    );
+
+                    return res.status(500).json({
+
+                        erro:
+
+                            'Erro ao carregar relatórios.'
+
+                    });
+
+                }
+
+                res.json(rows);
+
+            }
+
+        );
+
+    }
+
+);
 
 // =====================================================
-// USUÁRIOS DE TESTE
+
+// AVALIAR RELATÓRIO
+
 // =====================================================
 
-app.get('/criar-usuarios-teste', (req, res) => {
+app.post(
 
-    db.run(
-        `
-        INSERT OR IGNORE INTO usuarios
-        (nome, email, senha, tipo)
-        VALUES
-        ('Diretor', 'diretor@escola.com', '123456', 'gestor'),
-        ('Ana', 'ana@escola.com', '123456', 'professor')
-        `,
-        () => {
+    '/avaliar-relatorio',
 
-            res.send(`
-                <h2>
-                    Usuários de teste criados!
-                </h2>
+    exigirEscola,
 
-                <a href="/">
-                    Ir para o Login
-                </a>
-            `);
+    (req, res) => {
+
+        const {
+
+            id,
+
+            status,
+
+            providencia,
+
+            observacao_gestao
+
+        } = req.body;
+
+        if (!id || !providencia) {
+
+            return res.status(400).json({
+
+                erro:
+
+                    'Informe a providência da gestão.'
+
+            });
 
         }
-    );
 
-});
+        db.run(
 
+            `
+
+            UPDATE relatorios
+
+            SET
+
+                status = ?,
+
+                providencia = ?,
+
+                observacao_gestao = ?,
+
+                lido_gestao = 1
+
+            WHERE id = ?
+
+            AND escola_id = ?
+
+            `,
+
+            [
+
+                status || 'Em acompanhamento',
+
+                providencia,
+
+                observacao_gestao || '',
+
+                id,
+
+                escolaAtual(req)
+
+            ],
+
+            (err) => {
+
+                if (err) {
+
+                    console.error(
+
+                        'ERRO AO AVALIAR RELATÓRIO:',
+
+                        err.message
+
+                    );
+
+                    return res.status(500).json({
+
+                        erro:
+
+                            'Erro ao registrar a avaliação.'
+
+                    });
+
+                }
+
+                res.json({
+
+                    mensagem:
+
+                        'Providência da gestão registrada com sucesso!'
+
+                });
+
+            }
+
+        );
+
+    }
+
+);
 
 // =====================================================
-// INICIAR SERVIDOR
+
+// LISTAR PROFESSORES
+
 // =====================================================
 
-app.listen(PORT, () => {
+app.get(
 
-    console.log(
-        `Servidor rodando em http://localhost:${PORT}`
+    '/listar-professores',
+
+    exigirEscola,
+
+    (req, res) => {
+
+        db.all(
+
+            `
+
+            SELECT
+
+                usuarios.id,
+
+                usuarios.nome,
+
+                usuarios.email
+
+            FROM usuarios
+
+            INNER JOIN usuario_escolas
+
+                ON usuario_escolas.usuario_id = usuarios.id
+
+            WHERE usuarios.tipo = 'professor'
+
+            AND usuario_escolas.escola_id = ?
+
+            ORDER BY usuarios.nome ASC
+
+            `,
+
+            [
+
+                escolaAtual(req)
+
+            ],
+
+            (err, professores) => {
+
+                if (err) {
+
+                    return res.status(500).json({
+
+                        erro:
+
+                            'Erro ao carregar professores.'
+
+                    });
+
+                }
+
+                res.json(professores);
+
+            }
+
+        );
+
+    }
+
+);
+
+// =====================================================
+
+// CONTADORES DO GESTOR
+
+// =====================================================
+
+app.get(
+
+    '/contadores-gestor',
+
+    exigirEscola,
+
+    (req, res) => {
+
+        db.get(
+
+            `
+
+            SELECT COUNT(*) AS total
+
+            FROM usuarios
+
+            INNER JOIN usuario_escolas
+
+                ON usuario_escolas.usuario_id = usuarios.id
+
+            WHERE usuarios.tipo = 'professor'
+
+            AND usuario_escolas.escola_id = ?
+
+            `,
+
+            [
+
+                escolaAtual(req)
+
+            ],
+
+            (err, professores) => {
+
+                if (err) {
+
+                    return res.status(500).json({
+
+                        erro: err.message
+
+                    });
+
+                }
+
+                db.get(
+
+                    `
+
+                    SELECT COUNT(*) AS total
+
+                    FROM recados
+
+                    WHERE escola_id = ?
+
+                    `,
+
+                    [
+
+                        escolaAtual(req)
+
+                    ],
+
+                    (err, recados) => {
+
+                        if (err) {
+
+                            return res.status(500).json({
+
+                                erro: err.message
+
+                            });
+
+                        }
+
+                        db.get(
+
+                            `
+
+                            SELECT COUNT(*) AS total
+
+                            FROM eventos
+
+                            WHERE escola_id = ?
+
+                            `,
+
+                            [
+
+                                escolaAtual(req)
+
+                            ],
+
+                            (err, eventos) => {
+
+                                if (err) {
+
+                                    return res.status(500).json({
+
+                                        erro: err.message
+
+                                    });
+
+                                }
+
+                                res.json({
+
+                                    professores:
+
+                                        professores.total,
+
+                                    recados:
+
+                                        recados.total,
+
+                                    eventos:
+
+                                        eventos.total
+
+                                });
+
+                            }
+
+                        );
+
+                    }
+
+                );
+
+            }
+
+        );
+
+    }
+
+);
+
+// =====================================================
+
+// APAGAR PROFESSOR
+
+// =====================================================
+
+app.delete(
+
+    '/apagar-professor/:id',
+
+    exigirEscola,
+
+    (req, res) => {
+
+        if (
+
+            req.session.usuarioLogado.tipo !== 'gestor'
+
+        ) {
+
+            return res.status(403).json({
+
+                erro:
+
+                    'Apenas a gestão pode remover professores.'
+
+            });
+
+        }
+
+        db.run(
+
+            `
+
+            DELETE FROM usuario_escolas
+
+            WHERE usuario_id = ?
+
+            AND escola_id = ?
+
+            `,
+
+            [
+
+                req.params.id,
+
+                escolaAtual(req)
+
+            ],
+
+            (err) => {
+
+                if (err) {
+
+                    return res.status(500).json({
+
+                        erro: err.message
+
+                    });
+
+                }
+
+                res.json({
+
+                    mensagem:
+
+                        'Professor removido desta escola com sucesso!'
+
+                });
+
+            }
+
+        );
+
+    }
+
+);
+
+// =====================================================
+
+// ROTA ANTIGA
+
+// =====================================================
+
+app.get(
+
+    '/criar-usuarios-teste',
+
+    (req, res) => {
+
+        res.send(`
+
+            <h2>
+
+                Esta rota de teste não é mais necessária.
+
+            </h2>
+
+            <a href="/">
+
+                Voltar para o login
+
+            </a>
+
+        `);
+
+    }
+
+);
+
+// =====================================================
+
+// CADASTRO DE PROFESSOR
+
+// =====================================================
+
+app.post('/cadastro', (req, res) => {
+
+    const {
+
+        name,
+
+        email,
+
+        password,
+
+        codigo_escola
+
+    } = req.body;
+
+    if (
+
+        !name ||
+
+        !email ||
+
+        !password ||
+
+        !codigo_escola
+
+    ) {
+
+        return res.status(400).send(`
+
+            <h2>Preencha todos os campos.</h2>
+
+            <a href="/">Voltar</a>
+
+        `);
+
+    }
+
+    db.get(
+
+        `
+
+        SELECT id, nome, codigo
+
+        FROM escolas
+
+        WHERE codigo = ?
+
+        `,
+
+        [
+
+            codigo_escola
+
+                .trim()
+
+                .toUpperCase()
+
+        ],
+
+        (err, escola) => {
+
+            if (err) {
+
+                console.error(
+
+                    'ERRO AO VERIFICAR ESCOLA:',
+
+                    err.message
+
+                );
+
+                return res.status(500).send(`
+
+                    <h2>Erro ao verificar a escola.</h2>
+
+                    <a href="/">Voltar</a>
+
+                `);
+
+            }
+
+            if (!escola) {
+
+                return res.status(400).send(`
+
+                    <h2>Código da escola inválido.</h2>
+
+                    <p>
+
+                        Confira o código fornecido pela escola.
+
+                    </p>
+
+                    <a href="/">Voltar</a>
+
+                `);
+
+            }
+
+            db.get(
+
+                `
+
+                SELECT id
+
+                FROM usuarios
+
+                WHERE email = ?
+
+                `,
+
+                [email],
+
+                (err, usuarioExistente) => {
+
+                    if (err) {
+
+                        return res.status(500).send(`
+
+                            <h2>
+
+                                Erro ao verificar cadastro.
+
+                            </h2>
+
+                            <a href="/">
+
+                                Voltar
+
+                            </a>
+
+                        `);
+
+                    }
+
+                    if (usuarioExistente) {
+
+                        return res.status(400).send(`
+
+                            <h2>
+
+                                Este e-mail já está cadastrado.
+
+                            </h2>
+
+                            <a href="/">
+
+                                Voltar
+
+                            </a>
+
+                        `);
+
+                    }
+
+                    db.run(
+
+                        `
+
+                        INSERT INTO usuarios
+
+                        (
+
+                            nome,
+
+                            email,
+
+                            senha,
+
+                            tipo
+
+                        )
+
+                        VALUES (?, ?, ?, 'professor')
+
+                        `,
+
+                        [
+
+                            name,
+
+                            email,
+
+                            password
+
+                        ],
+
+                        function(err) {
+
+                            if (err) {
+
+                                console.error(
+
+                                    'ERRO AO CRIAR PROFESSOR:',
+
+                                    err.message
+
+                                );
+
+                                return res.status(500).send(`
+
+                                    <h2>
+
+                                        Erro ao criar a conta.
+
+                                    </h2>
+
+                                    <a href="/">
+
+                                        Voltar
+
+                                    </a>
+
+                                `);
+
+                            }
+
+                            const usuarioId =
+
+                                this.lastID;
+
+                            db.run(
+
+                                `
+
+                                INSERT INTO usuario_escolas
+
+                                (
+
+                                    usuario_id,
+
+                                    escola_id
+
+                                )
+
+                                VALUES (?, ?)
+
+                                `,
+
+                                [
+
+                                    usuarioId,
+
+                                    escola.id
+
+                                ],
+
+                                (err) => {
+
+                                    if (err) {
+
+                                        console.error(
+
+                                            'ERRO AO VINCULAR ESCOLA:',
+
+                                            err.message
+
+                                        );
+
+                                        return res.status(500).send(`
+
+                                            <h2>
+
+                                                Conta criada, mas houve erro ao vincular a escola.
+
+                                            </h2>
+
+                                            <a href="/">
+
+                                                Voltar
+
+                                            </a>
+
+                                        `);
+
+                                    }
+
+                                    res.send(`
+
+                                        <h2>
+
+                                            Conta criada com sucesso!
+
+                                        </h2>
+
+                                        <p>
+
+                                            Você foi vinculado à escola:
+
+                                            <strong>${escola.nome}</strong>
+
+                                        </p>
+
+                                        <p>
+
+                                            Agora você pode entrar no EduClass.
+
+                                        </p>
+
+                                        <a href="/">
+
+                                            Voltar para o login
+
+                                        </a>
+
+                                    `);
+
+                                }
+
+                            );
+
+                        }
+
+                    );
+
+                }
+
+            );
+
+        }
+
     );
 
 });

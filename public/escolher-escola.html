@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Escolher Escola - EduClass</title>
+
+    <style>
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #eaf3fa;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            min-height: 100vh;
+
+        }
+
+        .container {
+
+            background: white;
+
+            padding: 40px;
+
+            border-radius: 18px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+
+            text-align: center;
+
+            width: 400px;
+
+        }
+
+        h1 {
+
+            color: #071a35;
+
+            margin-bottom: 10px;
+
+        }
+
+        p {
+
+            color: #666;
+
+            margin-bottom: 30px;
+
+        }
+
+        #listaEscolas {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 15px;
+
+        }
+
+        .escola {
+
+            border: none;
+
+            background: #159cff;
+
+            color: white;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+        }
+
+        .escola:hover {
+
+            background: #087dcc;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🏫 Escolha a escola</h1>
+
+        <p>Selecione qual escola você deseja acessar.</p>
+
+        <div id="listaEscolas"></div>
+
+    </div>
+
+    <script>
+
+        async function carregarEscolas() {
+
+            const resposta = await fetch('/minhas-escolas');
+
+            const escolas = await resposta.json();
+
+            const lista = document.getElementById('listaEscolas');
+
+            if (escolas.length === 0) {
+
+                lista.innerHTML = `
+
+                    <p>
+
+                        Você ainda não está vinculado a nenhuma escola.
+
+                    </p>
+
+                `;
+
+                return;
+
+            }
+
+            escolas.forEach(escola => {
+
+                const botao = document.createElement('button');
+
+                botao.className = 'escola';
+
+                botao.textContent = escola.nome;
+
+                botao.onclick = () => {
+
+                    selecionarEscola(escola.id);
+
+                };
+
+                lista.appendChild(botao);
+
+            });
+
+        }
+
+        async function selecionarEscola(id) {
+
+            const resposta = await fetch('/selecionar-escola', {
+
+                method: 'POST',
+
+                headers: {
+
+                    'Content-Type': 'application/json'
+
+                },
+
+                body: JSON.stringify({
+
+                    escola_id: id
+
+                })
+
+            });
+
+            const resultado = await resposta.json();
+
+            if (!resposta.ok) {
+
+                alert(resultado.erro || 'Erro ao selecionar escola.');
+
+                return;
+
+            }
+
+            if (resultado.tipo === 'gestor') {
+
+                window.location.href = '/gestor.html';
+
+            } else {
+
+                window.location.href = '/professor.html';
+
+            }
+
+        }
+
+        carregarEscolas();
+
+    </script>
+
+</body>
+
+</html>
