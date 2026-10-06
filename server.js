@@ -800,6 +800,32 @@ db.serialize(() => {
 
     // =====================================================
 
+    // NOTAS
+
+    // =====================================================
+ 
+    db.run(`
+
+        CREATE TABLE IF NOT EXISTS notas (
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            aluno_id INTEGER NOT NULL,
+
+            turma TEXT NOT NULL,
+
+            nota REAL NOT NULL,
+
+            escola_id INTEGER NOT NULL,
+
+            UNIQUE(aluno_id, turma, escola_id)
+
+        )
+
+    `);
+
+    // =====================================================
+
     // RELATÓRIOS
 
     // =====================================================
@@ -984,11 +1010,285 @@ app.post('/login', (req, res) => {
 
                 return res.send(`
 
-                    <h2>Usuário ou senha incorretos.</h2>
-
-                    <a href="/">Voltar para o login</a>
-
-                `);
+                    <!DOCTYPE html>
+                    
+                    <html lang="pt-BR">
+                    
+                    <head>
+                    
+                        <meta charset="UTF-8">
+                    
+                        <meta
+                    
+                            name="viewport"
+                    
+                            content="width=device-width, initial-scale=1.0"
+                    
+                        >
+                    
+                        <title>EduClass | Erro no login</title>
+                    
+                        <link
+                    
+                            rel="preconnect"
+                    
+                            href="https://fonts.googleapis.com"
+                    
+                        >
+                    
+                        <link
+                    
+                            rel="preconnect"
+                    
+                            href="https://fonts.gstatic.com"
+                    
+                            crossorigin
+                    
+                        >
+                    
+                        <link
+                    
+                            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+                    
+                            rel="stylesheet"
+                    
+                        >
+                    
+                        <style>
+                    
+                            * {
+                    
+                                box-sizing: border-box;
+                    
+                                margin: 0;
+                    
+                                padding: 0;
+                    
+                            }
+                    
+                            body {
+                    
+                                font-family: 'Inter', sans-serif;
+                    
+                                min-height: 100vh;
+                    
+                                display: flex;
+                    
+                                align-items: center;
+                    
+                                justify-content: center;
+                    
+                                background:
+                    
+                                    linear-gradient(
+                    
+                                        135deg,
+                    
+                                        #071a35,
+                    
+                                        #0b315f,
+                    
+                                        #159cff
+                    
+                                    );
+                    
+                                padding: 20px;
+                    
+                            }
+                    
+                            .container {
+                    
+                                width: 100%;
+                    
+                                max-width: 500px;
+                    
+                            }
+                    
+                            .logo {
+                    
+                                text-align: center;
+                    
+                                color: white;
+                    
+                                font-size: 30px;
+                    
+                                font-weight: 800;
+                    
+                                margin-bottom: 25px;
+                    
+                            }
+                    
+                            .logo span {
+                    
+                                color: #54c7ff;
+                    
+                            }
+                    
+                            .card {
+                    
+                                background: white;
+                    
+                                border-radius: 20px;
+                    
+                                padding: 40px;
+                    
+                                text-align: center;
+                    
+                                box-shadow:
+                    
+                                    0 20px 50px
+                    
+                                    rgba(0, 0, 0, 0.25);
+                    
+                            }
+                    
+                            .error-icon {
+                    
+                                width: 80px;
+                    
+                                height: 80px;
+                    
+                                margin: 0 auto 20px;
+                    
+                                border-radius: 50%;
+                    
+                                display: flex;
+                    
+                                align-items: center;
+                    
+                                justify-content: center;
+                    
+                                background: #fee2e2;
+                    
+                                color: #dc2626;
+                    
+                                font-size: 38px;
+                    
+                                font-weight: 700;
+                    
+                            }
+                    
+                            h1 {
+                    
+                                color: #071a35;
+                    
+                                font-size: 28px;
+                    
+                                margin-bottom: 12px;
+                    
+                            }
+                    
+                            .subtitle {
+                    
+                                color: #64748b;
+                    
+                                font-size: 15px;
+                    
+                                line-height: 1.6;
+                    
+                                margin-bottom: 25px;
+                    
+                            }
+                    
+                            .btn {
+                    
+                                display: block;
+                    
+                                width: 100%;
+                    
+                                padding: 14px 20px;
+                    
+                                border-radius: 10px;
+                    
+                                background: #159cff;
+                    
+                                color: white;
+                    
+                                text-decoration: none;
+                    
+                                font-size: 15px;
+                    
+                                font-weight: 700;
+                    
+                                transition: 0.2s;
+                    
+                            }
+                    
+                            .btn:hover {
+                    
+                                background: #087fd5;
+                    
+                                transform: translateY(-1px);
+                    
+                            }
+                    
+                            @media (max-width: 500px) {
+                    
+                                .card {
+                    
+                                    padding: 30px 22px;
+                    
+                                }
+                    
+                                h1 {
+                    
+                                    font-size: 24px;
+                    
+                                }
+                    
+                            }
+                    
+                        </style>
+                    
+                    </head>
+                    
+                    <body>
+                    
+                        <div class="container">
+                    
+                            <div class="logo">
+                    
+                                Edu<span>Class</span>
+                    
+                            </div>
+                    
+                            <div class="card">
+                    
+                                <div class="error-icon">
+                    
+                                    !
+                    
+                                </div>
+                    
+                                <h1>
+                    
+                                    Usuário ou senha incorretos
+                    
+                                </h1>
+                    
+                                <p class="subtitle">
+                    
+                                    Não foi possível entrar no EduClass.
+                    
+                                    Verifique seu usuário e sua senha e tente novamente.
+                    
+                                </p>
+                    
+                                <a href="/" class="btn">
+                    
+                                    Voltar para o login
+                    
+                                </a>
+                    
+                            </div>
+                    
+                        </div>
+                    
+                    </body>
+                    
+                    </html>
+                    
+                    `);
 
             }
 
@@ -2706,13 +3006,193 @@ app.get(
 
 // =====================================================
 
+// SALVAR NOTAS
+
+// =====================================================
+
+app.post('/salvar-notas', exigirEscola, (req, res) => {
+
+    const { turma, notas } = req.body;
+
+    if (!turma || !Array.isArray(notas)) {
+
+        return res.status(400).json({
+
+            erro: 'Dados das notas inválidos.'
+
+        });
+
+    }
+
+    const escolaId = escolaAtual(req);
+
+    const stmt = db.prepare(`
+
+        INSERT INTO notas (
+
+            aluno_id,
+
+            turma,
+
+            nota,
+
+            escola_id
+
+        )
+
+        VALUES (?, ?, ?, ?)
+
+        ON CONFLICT(aluno_id, turma, escola_id)
+
+        DO UPDATE SET nota = excluded.nota
+
+    `);
+
+    let erro = null;
+
+    notas.forEach(item => {
+
+        const nota = Number(item.nota);
+
+        if (
+
+            Number.isNaN(nota) ||
+
+            nota < 0 ||
+
+            nota > 10
+
+        ) {
+
+            erro = 'Uma das notas é inválida.';
+
+            return;
+
+        }
+
+        stmt.run(
+
+            item.aluno_id,
+
+            turma,
+
+            nota,
+
+            escolaId
+
+        );
+
+    });
+
+    stmt.finalize(err => {
+
+        if (erro) {
+
+            return res.status(400).json({
+
+                erro
+
+            });
+
+        }
+
+        if (err) {
+
+            console.error(
+
+                'Erro ao salvar notas:',
+
+                err.message
+
+            );
+
+            return res.status(500).json({
+
+                erro: err.message
+
+            });
+
+        }
+
+        res.json({
+
+            mensagem: 'Notas salvas com sucesso!'
+
+        });
+
+    });
+
+});
+
+// =====================================================
+
+// LISTAR NOTAS
+
+// =====================================================
+
+app.get('/listar-notas', exigirEscola, (req, res) => {
+
+    const turma = req.query.turma;
+
+    if (!turma) {
+
+        return res.status(400).json({
+
+            erro: 'Turma não informada.'
+
+        });
+
+    }
+
+    const escolaId = escolaAtual(req);
+
+    db.all(`
+
+        SELECT
+
+            aluno_id,
+
+            nota
+
+        FROM notas
+
+        WHERE TRIM(turma) = TRIM(?)
+
+        AND escola_id = ?
+
+    `, [turma, escolaId], (err, rows) => {
+
+        if (err) {
+
+            console.error(
+
+                'Erro ao listar notas:',
+
+                err.message
+
+            );
+
+            return res.status(500).json({
+
+                erro: err.message
+
+            });
+
+        }
+
+        res.json(rows);
+
+    });
+
+});
+
+// =====================================================
+
 // CHAMADA
 
 // =====================================================
 
-app.post(
-
-    '/registrar-chamada',
+    app.post( '/registrar-chamada',
 
     exigirEscola,
 
@@ -3726,34 +4206,363 @@ app.post('/cadastro', (req, res) => {
 
                                     res.send(`
 
-                                        <h2>
-
-                                            Conta criada com sucesso!
-
-                                        </h2>
-
-                                        <p>
-
-                                            Você foi vinculado à escola:
-
-                                            <strong>${escola.nome}</strong>
-
-                                        </p>
-
-                                        <p>
-
-                                            Agora você pode entrar no EduClass.
-
-                                        </p>
-
-                                        <a href="/">
-
-                                            Voltar para o login
-
-                                        </a>
-
-                                    `);
-
+                                        <!DOCTYPE html>
+                                        
+                                        <html lang="pt-BR">
+                                        
+                                        <head>
+                                        
+                                            <meta charset="UTF-8">
+                                        
+                                            <meta
+                                        
+                                                name="viewport"
+                                        
+                                                content="width=device-width, initial-scale=1.0"
+                                        
+                                            >
+                                        
+                                            <title>EduClass | Conta criada</title>
+                                        
+                                            <link
+                                        
+                                                rel="preconnect"
+                                        
+                                                href="https://fonts.googleapis.com"
+                                        
+                                            >
+                                        
+                                            <link
+                                        
+                                                rel="preconnect"
+                                        
+                                                href="https://fonts.gstatic.com"
+                                        
+                                                crossorigin
+                                        
+                                            >
+                                        
+                                            <link
+                                        
+                                                href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+                                        
+                                                rel="stylesheet"
+                                        
+                                            >
+                                        
+                                            <style>
+                                        
+                                                * {
+                                        
+                                                    box-sizing: border-box;
+                                        
+                                                    margin: 0;
+                                        
+                                                    padding: 0;
+                                        
+                                                }
+                                        
+                                                body {
+                                        
+                                                    font-family: 'Inter', sans-serif;
+                                        
+                                                    min-height: 100vh;
+                                        
+                                                    display: flex;
+                                        
+                                                    align-items: center;
+                                        
+                                                    justify-content: center;
+                                        
+                                                    background:
+                                        
+                                                        linear-gradient(
+                                        
+                                                            135deg,
+                                        
+                                                            #071a35,
+                                        
+                                                            #0b315f,
+                                        
+                                                            #159cff
+                                        
+                                                        );
+                                        
+                                                    padding: 20px;
+                                        
+                                                }
+                                        
+                                                .container {
+                                        
+                                                    width: 100%;
+                                        
+                                                    max-width: 500px;
+                                        
+                                                }
+                                        
+                                                .logo {
+                                        
+                                                    text-align: center;
+                                        
+                                                    color: white;
+                                        
+                                                    font-size: 30px;
+                                        
+                                                    font-weight: 800;
+                                        
+                                                    margin-bottom: 25px;
+                                        
+                                                }
+                                        
+                                                .logo span {
+                                        
+                                                    color: #54c7ff;
+                                        
+                                                }
+                                        
+                                                .card {
+                                        
+                                                    background: white;
+                                        
+                                                    border-radius: 20px;
+                                        
+                                                    padding: 40px;
+                                        
+                                                    text-align: center;
+                                        
+                                                    box-shadow:
+                                        
+                                                        0 20px 50px
+                                        
+                                                        rgba(0, 0, 0, 0.25);
+                                        
+                                                }
+                                        
+                                                .success-icon {
+                                        
+                                                    width: 80px;
+                                        
+                                                    height: 80px;
+                                        
+                                                    margin: 0 auto 20px;
+                                        
+                                                    border-radius: 50%;
+                                        
+                                                    display: flex;
+                                        
+                                                    align-items: center;
+                                        
+                                                    justify-content: center;
+                                        
+                                                    background: #dcfce7;
+                                        
+                                                    color: #16a34a;
+                                        
+                                                    font-size: 38px;
+                                        
+                                                    font-weight: 700;
+                                        
+                                                }
+                                        
+                                                h1 {
+                                        
+                                                    color: #071a35;
+                                        
+                                                    font-size: 28px;
+                                        
+                                                    margin-bottom: 12px;
+                                        
+                                                }
+                                        
+                                                .subtitle {
+                                        
+                                                    color: #64748b;
+                                        
+                                                    font-size: 15px;
+                                        
+                                                    line-height: 1.6;
+                                        
+                                                    margin-bottom: 25px;
+                                        
+                                                }
+                                        
+                                                .school-box {
+                                        
+                                                    background: #f1f7fc;
+                                        
+                                                    border: 1px solid #dbeafe;
+                                        
+                                                    border-radius: 12px;
+                                        
+                                                    padding: 18px;
+                                        
+                                                    margin-bottom: 25px;
+                                        
+                                                }
+                                        
+                                                .school-label {
+                                        
+                                                    display: block;
+                                        
+                                                    color: #64748b;
+                                        
+                                                    font-size: 13px;
+                                        
+                                                    margin-bottom: 6px;
+                                        
+                                                }
+                                        
+                                                .school-name {
+                                        
+                                                    color: #071a35;
+                                        
+                                                    font-size: 18px;
+                                        
+                                                    font-weight: 700;
+                                        
+                                                }
+                                        
+                                                .info {
+                                        
+                                                    color: #475569;
+                                        
+                                                    font-size: 14px;
+                                        
+                                                    line-height: 1.6;
+                                        
+                                                    margin-bottom: 25px;
+                                        
+                                                }
+                                        
+                                                .btn {
+                                        
+                                                    display: block;
+                                        
+                                                    width: 100%;
+                                        
+                                                    padding: 14px 20px;
+                                        
+                                                    border-radius: 10px;
+                                        
+                                                    background: #159cff;
+                                        
+                                                    color: white;
+                                        
+                                                    text-decoration: none;
+                                        
+                                                    font-size: 15px;
+                                        
+                                                    font-weight: 700;
+                                        
+                                                    transition: 0.2s;
+                                        
+                                                }
+                                        
+                                                .btn:hover {
+                                        
+                                                    background: #087fd5;
+                                        
+                                                    transform: translateY(-1px);
+                                        
+                                                }
+                                        
+                                                .check {
+                                        
+                                                    color: #16a34a;
+                                        
+                                                    margin-right: 6px;
+                                        
+                                                }
+                                        
+                                                @media (max-width: 500px) {
+                                        
+                                                    .card {
+                                        
+                                                        padding: 30px 22px;
+                                        
+                                                    }
+                                        
+                                                    h1 {
+                                        
+                                                        font-size: 24px;
+                                        
+                                                    }
+                                        
+                                                }
+                                        
+                                            </style>
+                                        
+                                        </head>
+                                        
+                                        <body>
+                                        
+                                            <div class="container">
+                                        
+                                                <div class="logo">
+                                        
+                                                    Edu<span>Class</span>
+                                        
+                                                </div>
+                                        
+                                                <div class="card">
+                                        
+                                                    <div class="success-icon">
+                                        
+                                                        ✓
+                                        
+                                                    </div>
+                                        
+                                                    <h1>
+                                        
+                                                        Conta criada com sucesso!
+                                        
+                                                    </h1>
+                                        
+                                                    <p class="subtitle">
+                                        
+                                                        Sua conta foi criada e já está pronta para ser utilizada.
+                                        
+                                                    </p>
+                                        
+                                                    <div class="school-box">
+                                        
+                                                        <span class="school-label">
+                                        
+                                                            Escola vinculada
+                                        
+                                                        </span>
+                                        
+                                                        <div class="school-name">
+                                        
+                                                            ${escola.nome}
+                                        
+                                                        </div>
+                                        
+                                                    </div>
+                                        
+                                                    <p class="info">
+                                        
+                                                        <span class="check">✓</span>
+                                        
+                                                        Agora você pode entrar no EduClass e acessar o painel do professor.
+                                        
+                                                    </p>
+                                        
+                                                    <a href="/" class="btn">
+                                        
+                                                        Entrar no EduClass
+                                        
+                                                    </a>
+                                        
+                                                </div>
+                                        
+                                            </div>
+                                        
+                                        </body>
+                                        
+                                        </html>
+                                        
+                                        `);
                                 }
 
                             );

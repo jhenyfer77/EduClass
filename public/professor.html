@@ -640,233 +640,275 @@
 
         </section>
 
-        <!-- =================================================
+      <!-- =================================================
+
      NOTAS
+
 ================================================= -->
 
 <section class="dashboard page-section" id="notas" style="display: none;">
 
     <div class="section-header">
+
         <h2>Notas</h2>
-        <p>Consulte e organize as notas dos alunos.</p>
+
+        <p>Lance e consulte as notas dos alunos.</p>
+
     </div>
 
-    <div class="card">
+    <!-- =================================================
+
+         BOTÕES DE OPÇÃO
+
+    ================================================= -->
+
+    <div class="cards-grid">
+
+        <div class="info-card">
+
+            <div class="stat-icon">
+
+                <i class="fa-solid fa-pen-to-square"></i>
+
+            </div>
+
+            <h3>Lançar notas</h3>
+
+            <p>
+
+                Registre as notas dos alunos por turma.
+
+            </p>
+
+            <button
+
+                type="button"
+
+                class="btn btn-primary"
+
+                id="btnLancarNotas"
+
+            >
+
+                Lançar notas
+
+            </button>
+
+        </div>
+
+        <div class="info-card">
+
+            <div class="stat-icon">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+            </div>
+
+            <h3>Ver notas</h3>
+
+            <p>
+
+                Consulte as notas já registradas.
+
+            </p>
+
+            <button
+
+                type="button"
+
+                class="btn btn-primary"
+
+                id="btnVerNotas"
+
+            >
+
+                Ver notas
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- =================================================
+
+         LANÇAR NOTAS
+
+    ================================================= -->
+
+    <div
+
+        class="card"
+
+        id="areaLancarNotas"
+
+        style="display: none; margin-top:  22px;"
+
+    >
 
         <div class="card-header">
+
             <div class="card-title">
+
                 <i class="fa-solid fa-clipboard-check"></i>
+
                 Lançamento de notas
+
             </div>
+
         </div>
 
         <div class="card-body">
 
-            <p>Selecione a turma para visualizar os alunos.</p>
+            <p>
+
+                Selecione a turma para visualizar os alunos.
+
+            </p>
 
             <div class="form-group">
 
                 <label class="form-label">
+
                     Turma
+
                 </label>
 
                 <select
+
                     id="turmaNotas"
+
                     class="form-select"
+
                 >
+
                     <option value="">
+
                         Selecione uma turma
+
                     </option>
+
                 </select>
 
             </div>
 
             <div
+
                 id="listaNotas"
+
                 style="margin-top: 20px;"
+
             >
+
                 <p>
+
                     Selecione uma turma para carregar os alunos.
+
                 </p>
+
             </div>
 
         </div>
 
     </div>
 
+    <!-- =================================================
+
+         VER NOTAS
+
+    ================================================= -->
+
+    <!-- =================================================
+
+     VER NOTAS
+
+================================================= -->
+
+<div
+
+class="card"
+
+id="areaVerNotas"
+
+style="display: none; margin-top: 22px;"
+
+>
+
+<div class="card-header">
+
+    <div class="card-title">
+
+        <i class="fa-solid fa-chart-column"></i>
+
+        Notas da turma
+
+    </div>
+
+    <button
+
+        type="button"
+
+        class="btn btn-primary"
+
+        id="btnAlterarNotas"
+
+    >
+
+        Alterar notas
+
+    </button>
+
+</div>
+
+<div class="card-body">
+
+    <div class="form-group">
+
+        <label class="form-label">
+
+            Turma
+
+        </label>
+
+        <select
+
+            id="turmaVerNotas"
+
+            class="form-select"
+
+        >
+
+            <option value="">
+
+                Selecione uma turma
+
+            </option>
+
+        </select>
+
+    </div>
+
+    <div
+
+        id="listaNotasSalvas"
+
+        style="margin-top: 20px;"
+
+    >
+
+        <p>
+
+            Selecione uma turma para visualizar as notas.
+
+        </p>
+
+    </div>
+
+</div>
+
+</div>
+
 </section>
-
-        <!-- =================================================
-             FREQUÊNCIA
-        ================================================= -->
-
-        <section class="dashboard page-section" id="frequencia" style="display: none;">
-
-            <div class="section-header">
-                <h2>Frequência</h2>
-                <p>Registre a presença dos alunos.</p>
-            </div>
-
-            <div class="card">
-                <div class="card-body">
-                    <p>
-                        A área de registro de frequência estará disponível aqui.
-                    </p>
-                </div>
-            </div>
-
-        </section>
-
-        <!-- =================================================
-             PLANEJAMENTO
-        ================================================= -->
-
-        <section class="dashboard page-section" id="planejamento" style="display: none;">
-
-            <div class="section-header">
-                <h2>Planejamento</h2>
-                <p>Organize seus planejamentos de aula.</p>
-            </div>
-
-            <div class="card">
-
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fa-solid fa-book-open"></i>
-                        Novo planejamento
-                    </div>
-                </div>
-
-                <div class="card-body">
-
-                    <form id="formPlanejamento">
-
-                        <div class="form-group">
-                            <label class="form-label">
-                                Matéria
-                            </label>
-
-                            <input
-                                type="text"
-                                name="materia"
-                                class="form-input"
-                                placeholder="Digite a matéria"
-                                required
-                            >
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">
-                                Data planejada
-                            </label>
-
-                            <input
-                                type="date"
-                                name="data_planejada"
-                                class="form-input"
-                                required
-                            >
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">
-                                Conteúdo da aula
-                            </label>
-
-                            <textarea
-                                name="conteudo"
-                                class="form-textarea"
-                                placeholder="Descreva o planejamento da aula"
-                                required
-                            ></textarea>
-                        </div>
-
-                        <button
-                            type="submit"
-                            class="btn btn-primary"
-                        >
-                            + SALVAR PLANEJAMENTO
-                        </button>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-            <div class="card" style="margin-top: 22px;">
-
-                <div class="card-header">
-
-                    <div class="card-title">
-                        <i class="fa-solid fa-list"></i>
-                        Meus planejamentos
-                    </div>
-
-                    <span id="planningCount">0</span>
-
-                </div>
-
-                <div class="card-body">
-                    <div id="listaPlanejamentos"></div>
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- =================================================
-             CALENDÁRIO
-        ================================================= -->
-
-        <section class="dashboard page-section" id="calendario" style="display: none;">
-
-            <div class="section-header">
-                <h2>Calendário escolar</h2>
-                <p>Consulte os eventos e compromissos escolares.</p>
-            </div>
-
-            <div class="card">
-
-                <div class="card-body">
-
-                    <div class="calendar-header">
-
-                        <div class="calendar-month" id="calendarMonthFull">
-                            Calendário escolar
-                        </div>
-
-                        <button
-                            type="button"
-                            id="currentMonthButton"
-                            class="btn btn-primary"
-                        >
-                            Hoje
-                        </button>
-
-                    </div>
-
-                    <div class="calendar-weekdays">
-                        <div>Dom</div>
-                        <div>Seg</div>
-                        <div>Ter</div>
-                        <div>Qua</div>
-                        <div>Qui</div>
-                        <div>Sex</div>
-                        <div>Sáb</div>
-                    </div>
-
-                    <div class="calendar-days" id="calendarDaysFull"></div>
-
-                    <p style="margin-top: 20px;">
-                        Os eventos escolares serão destacados no calendário.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
 
         <!-- =================================================
              COMUNICADOS

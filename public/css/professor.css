@@ -1696,3 +1696,63 @@ color: white;
         height: 40px;
     }
 }
+
+/* =========================================================
+
+   CORES DAS NOTAS
+
+========================================================= */
+
+.nota-verde {
+
+    color: #15803d;
+
+    background-color: #dcfce7;
+
+    border: 1px solid #86efac;
+
+    padding: 6px 12px;
+
+    border-radius: 8px;
+
+    font-weight: 700;
+
+    display: inline-block;
+
+}
+
+.nota-amarela {
+
+    color: #a16207;
+
+    background-color: #fef9c3;
+
+    border: 1px solid #fde047;
+
+    padding: 6px 12px;
+
+    border-radius: 8px;
+
+    font-weight: 700;
+
+    display: inline-block;
+
+}
+
+.nota-vermelha {
+
+    color: #b91c1c;
+
+    background-color: #fee2e2;
+
+    border: 1px solid #fca5a5;
+
+    padding: 6px 12px;
+
+    border-radius: 8px;
+
+    font-weight: 700;
+
+    display: inline-block;
+
+}

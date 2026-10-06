@@ -501,26 +501,55 @@ function escapeHTML(value) {
 }
 
 function mostrarMensagem(mensagem, tipo) {
+
     const antiga = document.querySelector(".system-message");
 
     if (antiga) {
+
         antiga.remove();
+
     }
 
     const elemento = document.createElement("div");
 
-    elemento.className = `system-message ${tipo}`;
+    elemento.className = "system-message";
+
     elemento.textContent = mensagem;
+
+    elemento.style.position = "fixed";
+
+    elemento.style.top = "20px";
+
+    elemento.style.right = "20px";
+
+    elemento.style.zIndex = "99999";
+
+    elemento.style.padding = "15px 22px";
+
+    elemento.style.borderRadius = "10px";
+
+    elemento.style.backgroundColor =
+
+        tipo === "success" ? "#22c55e" : "#ef4444";
+
+    elemento.style.color = "#ffffff";
+
+    elemento.style.fontSize = "16px";
+
+    elemento.style.fontWeight = "600";
+
+    elemento.style.boxShadow =
+
+        "0 4px 15px rgba(0,0,0,0.25)";
 
     document.body.appendChild(elemento);
 
     setTimeout(() => {
-        elemento.classList.add("hide");
 
-        setTimeout(() => {
-            elemento.remove();
-        }, 300);
+        elemento.remove();
+
     }, 3000);
+
 }
 
 /* =========================================================
@@ -807,13 +836,49 @@ function organizarTurmas() {
                         aluno(s) cadastrado(s)
                     </p>
 
-                    <button
-                        type="button"
-                        class="btn btn-primary"
-                        onclick="mostrarAlunos('${idTurma}')"
-                    >
-                        Ver alunos
-                    </button>
+                    <div style="
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 15px;
+
+    flex-wrap: wrap;
+
+">
+
+    <button
+
+        type="button"
+
+        class="btn btn-primary"
+
+        onclick="mostrarAlunos('${idTurma}')"
+
+    >
+
+        Ver alunos
+
+    </button>
+
+    <button
+
+        type="button"
+
+        class="btn btn-danger"
+
+        onclick="apagarTurma('${escapeHTML(nomeTurma)}')"
+
+    >
+
+        <i class="fa-solid fa-trash"></i>
+
+        Apagar turma
+
+    </button>
+
+</div>
 
                 </div>
             `;
@@ -886,7 +951,7 @@ function carregarTurmasNotas() {
 
     /* Quando selecionar uma turma, mostrar os alunos */
 
-    select.addEventListener("change", function () {
+    select.addEventListener("change", async function () {
 
         const turmaSelecionada = this.value;
 
@@ -1030,56 +1095,132 @@ function carregarTurmasNotas() {
 
         botaoSalvar.addEventListener("click", async () => {
 
-            const campos =
-
-                lista.querySelectorAll(".campo-nota");
-
+            console.log("1 - CLIQUEI EM SALVAR NOTAS");
+        
+            const campos = lista.querySelectorAll(".campo-nota");
+        
+            console.log("2 - CAMPOS ENCONTRADOS:", campos.length);
+        
             const notas = [];
-
+        
             campos.forEach(campo => {
-
-                if (campo.value !== "") {
-
-                    notas.push({
-
-                        aluno_id: campo.dataset.alunoId,
-
-                        aluno_nome: campo.dataset.alunoNome,
-
-                        turma: turmaSelecionada,
-
-                        nota: Number(campo.value)
-
-                    });
-
-                }
-
-            });
-
-            if (notas.length === 0) {
-
-                mostrarMensagem(
-
-                    "Digite pelo menos uma nota.",
-
-                    "error"
-
+        
+                console.log(
+        
+                    "Campo:",
+        
+                    campo.dataset.alunoId,
+        
+                    "Valor:",
+        
+                    campo.value
+        
                 );
-
+        
+                if (campo.value !== "") {
+        
+                    notas.push({
+        
+                        aluno_id: campo.dataset.alunoId,
+        
+                        aluno_nome: campo.dataset.alunoNome,
+        
+                        turma: turmaSelecionada,
+        
+                        nota: Number(campo.value)
+        
+                    });
+        
+                }
+        
+            });
+        
+            console.log("3 - NOTAS MONTADAS:", notas);
+        
+            if (notas.length === 0) {
+        
+                console.log("4 - NENHUMA NOTA FOI DIGITADA");
+        
+                mostrarMensagem(
+        
+                    "Digite pelo menos uma nota.",
+        
+                    "error"
+        
+                );
+        
                 return;
-
+        
             }
-
-            console.log("Notas para salvar:", notas);
-
-            mostrarMensagem(
-
-                "Notas preparadas para salvar!",
-
-                "success"
-
-            );
-
+        
+            console.log("5 - VOU ENVIAR PARA O SERVIDOR");
+        
+            try {
+        
+                const response = await fetch("/salvar-notas", {
+        
+                    method: "POST",
+        
+                    headers: {
+        
+                        "Content-Type": "application/json"
+        
+                    },
+        
+                    body: JSON.stringify({
+        
+                        turma: turmaSelecionada,
+        
+                        notas: notas
+        
+                    })
+        
+                });
+        
+                console.log("6 - RESPOSTA DO SERVIDOR:", response.status);
+        
+                const resultado = await response.json();
+        
+                console.log("7 - RESULTADO:", resultado);
+        
+                if (!response.ok) {
+        
+                    throw new Error(
+        
+                        resultado.erro || "Erro ao salvar as notas."
+        
+                    );
+        
+                }
+        
+                mostrarMensagem(
+        
+                    "Notas salvas com sucesso!",
+        
+                    "success"
+        
+                );
+        
+            } catch (error) {
+        
+                console.error(
+        
+                    "8 - ERRO AO SALVAR NOTAS:",
+        
+                    error
+        
+                );
+        
+                mostrarMensagem(
+        
+                    "Erro ao salvar as notas.",
+        
+                    "error"
+        
+                );
+        
+            }
+        
         });
 
     });
@@ -1146,6 +1287,202 @@ function mostrarAlunos(idTurma) {
 
     detalhes.style.display =
         "block";
+}
+
+/* =========================================================
+
+   APAGAR TURMA
+
+========================================================= */
+
+async function apagarTurma(nomeTurma) {
+
+    const confirmar = confirm(
+
+        `⚠️ Tem certeza que deseja apagar a turma "${nomeTurma}"?\n\n` +
+
+        `Os alunos cadastrados nessa turma também serão removidos.`
+
+    );
+
+    if (!confirmar) {
+
+        return;
+
+    }
+
+    try {
+
+        const response = await fetch(
+
+            `/apagar-turma/${encodeURIComponent(nomeTurma)}`,
+
+            {
+
+                method: "DELETE"
+
+            }
+
+        );
+
+        const dados = await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                dados.erro ||
+
+                "Não foi possível apagar a turma."
+
+            );
+
+        }
+
+        mostrarMensagem(
+
+            "Turma apagada com sucesso!",
+
+            "success"
+
+        );
+
+        // Atualiza a lista de alunos/turmas
+
+        await carregarAlunosDasTurmas();
+
+        // Fecha os detalhes da turma
+
+        const detalhes =
+
+            document.getElementById("detalhesTurma");
+
+        if (detalhes) {
+
+            detalhes.style.display = "none";
+
+        }
+
+    } catch (error) {
+
+        console.error(
+
+            "Erro ao apagar turma:",
+
+            error
+
+        );
+
+        mostrarMensagem(
+
+            error.message ||
+
+            "Erro ao apagar a turma.",
+
+            "error"
+
+        );
+
+    }
+
+}
+
+/* =========================================================
+
+   APAGAR TURMA
+
+========================================================= */
+
+async function apagarTurma(nomeTurma) {
+
+    const confirmar = confirm(
+
+        `⚠️ Tem certeza que deseja apagar a turma "${nomeTurma}"?\n\n` +
+
+        `Os alunos cadastrados nessa turma também serão removidos.`
+
+    );
+
+    if (!confirmar) {
+
+        return;
+
+    }
+
+    try {
+
+        const response = await fetch(
+
+            `/apagar-turma/${encodeURIComponent(nomeTurma)}`,
+
+            {
+
+                method: "DELETE"
+
+            }
+
+        );
+
+        const dados = await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                dados.erro ||
+
+                "Não foi possível apagar a turma."
+
+            );
+
+        }
+
+        mostrarMensagem(
+
+            "Turma apagada com sucesso!",
+
+            "success"
+
+        );
+
+        // Atualiza a lista de alunos/turmas
+
+        await carregarAlunosDasTurmas();
+
+        // Fecha os detalhes da turma
+
+        const detalhes =
+
+            document.getElementById("detalhesTurma");
+
+        if (detalhes) {
+
+            detalhes.style.display = "none";
+
+        }
+
+    } catch (error) {
+
+        console.error(
+
+            "Erro ao apagar turma:",
+
+            error
+
+        );
+
+        mostrarMensagem(
+
+            error.message ||
+
+            "Erro ao apagar a turma.",
+
+            "error"
+
+        );
+
+    }
+
 }
 
 /* =========================================================
@@ -1543,6 +1880,645 @@ async function selecionarEscola(escolaId) {
         );
 
     }
+
+}
+
+/* =========================================================
+
+   LANÇAR NOTAS / VER NOTAS
+
+========================================================= */
+
+const btnLancarNotas = document.getElementById("btnLancarNotas");
+
+const btnVerNotas = document.getElementById("btnVerNotas");
+
+const areaLancarNotas = document.getElementById("areaLancarNotas");
+
+const areaVerNotas = document.getElementById("areaVerNotas");
+
+const btnAlterarNotas = 
+    document.getElementById("btnAlterarNotas");
+
+let modoAlterarNotas = false;
+
+// =========================================================
+
+// BOTÃO LANÇAR NOTAS
+
+// =========================================================
+
+if (btnLancarNotas) {
+
+    btnLancarNotas.addEventListener("click", () => {
+
+        areaLancarNotas.style.display = "block";
+
+        areaVerNotas.style.display = "none";
+
+    });
+
+}
+
+// =========================================================
+
+// BOTÃO VER NOTAS
+
+// =========================================================
+
+if (btnVerNotas) {
+
+    btnVerNotas.addEventListener("click", () => {
+
+        areaLancarNotas.style.display = "none";
+
+        areaVerNotas.style.display = "block";
+
+        carregarTurmasVerNotas();
+
+    });
+
+}
+
+// =========================================================
+
+// CARREGAR TURMAS PARA VER NOTAS
+
+// =========================================================
+
+async function carregarTurmasVerNotas() {
+
+    const select = document.getElementById("turmaVerNotas");
+
+    if (!select) {
+
+        return;
+
+    }
+
+    try {
+
+        const response = await fetch("/listar-alunos");
+
+        if (!response.ok) {
+
+            throw new Error("Erro ao carregar turmas.");
+
+        }
+
+        const alunos = await response.json();
+
+        const turmas = [
+
+            ...new Set(
+
+                alunos
+
+                    .map(aluno => aluno.turma)
+
+                    .filter(turma => turma)
+
+            )
+
+        ];
+
+        select.innerHTML = `
+
+            <option value="">
+
+                Selecione uma turma
+
+            </option>
+
+        `;
+
+        turmas.forEach(turma => {
+
+            const option = document.createElement("option");
+
+            option.value = turma;
+
+            option.textContent = turma;
+
+            select.appendChild(option);
+
+        });
+
+    } catch (error) {
+
+        console.error(
+
+            "Erro ao carregar turmas:",
+
+            error
+
+        );
+
+    }
+
+}
+
+// =========================================================
+
+// QUANDO ESCOLHER A TURMA
+
+// =========================================================
+
+const turmaVerNotas =
+
+    document.getElementById("turmaVerNotas");
+
+if (turmaVerNotas) {
+
+    turmaVerNotas.addEventListener("change", async function () {
+
+        const turma = this.value;
+
+        const lista =
+
+            document.getElementById("listaNotasSalvas");
+
+        if (!lista) {
+
+            return;
+
+        }
+
+        if (!turma) {
+
+            lista.innerHTML = `
+
+                <p>
+
+                    Selecione uma turma para visualizar as notas.
+
+                </p>
+
+            `;
+
+            return;
+
+        }
+
+        lista.innerHTML = `
+
+            <p>
+
+                Carregando notas...
+
+            </p>
+
+        `;
+
+        try {
+
+            // Buscar alunos da turma
+
+            const alunosResponse =
+
+                await fetch(
+
+                    `/listar-alunos?turma=${encodeURIComponent(turma)}`
+
+                );
+
+            if (!alunosResponse.ok) {
+
+                throw new Error(
+
+                    "Erro ao carregar alunos."
+
+                );
+
+            }
+
+            const alunos =
+
+                await alunosResponse.json();
+
+            // Buscar notas salvas
+
+            const notasResponse =
+
+                await fetch(
+
+                    `/listar-notas?turma=${encodeURIComponent(turma)}`
+
+                );
+
+            if (!notasResponse.ok) {
+
+                throw new Error(
+
+                    "Erro ao carregar notas."
+
+                );
+
+            }
+
+            const notas =
+
+                await notasResponse.json();
+
+            // Criar mapa das notas
+
+            const mapaNotas = {};
+
+            notas.forEach(item => {
+
+                mapaNotas[item.aluno_id] =
+
+                    Number(item.nota);
+
+            });
+
+            // Nenhum aluno
+
+            if (alunos.length === 0) {
+
+                lista.innerHTML = `
+
+                    <div class="empty-card">
+
+                        <span>👥</span>
+
+                        <p>
+
+                            Nenhum aluno encontrado nessa turma.
+
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+            // Tabela
+
+            let html = `
+
+                <div style="
+
+                    overflow-x: auto;
+
+                    width: 100%;
+
+                ">
+
+                    <table class="data-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+
+                                    Aluno
+
+                                </th>
+
+                                <th>
+
+                                    Nota
+
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+            `;
+
+            alunos.forEach(aluno => {
+
+                const nota = mapaNotas[aluno.id];
+            
+                let classeNota = "nota-vermelha";
+            
+                let textoNota = "Sem nota";
+            
+                if (nota !== undefined) {
+            
+                    textoNota =
+            
+                        nota.toFixed(1).replace(".", ",");
+            
+                    if (nota >= 8) {
+            
+                        classeNota = "nota-verde";
+            
+                    } else if (nota >= 5) {
+            
+                        classeNota = "nota-amarela";
+            
+                    }
+            
+                }
+            
+                html += `
+            
+                    <tr>
+            
+                        <td>
+            
+                            ${escapeHTML(aluno.nome)}
+            
+                        </td>
+            
+                        <td>
+            
+                            <span
+            
+                                class="nota-valor ${classeNota}"
+            
+                                data-aluno-id="${aluno.id}"
+            
+                                data-nota="${nota !== undefined ? nota : 0}"
+            
+                            >
+            
+                                ${textoNota}
+            
+                            </span>
+            
+                        </td>
+            
+                    </tr>
+            
+                `;
+            
+            });
+
+            html += `
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            `;
+
+            lista.innerHTML = html;
+
+        } catch (error) {
+
+            console.error(
+
+                "Erro ao carregar notas:",
+
+                error
+
+            );
+
+            lista.innerHTML = `
+
+                <div class="empty-card">
+
+                    <span>⚠️</span>
+
+                    <p>
+
+                        Não foi possível carregar as notas.
+
+                    </p>
+
+                </div>
+
+            `;
+
+        }
+
+    });
+
+}
+
+/* =========================================================
+
+   ALTERAR NOTAS
+
+========================================================= */
+
+if (btnAlterarNotas) {
+
+    btnAlterarNotas.addEventListener("click", async () => {
+
+        const turma = document.getElementById("turmaVerNotas").value;
+
+        const lista =
+
+            document.getElementById("listaNotasSalvas");
+
+        if (!turma) {
+
+            mostrarMensagem(
+
+                "Selecione uma turma primeiro.",
+
+                "error"
+
+            );
+
+            return;
+
+        }
+
+        /* =================================================
+
+           MODO ALTERAÇÃO
+
+        ================================================= */
+
+        if (!modoAlterarNotas) {
+
+            const campos =
+
+                lista.querySelectorAll(".nota-valor");
+
+            campos.forEach(campo => {
+
+                const nota =
+
+                    campo.dataset.nota;
+
+                const alunoId =
+
+                    campo.dataset.alunoId;
+
+                campo.outerHTML = `
+
+                    <input
+
+                        type="number"
+
+                        min="0"
+
+                        max="10"
+
+                        step="0.1"
+
+                        class="campo-alterar-nota"
+
+                        data-aluno-id="${alunoId}"
+
+                        value="${nota}"
+
+                        style="
+
+                            width: 80px;
+
+                            padding: 8px;
+
+                            border: 1px solid #ccc;
+
+                            border-radius: 6px;
+
+                        "
+
+                    >
+
+                `;
+
+            });
+
+            modoAlterarNotas = true;
+
+            btnAlterarNotas.textContent =
+
+                "Salvar alterações";
+
+            return;
+
+        }
+
+        /* =================================================
+
+           SALVAR ALTERAÇÕES
+
+        ================================================= */
+
+        const inputs =
+
+            lista.querySelectorAll(".campo-alterar-nota");
+
+        const notas = [];
+
+        inputs.forEach(input => {
+
+            const nota =
+
+                Number(input.value);
+
+            notas.push({
+
+                aluno_id:
+
+                    input.dataset.alunoId,
+
+                nota: nota
+
+            });
+
+        });
+
+        try {
+
+            const response =
+
+                await fetch("/salvar-notas", {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type": "application/json"
+
+                    },
+
+                    body: JSON.stringify({
+
+                        turma: turma,
+
+                        notas: notas
+
+                    })
+
+                });
+
+            const resultado =
+
+                await response.json();
+
+            if (!response.ok) {
+
+                throw new Error(
+
+                    resultado.erro ||
+
+                    "Erro ao salvar alterações."
+
+                );
+
+            }
+
+            mostrarMensagem(
+
+                "Notas alteradas com sucesso!",
+
+                "success"
+
+            );
+
+            modoAlterarNotas = false;
+
+            btnAlterarNotas.textContent =
+
+                "Alterar notas";
+
+            /*
+
+             * Recarrega as notas para voltar
+
+             * à visualização colorida.
+
+             */
+
+            document
+
+                .getElementById("turmaVerNotas")
+
+                .dispatchEvent(
+
+                    new Event("change")
+
+                );
+
+        } catch (error) {
+
+            console.error(
+
+                "Erro ao alterar notas:",
+
+                error
+
+            );
+
+            mostrarMensagem(
+
+                "Erro ao alterar as notas.",
+
+                "error"
+
+            );
+
+        }
+
+    });
 
 }
 
