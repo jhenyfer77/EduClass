@@ -3006,6 +3006,203 @@ app.get(
 
 // =====================================================
 
+// LISTAR ALUNOS
+
+// =====================================================
+
+app.get(
+
+    '/listar-alunos',
+
+    exigirEscola,
+
+    (req, res) => {
+
+        // ... seu código atual ...
+
+    }
+
+);
+
+// =====================================================
+
+// APAGAR TURMA
+
+// =====================================================
+
+app.delete(
+
+    '/apagar-turma/:turma',
+
+    exigirEscola,
+
+    (req, res) => {
+
+        const turma = decodeURIComponent(req.params.turma);
+
+        const escolaId = escolaAtual(req);
+
+        if (!turma) {
+
+            return res.status(400).json({
+
+                erro: 'Turma não informada.'
+
+            });
+
+        }
+
+        db.all(
+
+            `
+
+            SELECT id
+
+            FROM alunos
+
+            WHERE TRIM(turma) = TRIM(?)
+
+            AND escola_id = ?
+
+            `,
+
+            [turma, escolaId],
+
+            (err, alunos) => {
+
+                if (err) {
+
+                    return res.status(500).json({
+
+                        erro: err.message
+
+                    });
+
+                }
+
+                if (alunos.length === 0) {
+
+                    return res.status(404).json({
+
+                        erro: 'Nenhum aluno encontrado nessa turma.'
+
+                    });
+
+                }
+
+                const ids = alunos.map(aluno => aluno.id);
+
+                const placeholders = ids.map(() => '?').join(',');
+
+                db.run(
+
+                    `
+
+                    DELETE FROM notas
+
+                    WHERE aluno_id IN (${placeholders})
+
+                    AND escola_id = ?
+
+                    `,
+
+                    [...ids, escolaId],
+
+                    (erroNotas) => {
+
+                        if (erroNotas) {
+
+                            return res.status(500).json({
+
+                                erro: erroNotas.message
+
+                            });
+
+                        }
+
+                        db.run(
+
+                            `
+
+                            DELETE FROM frequencias
+
+                            WHERE aluno_id IN (${placeholders})
+
+                            AND escola_id = ?
+
+                            `,
+
+                            [...ids, escolaId],
+
+                            (erroFrequencias) => {
+
+                                if (erroFrequencias) {
+
+                                    return res.status(500).json({
+
+                                        erro: erroFrequencias.message
+
+                                    });
+
+                                }
+
+                                db.run(
+
+                                    `
+
+                                    DELETE FROM alunos
+
+                                    WHERE TRIM(turma) = TRIM(?)
+
+                                    AND escola_id = ?
+
+                                    `,
+
+                                    [turma, escolaId],
+
+                                    function (erroAlunos) {
+
+                                        if (erroAlunos) {
+
+                                            return res.status(500).json({
+
+                                                erro: erroAlunos.message
+
+                                            });
+
+                                        }
+
+                                        res.json({
+
+                                            mensagem: 'Turma apagada com sucesso!',
+
+                                            alunosRemovidos: this.changes
+
+                                        });
+
+                                    }
+
+                                );
+
+                            }
+
+                        );
+
+                    }
+
+                );
+
+            }
+
+        );
+
+    }
+
+);
+
+
+// =====================================================
+
 // SALVAR NOTAS
 
 // =====================================================
@@ -3185,6 +3382,7 @@ app.get('/listar-notas', exigirEscola, (req, res) => {
     });
 
 });
+
 
 // =====================================================
 
