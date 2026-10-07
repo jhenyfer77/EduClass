@@ -910,6 +910,294 @@ style="display: none; margin-top: 22px;"
 
 </section>
 
+<!-- PLANEJAMENTO -->
+
+<section class="dashboard page-section" id="planejamento" style="display: none;">
+
+    <div class="section-header">
+
+        <h2>Planejamento</h2>
+
+        <p>Organize e registre seus planejamentos de aula.</p>
+
+    </div>
+
+    <div class="dashboard-grid">
+
+        <!-- NOVO PLANEJAMENTO -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <div class="card-title">
+
+                    <i class="fa-solid fa-book-open"></i>
+
+                    Novo planejamento
+
+                </div>
+
+            </div>
+
+            <div class="card-body">
+
+                <form id="formPlanejamento">
+
+                    <div class="form-group">
+
+                        <label class="form-label">Matéria</label>
+
+                        <input
+
+                            type="text"
+
+                            name="materia"
+
+                            class="form-input"
+
+                            placeholder="Ex.: Matemática"
+
+                            required
+
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label">Data da aula</label>
+
+                        <input
+
+                            type="date"
+
+                            name="data_planejada"
+
+                            class="form-input"
+
+                            required
+
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="form-label">
+
+                            Conteúdo / Planejamento
+
+                        </label>
+
+                        <textarea
+
+                            name="conteudo"
+
+                            class="form-input"
+
+                            rows="6"
+
+                            placeholder="Descreva o que será trabalhado na aula..."
+
+                            required
+
+                        ></textarea>
+
+                    </div>
+
+                    <button
+
+                        type="submit"
+
+                        class="btn btn-primary"
+
+                    >
+
+                        <i class="fa-solid fa-floppy-disk"></i>
+
+                        Salvar planejamento
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <!-- MEUS PLANEJAMENTOS -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <div class="card-title">
+
+                    <i class="fa-solid fa-list-check"></i>
+
+                    Meus planejamentos
+
+                </div>
+
+                <span id="planningCount">0</span>
+
+            </div>
+
+            <div class="card-body">
+
+                <div id="listaPlanejamentos">
+
+                    <p>Carregando planejamentos...</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- CALENDÁRIO -->
+
+<section class="dashboard page-section" id="calendario" style="display: none;">
+
+    <div class="section-header">
+
+        <h2>Calendário</h2>
+
+        <p>Confira os eventos e datas importantes da escola.</p>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <div class="card-title">
+
+                <i class="fa-solid fa-calendar-days"></i>
+
+                Calendário escolar
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="calendar-header">
+
+                <div class="calendar-month" id="calendarPageMonth">
+
+                    Setembro 2026
+
+                </div>
+
+                <div class="calendar-navigation">
+
+                    <button
+
+                        type="button"
+
+                        class="btn btn-secondary"
+
+                        id="calendarPagePrevMonth"
+
+                    >
+
+                        <i class="fa-solid fa-chevron-left"></i>
+
+                    </button>
+
+                    <button
+
+                        type="button"
+
+                        class="btn btn-secondary"
+
+                        id="calendarPageNextMonth"
+
+                    >
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="calendar-weekdays">
+
+                <div>Dom</div>
+
+                <div>Seg</div>
+
+                <div>Ter</div>
+
+                <div>Qua</div>
+
+                <div>Qui</div>
+
+                <div>Sex</div>
+
+                <div>Sáb</div>
+
+            </div>
+
+            <div
+
+                class="calendar-days"
+
+                id="calendarPageDays"
+
+            ></div>
+
+            <div class="next-event" style="margin-top: 25px;">
+
+                <h3>
+
+                    <i class="fa-solid fa-bell"></i>
+
+                    Próximo evento
+
+                </h3>
+
+                <div
+
+                    class="next-event-title"
+
+                    id="nextEventPageTitle"
+
+                >
+
+                    Carregando evento...
+
+                </div>
+
+                <div
+
+                    class="next-event-info"
+
+                    id="nextEventPageDate"
+
+                >
+
+                    Aguarde...
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
         <!-- =================================================
              COMUNICADOS
         ================================================= -->
